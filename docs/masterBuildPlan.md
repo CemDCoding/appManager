@@ -131,7 +131,16 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | ID | Funktion | Beschreibung aus Nutzersicht | Kernfluss |
 |---|---|---|---|
-| F-01 | {{…}} | {{…}} | {{ja/nein}} |
+| F-01 | Projekte verwalten | Projekte/Apps anlegen, bearbeiten, archivieren; Plattformen (Mobile, Web, Webseite, Desktop, Steam) | ⟦offen⟧ |
+| F-02 | Deploy- und Dienstübersicht | Pro Projekt die genutzten Dienste (z. B. Railway, Vercel, Supabase) mit Zweck und Kosten eintragen und einsehen | ⟦offen⟧ |
+| F-03 | Ausgaben erfassen | Einmalige und wiederkehrende Ausgaben (DB, Server, Lizenzen …) mit Kategorie; Aufteilung auf ein, mehrere oder alle Projekte (PE-06, PE-07) | ⟦offen⟧ |
+| F-04 | Einnahmen erfassen | Von Hand, einmalig oder wiederkehrend, netto, einem Projekt zugeordnet, mit Kategorie (PE-08) | ⟦offen⟧ |
+| F-05 | Mitarbeiter und Coder | Personen anlegen, Kosten pro Arbeitspaket oder als periodische Abrechnung, aufgeteilt auf Projekte | ⟦offen⟧ |
+| F-06 | KI-/Coder-Abos | Kosten als Abo oder nach Token, aufgeteilt auf Projekte | ⟦offen⟧ |
+| F-07 | Werbekampagnen | Kampagnen mit Kosten, akquirierten Nutzern, Klicks, Format, 0–5 Sternen; Projekten zuordenbar; fließen in Ausgaben-Statistik ein | ⟦offen⟧ |
+| F-08 | Währungen | Kurstabelle pflegen, Beträge in Originalwährung, Anzeigewährung umschaltbar (PE-04, PE-05) | ⟦offen⟧ |
+| F-09 | Statistiken | Auswertungen über Portfolio und pro Projekt | ⟦offen⟧ |
+| F-10 | PDF-Bericht | PDF für gesamtes Portfolio und für einzelne Projekte | ⟦offen⟧ |
 
 ### Optional
 
@@ -184,7 +193,12 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 **Bausteine:** {{Diagramm (Mermaid oder ASCII) und je Baustein ein Satz}}
 
-**Grundregeln:** {{z. B. „Nur die API spricht mit der Datenbank“}}
+**Grundregeln:**
+
+1. Nur der Electron-Main-Prozess liest und schreibt Dateien; die Oberfläche spricht über eine typisierte IPC-Schnittstelle mit ihm (PE-02).
+2. Beträge werden in Originalwährung gespeichert. Beim Anlegen einer Buchung wird der zu diesem Zeitpunkt neueste Kurs aus der Kurstabelle in die Buchung kopiert (Snapshot). Spätere Kursänderungen betreffen nur neue Buchungen (PE-05).
+3. Gemeinsame Kosten werden gleichmäßig oder nach eigenen Prozenten auf bestimmte Projekte oder „alle“ verteilt; „alle“ = die zum Kostenzeitpunkt aktiven Projekte (PE-06).
+4. Wiederkehrende Posten werden einmal angelegt (Betrag, Intervall, Start, optional Ende, Preisänderung ab Datum); Monatswerte berechnet die App (PE-07).
 
 | Entität | Wichtige Felder | Gehört zu | Löschverhalten |
 |---|---|---|---|
@@ -492,13 +506,17 @@ flowchart LR
 | PE-02 | Electron + React + TypeScript + Vite | Node vorhanden, React später für Web/Mobil nutzbar, reife Diagramm-/PDF-Bibliotheken | Nutzer am 2026-10-25 |
 | PE-03 | Nur Windows, Installer (.exe) baut der Nutzer lokal | einziges Zielsystem des Nutzers | Nutzer am 2026-10-25 |
 | PE-04 | Mehrere Währungen: Betrag in Originalwährung speichern, Kurs trägt der Nutzer selbst ein. Zusätzlich wählbare Anzeigewährung, in die alle Ansichten umgerechnet werden. Kein Termin. | Abos oft in USD; keine Online-Kursdienste | Nutzer am 2026-10-25 |
+| PE-05 | Nutzer pflegt Kurse in eigenem Tempo. Neue Buchungen speichern den beim Eintragen neuesten Kurs (Snapshot). (angenommen) Der Kurs einer einzelnen Buchung bleibt nachträglich von Hand änderbar. | stabile Auswertungen | Nutzer am 2026-10-25 |
+| PE-06 | Aufteilung gleichmäßig oder nach Prozent, auf bestimmte oder alle (zum Zeitpunkt aktiven) Projekte | flexibel, alte Monate bleiben stabil | Nutzer am 2026-10-25 |
+| PE-07 | Wiederkehrende Kosten als ein Posten mit Intervall, Start, Ende, Preisänderung ab Datum | wenig Pflegeaufwand | Nutzer am 2026-10-25 |
+| PE-08 | Einnahmen von Hand, einmalig/wiederkehrend, netto, je Projekt, mit Kategorie | einfach; CSV-Import nicht in Pflicht | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
 | ID | Frage | Priorität | Betrifft | Empfehlung | Status |
 |---|---|---|---|---|---|
 | Q-01 | Ist eine Kommerzialisierung denkbar? | W | §1, §5 | nein, privat | offen |
-| Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | offen |
+| Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | geklärt → PE-05 |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
