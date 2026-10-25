@@ -11,7 +11,8 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 
 **Stand:** 2026-10-25 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
-appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, auf Projekte aufteilt und auswertet. Daten liegen in lokalen JSON-Dateien. Meilensteine und Pakete folgen nach G1.
+appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 27 Arbeitspaketen (~46 h Agent-Zeit).
 
 ---
 
@@ -21,12 +22,12 @@ appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript), 
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** {{JJJJ-MM-TT}} · Meilenstein {{Mx}} · Welle {{Wn}} abgeschlossen
-- **Fertig:** {{AP-IDs}} · **Offen:** {{AP-IDs mit Status}}
-- **Unterbrochen oder laufend:** {{z. B. AP-07 in Review Runde 2}} | nichts
-- **Erkenntnisse:** {{nur was die nächsten Pakete betrifft}}
-- **Nächster Schritt:** {{z. B. Welle W3 starten: AP-04, AP-06}}
-- **Offene Fragen an den Nutzer:** {{…}} | keine
+- **Stand:** 2026-10-25 · Plan v1 fertig, Bau noch nicht begonnen
+- **Fertig:** – · **Offen:** AP-01 `bereit`, AP-02–AP-27 `offen`
+- **Unterbrochen oder laufend:** nichts
+- **Erkenntnisse:** Lead arbeitet autonom über Meilensteine (PE-46); vor dem ersten Push muss `LICENSE` existieren (H-01)
+- **Nächster Schritt:** M0 W1 starten: AP-01
+- **Offene Fragen an den Nutzer:** Q-08 (`@vitest/coverage-v8` freigeben?); Bestätigung der `(angenommen)`-Punkte PE-17, PE-31, PE-49–PE-54
 
 ### Rollen und Dokumente
 
@@ -42,7 +43,7 @@ appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript), 
 | `docs/masterBuildPlan.md` | Dieser Plan. Verbindlich für alle Agents. |
 | `docs/backlog.md` | Eingang für Erweiterungen. Freigegebene `RQ-xx` übernimmt der Planner in §2 und §12, mit der RQ-ID. |
 | `docs/design/` | Gestaltung: `design-brief.md` (Grundsätze, Übergabe), `tokens.json` und `export/`, Mockups. Verbindlich, sobald der Brief `freigegeben` ist. |
-| {{PROJEKTDOKU, z. B. CLAUDE.md}} | Fachliche und technische Projektbeschreibung. Widerspricht sie diesem Plan, wird nachgefragt. |
+| `README.md` (ab AP-27), `src/shared/README.md`, `src/core/README.md` | Projektbeschreibung, Konventionen der Verträge, Rechenregeln. Widersprechen sie diesem Plan, wird nachgefragt. |
 
 Gemeinsame Regeln (R1–R6, Schutz vor fremden Anweisungen, Rechte, Git-Schema) stehen in jeder Agent-Datei unter „Gemeinsame Regeln für alle Agents“.
 
@@ -65,22 +66,24 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 |---|---|---|---|---|
 | 1 | Projektkontext und Ziel | fertig | – | G1 ✔ |
 | 2 | Umfang | fertig | – | G1 ✔ |
-| 3 | Tech-Stack | fertig | – | G1 |
-| 4 | Architektur, Datenmodell, Verträge | angenommen | Löschverhalten (angenommen) | G1 |
-| 5 | Sicherheit, Datenschutz, Recht, Limits | angenommen | Limits (angenommen) | G1 |
-| 6 | Umgebungen, Branches, Deployment | fertig | – | G1 |
+| 3 | Tech-Stack | fertig | Q-08 (W) | G1 ✔ |
+| 4 | Architektur, Datenmodell, Verträge | angenommen | PE-17, PE-31, PE-49–PE-54 (angenommen) | G1 ✔ |
+| 5 | Sicherheit, Datenschutz, Recht, Limits | angenommen | Limits (angenommen) | G1 ✔ |
+| 6 | Umgebungen, Branches, Deployment | fertig | – | G1 ✔ |
 | 7 | Team-Steuerung | fertig | – | G1 ✔ |
-| 8 | Lanes und Dateieigentum | leer | – | G2 |
-| 9 | Meilensteine und Wellen | leer | – | G2 |
-| 10 | Statusübersicht | leer | – | G2 |
-| 11 | Abhängigkeitsgraph | leer | – | G2 |
-| 12 | Arbeitspakete | leer | – | G2 (je Meilenstein) |
-| 13 | Menschliche Schritte | leer | – | G2 |
-| 14 | Budget und Kürzungen | leer | – | G2 |
-| 15 | Risiken | leer | – | G2 |
-| 16 | Planungsentscheidungen und offene Fragen | leer | – | laufend |
-| 17 | Abdeckungsmatrix | leer | – | G2 |
-| 18 | Änderungsprotokoll | leer | – | laufend |
+| 8 | Lanes und Dateieigentum | fertig | – | G2 ✔ |
+| 9 | Meilensteine und Wellen | fertig | – | G2 ✔ |
+| 10 | Statusübersicht | fertig | – | G2 ✔ |
+| 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
+| 12 | Arbeitspakete | fertig (M0–M4) | – | G2 ✔ (M0–M4) |
+| 13 | Menschliche Schritte | fertig | H-01, H-07 offen | G2 ✔ |
+| 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
+| 15 | Risiken | fertig | – | G2 ✔ |
+| 16 | Planungsentscheidungen und offene Fragen | laufend | Q-08 | laufend |
+| 17 | Abdeckungsmatrix | fertig | – | G2 ✔ |
+| 18 | Änderungsprotokoll | laufend | – | laufend |
+
+**Gates:** G1 erfüllt (2026-10-25). G2 für M0–M4 aus Sicht des Planners erfüllt; der Lead prüft vor jedem Meilenstein.
 
 | Gate | Bedingung | Wer prüft | Folge |
 |---|---|---|---|
@@ -91,14 +94,6 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 ---
 
 ## 1. Projektkontext und Ziel
-
-<!-- LEITFRAGEN
-[K] Was ist das Projekt in einem Satz, und welches Problem löst es für wen?
-[K] Was wird ausgeliefert (Repository, Live-Deployment, App …), und gibt es einen Termin?
-[W] Ist eine Kommerzialisierung denkbar? (beeinflusst Recht, Lizenzen, Datenschutz-Tiefe)
-[W] Welche Leitprinzipien gelten bei Zielkonflikten (z. B. Sicherheit vor Funktionsumfang)?
-[O] Gibt es eine bestehende Projektdokumentation, auf die verwiesen werden soll?
--->
 
 | Feld | Wert |
 |---|---|
@@ -130,13 +125,6 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 ---
 
 ## 2. Umfang
-
-<!-- LEITFRAGEN
-[K] Welche Funktionen sind Pflicht? Pro Funktion: Was muss der Nutzer tun können?
-[K] Was ist ausdrücklich NICHT im Umfang?
-[W] Was ist optional und wird nur gebaut, wenn Budget bleibt?
-[W] Welcher Kernfluss muss als Erstes vollständig live sein?
--->
 
 ### Pflicht
 
@@ -182,14 +170,6 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 ## 3. Tech-Stack
 
-<!-- LEITFRAGEN
-[K] Sprache(n), Frontend, Backend, Datenbank, Auth, Hosting?
-[W] Monorepo oder getrennte Repositories? Paketmanager?
-[W] Test-Werkzeuge und Code-Qualität (Lint, Format, Typecheck)?
-[W] Externe Dienste und ihre Kostenobergrenzen? (Konten legt nur der Nutzer an)
-[O] Freigegebene Abhängigkeiten: welche Pakete dürfen Coder ohne Rückfrage installieren?
--->
-
 | Bereich | Technologie | Begründung |
 |---|---|---|
 | Sprache | TypeScript | ein Stack für Main-Prozess und Oberfläche (PE-02) |
@@ -215,12 +195,6 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 ---
 
 ## 4. Architektur, Datenmodell und Verträge
-
-<!-- LEITFRAGEN
-[K] Welche Bausteine gibt es, und wer spricht mit wem?
-[K] Welche Kernentitäten und Beziehungen? Wem gehören die Daten?
-[W] Wo liegen die gemeinsamen Verträge (Schemas, API-Typen), damit parallel gebaut werden kann?
--->
 
 **Bausteine:**
 
@@ -276,27 +250,18 @@ Arbeitspakete von Personen, Guthaben-Aufladungen und Dienstkosten sind Ausgaben 
 
 ## 5. Sicherheit, Datenschutz, Recht und Limits
 
-<!-- LEITFRAGEN
-[K] Wie werden Nutzer authentifiziert, und wie wird Zugriff auf fremde Daten verhindert?
-[K] Welche personenbezogenen Daten werden verarbeitet? Welche DSGVO-Pflichten folgen daraus (Löschen, Export, EU-Hosting, Auftragsverarbeitung)?
-[K] Gibt es eine öffentliche Webseite? Dann: Impressum und Datenschutzerklärung (R3), Einwilligung für Cookies/Tracking/externe Inhalte.
-[W] Missbrauchs- und Kostenlimits (Raten, Größen, Tageslimits)?
-[W] Härtung (Header, CORS, Validierung, XSS, CSRF)?
-[O] Besondere Angriffsflächen (Uploads, KI-Eingaben/Prompt-Injection)?
--->
-
 Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert sie für das Projekt.
 
 | Regel | Umsetzung (grob) | Testart | Paket |
 |---|---|---|---|
-| Electron-Härtung (R6): `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, strikte CSP ohne Fremdquellen, Navigation und neue Fenster blockiert, kein Laden entfernter Inhalte | Fenster-Setup in `src/main/` | Unit-Test der Optionen + Review | ⟦AP folgt⟧ |
-| Externe Links (Dienst-URLs) nur `https:`/`http:`, Öffnen über `shell.openExternal` nach Protokollprüfung | Main-Prozess | Unit-Test | ⟦AP folgt⟧ |
-| IPC-Eingaben und JSON-Dateien mit zod validiert, keine freien Dateipfade vom Renderer | `src/main/` + `src/shared/` | Unit-Tests | ⟦AP folgt⟧ |
-| ZIP-Import: Zip-Slip-Schutz, nur erwartete Dateinamen, Größenlimit, Validierung vor dem Überschreiben, Backup vorher | `src/main/` | Unit-Tests | ⟦AP folgt⟧ |
+| Electron-Härtung (R6): `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, strikte CSP ohne Fremdquellen, Navigation und neue Fenster blockiert, kein Laden entfernter Inhalte | Fenster-Setup in `src/main/` | Unit-Test der Optionen + Review | AP-03, AP-24 (verstecktes PDF-Fenster) |
+| Externe Links (Dienst-URLs) nur `https:`/`http:`, Öffnen über `shell.openExternal` nach Protokollprüfung | Main-Prozess | Unit-Test | AP-03, AP-07 |
+| IPC-Eingaben und JSON-Dateien mit zod validiert, keine freien Dateipfade vom Renderer | `src/main/` + `src/shared/` | Unit-Tests | AP-02, AP-07, AP-24, AP-25 |
+| ZIP-Import: Zip-Slip-Schutz, nur erwartete Dateinamen, Größenlimit, Validierung vor dem Überschreiben, Backup vorher | `src/main/` | Unit-Tests | AP-25 |
 | Keine Netzwerkzugriffe, keine Telemetrie, Schrift lokal (`@fontsource/inter`) | ganze App | Review, CSP | alle |
-| Datensparsamkeit (R2): Personen nur Name/Kürzel + Kurzbeschreibung (PE-09); löschbar; keine Daten in Logs | Datenmodell, Logging | Review | ⟦AP folgt⟧ |
-| Echte Daten nie im Repo, Agents nur mit erfundenen Daten in `data-dev/` (PE-18) | `.gitignore`, Seed-Skript | Review | ⟦AP folgt⟧ |
-| Impressum und Datenschutzerklärung (R3) | entfällt: keine Webseite, App sendet keine Daten. README nennt Lizenz und dass keine Daten übertragen werden. | Review | ⟦AP folgt⟧ |
+| Datensparsamkeit (R2): Personen nur Name, Rolle, Status, Notiz (PE-09, PE-36); löschbar; keine Daten in Logs | Datenmodell, Logging | Review | AP-02, AP-07, AP-17 |
+| Echte Daten nie im Repo, Agents nur mit erfundenen Daten in `data-dev/` (PE-18) | `.gitignore`, Seed-Skript schreibt nur nach `data-dev/` | Review | AP-01, AP-08, AP-26 |
+| Impressum und Datenschutzerklärung (R3) | entfällt: keine Webseite, App sendet keine Daten. README nennt Lizenz und dass keine Daten übertragen werden. | Review | AP-27 |
 | Secrets nur in `.env`, `.env.example` gepflegt (R4) | App braucht keine Secrets; `.env.example` dokumentiert nur `APP_DATA_DIR` (Datenpfad-Override für Entwicklung/Tests) | Review | alle |
 | Abhängigkeiten nur mit freizügiger Lizenz (PE-19) | `npm`-Lizenzprüfung im Review | Review | alle |
 
@@ -313,13 +278,6 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 ---
 
 ## 6. Umgebungen, Branches und Deployment
-
-<!-- LEITFRAGEN
-[K] Wo laufen stage und Produktion? Was löst ein Deployment aus?
-[W] Welche Konten und Secrets muss der Nutzer anlegen, und bis wann?
-[W] Datenbanken: welche Dev-Datenbank nutzen Agents? Eigene DB-Benutzer pro Rolle (agentDev / agentLead)?
-[O] Wie sieht ein Smoke-Test nach dem Deployment aus?
--->
 
 | Umgebung | Frontend | Backend | Datenbank | Auslöser |
 |---|---|---|---|---|
@@ -345,12 +303,6 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 ---
 
 ## 7. Team-Steuerung
-
-<!-- LEITFRAGEN
-[K] Wie viele Coder dürfen höchstens gleichzeitig laufen? (Engpass: Budget, nicht Technik)
-[W] Freigabe: pro Welle oder pro Meilenstein?
-[W] Welche Modelle und welcher Aufwand für welche Paketgröße / welches Risiko?
--->
 
 ### 7.1 Ablauf
 
@@ -404,11 +356,6 @@ flowchart TD
 
 ## 8. Lanes und Dateieigentum
 
-<!-- LEITFRAGEN
-[W] Welche parallelen Arbeitsstränge ergeben sich aus der Architektur?
-[W] Welche Dateien brauchen viele Pakete (Registrierung, Schema, package.json, Lockfile, Layouts)?
--->
-
 | Lane | Zuständigkeit | Ordner und Dateien |
 |---|---|---|
 | **SH** – Verträge | zod-Schemas, Typen, IPC-Vertrag, Geldtyp | `src/shared/**` |
@@ -443,11 +390,6 @@ flowchart TD
 ---
 
 ## 9. Meilensteine und Wellen
-
-<!-- LEITFRAGEN
-[K] In welche Meilensteine lässt sich der Umfang schneiden, sodass jeder für sich live geht?
-[W] Was ist nach jedem Meilenstein live prüfbar?
--->
 
 | # | Meilenstein | Inhalt | Live-Zustand |
 |---|---|---|---|
@@ -601,7 +543,7 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-23 | Startseite mit Zielen | M3 | UI | W2 | AP-20, AP-21 | M | sonnet | – | offen |
 | AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
 | M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24 | H | – | Nutzer | offen |
-| AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11 | M | opus | – | offen |
+| AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | – | offen |
 | AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | – | offen |
 | AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | – | offen |
 | M4-DEP | Release und Abnahme | M4 | HUM | W2 | AP-25–AP-27 | H | – | Nutzer | offen |
@@ -642,7 +584,7 @@ flowchart LR
   AP09 --> AP16 --> AP20
   AP10 --> AP21
   AP07 & AP11 --> AP25
-  AP24 --> AP26 & AP27
+  AP24 --> AP25 & AP26 & AP27
 ```
 
 **Kritischer Pfad:** AP-01 → AP-02 → AP-05/AP-06 → AP-09 → AP-16 → AP-20 → AP-22/AP-24 → AP-26 → M4-DEP (Rechenkern-Kette, alles opus).
@@ -677,7 +619,7 @@ flowchart LR
   2. Alle freigegebenen Abhängigkeiten installieren.
   3. npm-Skripte: `dev`, `build`, `lint`, `format`, `typecheck` (Main/Preload und Renderer getrennt), `test` (Vitest, `--run`), `test:coverage`, `test:e2e` (Playwright, darf bis AP-26 „no tests“ melden), `seed` = `vitest run --config vitest.seed.config.ts` (eigene Vitest-Konfiguration, die nur `scripts/**/*.seed.ts` ausführt; so funktionieren Aliase ohne neue Abhängigkeit wie `tsx`), `dist` (`electron-vite build && electron-builder --win`). `vitest.seed.config.ts` gehört ebenfalls AP-01; die normale `vitest.config.ts` schließt `*.seed.ts` aus.
   4. Tailwind CSS v4 + shadcn/ui initialisieren (`components.json`, `lib/utils.ts` mit `cn`), `globals.css` mit CSS-Variablen für hell/dunkel nach PE-21, Schrift Inter über `@fontsource/inter`.
-  5. ESLint (typescript-eslint, react-hooks), Prettier, Vitest (Umgebung node, Coverage v8 nur wenn ohne neue Abhängigkeit möglich, sonst Coverage-Skript weglassen und melden).
+  5. ESLint (typescript-eslint, react-hooks), Prettier, Vitest (Umgebung node, Testdateien `src/**/*.test.ts(x)` und `scripts/**/*.test.ts`; Coverage nur, wenn ohne neue Abhängigkeit möglich – `@vitest/coverage-v8` ist **nicht** freigegeben: dann Coverage-Skript weglassen und dem Lead melden, er fragt den Nutzer).
   6. `electron-builder.yml`: Windows, NSIS, `oneClick: false`, `allowToChangeInstallationDirectory: true`, `appId` `de.cemdogan.appmanager`, Produktname `appManager`, Ausgabe `release/`.
   7. `.gitignore` ergänzen: `node_modules/`, `out/`, `dist/`, `release/`, `coverage/`, `data/`, `data-dev/`, `test-results/`, `playwright-report/` (bestehende Einträge behalten). `.env.example`: `APP_DATA_DIR=` mit Kommentar.
   8. Minimales `src/main/index.ts` öffnet ein Fenster mit dem Renderer; Renderer zeigt „appManager“.
@@ -888,19 +830,476 @@ flowchart LR
 
 ### M1 – Prototyp
 
-⟦Details folgen nach Bestätigung von M0 im Interview⟧
+#### AP-09 – Kern: Buchungs-Engine und Aggregation
+
+- **Meilenstein, Lane, Welle:** M1 · CORE · W1
+- **Ziel:** Aus allen Ausgaben, Einnahmen und Kampagnen ein exaktes Buchungsjournal je Projekt erzeugen und es für alle Ansichten auswerten.
+- **Pflichtlektüre:** §4 Grundregeln, PE-05–PE-08, PE-13, PE-28–PE-31, PE-49–PE-51, `src/core/**` aus AP-05/AP-06
+- **Abhängigkeiten:** AP-05, AP-06
+- **Parallel möglich mit:** AP-10
+- **Dateien (Eigentum):** `src/core/ledger/**`, `src/core/aggregate/**`
+- **Nicht anfassen:** übrige `src/core/**`, `src/shared/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `buildLedger({projects, expenses, incomes, campaigns}, range)`: erzeugt Einträge `{date, kind: 'expense'|'income', category, projectId | null, eurCents, original: Money, sourceType, sourceId, personId?, serviceId?}`; wiederkehrende Posten über `occurrences`/`amountAt`; Kampagnen am Startdatum, Kategorie `advertising` (PE-49).
+  2. Reihenfolge PE-50: Betrag → EUR (Snapshot) → Aufteilung (`resolveProjects` mit `isActive` am Buchungstag) → Einträge je Projekt. Keine aktiven Projekte → Eintrag mit `projectId: null` und Flag `unallocated` (zählt im Portfolio, wird in der UI gewarnt).
+  3. `aggregate(ledger, {groupBy: 'month'|'quarter'|'year'|'project'|'category'|'person'|'service', filter})` → Summen Einnahmen, Ausgaben, Saldo in EUR-Cents.
+  4. `monthlyFixedCosts(expenses, projects, date)` nach PE-51, gesamt und je Projekt.
+  5. `toDisplay(eurCents, displayCurrency, rates)` nutzt `convertForDisplay` aus AP-05.
+- **Schnittstellen:** stellt `buildLedger`, `aggregate`, `monthlyFixedCosts`, `toDisplay` für alle UI-Pakete, AP-16, AP-20 bereit.
+- **Akzeptanzkriterien:** Referenzszenario aus §1 (Abnahme) ergibt exakt erwartete Werte je Projekt; Summe aller Projektanteile = Summe der Buchungen (Eigenschaftstest); eingestelltes Projekt erhält nach Enddatum keine „alle“-Anteile mehr.
+- **Tests:** Szenario-Tests mit festen Daten (inkl. Seed-ähnlicher Fälle), Eigenschaftstests, Randfälle (USD ohne Kurs → Fehlerwert sichtbar, Preisänderung, Projekt ohne Buchungen); Abdeckung 100 % Zeilen
+- **Review-Schwerpunkte:** Rechengenauigkeit, Reihenfolge PE-50, Determinismus, keine Float-Arithmetik
+- **Design-Review:** nein
+- **Doku-Pflichten:** `src/core/README.md` (Rechenregeln mit Beispielen) anlegen
+- **Aufwand:** L · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** groß (L), Kern
+- **Kürzbar bei Budgetnot:** nein (PE-24)
+- **Commit-Typ:** `feat(AP-09): add ledger and aggregation core`
+
+#### AP-10 – UI-Baukasten und Daten-Hooks
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W1
+- **Ziel:** Wiederverwendbare Formular-, Tabellen- und Datenbausteine, damit die Fachseiten schnell und einheitlich entstehen.
+- **Pflichtlektüre:** PE-05, PE-06, PE-07, PE-13, PE-21, PE-47, PE-48, PE-54, `src/shared/ipc.ts`
+- **Abhängigkeiten:** AP-04, AP-07
+- **Parallel möglich mit:** AP-09
+- **Dateien (Eigentum):** `src/renderer/components/forms/**`, `src/renderer/components/data/**`, `src/renderer/hooks/**`, `src/renderer/state/**`, `src/renderer/app/Header.tsx`, `src/renderer/i18n/shared-keys.ts` (+ de/en-Wörterbücher für Kategorien, Plattformen, Formate)
+- **Nicht anfassen:** `src/renderer/pages/**`, `src/renderer/features/**`, übrige `src/renderer/app/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Hooks: `useCollection(name)` (Liste, laden, Fehler), `useEntityMutation` (create/update/delete mit Fehlertext aus Fehlercode, z. B. `IN_USE`), `useSettings`, `useRates` (neuester Kurs je Währung).
+  2. `DisplayCurrencyProvider` (aus Settings) + Auswahl in `Header.tsx`; Hinweis „umgerechnet“ bei Nicht-EUR (PE-50).
+  3. Formularbausteine: `MoneyInput` (Betrag + Währung; schlägt `rateToEur` aus neuestem Kurs vor, Feld bleibt änderbar, PE-05), `AllocationEditor` (alle/ausgewählt, gleich/Prozent, Live-Vorschau der Cent-Aufteilung mit `splitCents`, Prozentsumme muss 100 % sein), `RecurrenceEditor` (Intervall, Start, Ende, Preisänderungen), `ProjectPicker`, `CategorySelect` (Startlisten + eigene, ausgeblendete nicht wählbar), `DateInput`, `StarRating` (0–5), `ConfirmDialog`.
+  4. Datenbausteine: `DataTable` (Sortierung, Filter-Slot, leere Zustände), `KpiCard`, `PeriodPicker` (Monat, Quartal, Jahr, frei).
+  5. Alle sichtbaren Texte über i18n; Geld/Datum nur über die Formatierer aus AP-04.
+- **Schnittstellen:** stellt Bausteine und Hooks für AP-11–AP-15, AP-17–AP-19, AP-22–AP-25 bereit.
+- **Akzeptanzkriterien:** `AllocationEditor` zeigt für 100 € auf 3 Projekte 33,34/33,33/33,33; Prozent ≠ 100 % blockiert Speichern; Kurs-Vorschlag erscheint bei Fremdwährung; Anzeigewährung umschaltbar und bleibt erhalten.
+- **Tests:** Vitest für reine Hilfslogik der Bausteine (Validierung, Vorschau-Berechnung) – UI-Rendering-Tests nicht nötig
+- **Review-Schwerpunkte:** Wiederverwendbarkeit, i18n vollständig, keine Rechenlogik dupliziert (nur Kern-Funktionen aufrufen)
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** kurze Nutzungsbeispiele als JSDoc
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-10): add form, data components and hooks`
+
+#### AP-11 – Einstellungen, Kurse, Kategorien
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W2
+- **Ziel:** Datenordner, Backups, Anzeigewährung, Sprache, Theme, Kurstabelle und eigene Listen pflegen.
+- **Pflichtlektüre:** PE-04, PE-05, PE-13, PE-17, PE-18, PE-47, PE-54
+- **Abhängigkeiten:** AP-10
+- **Parallel möglich mit:** AP-12, AP-13, AP-14, AP-15
+- **Dateien (Eigentum):** `src/renderer/pages/settings/**`
+- **Nicht anfassen:** `src/renderer/features/transfer/**` (Platzhalter, wird in AP-25 ersetzt), andere Seiten, `src/renderer/components/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Abschnitt Daten: aktueller Datenordner, Knopf „Ordner wählen“ (`dataDir:choose`), Hinweis zum Neustart; Backup-Liste mit „Wiederherstellen“ (mit Rückfrage); eingebunden `TransferSection` (Platzhalter).
+  2. Abschnitt Anzeige: Anzeigewährung, Sprache, Theme.
+  3. Abschnitt Kurse: Tabelle aller Kurse (Währung, Kurs, eingetragen am), „Kurs eintragen“ (`1 X = k EUR`), kein Löschen (PE-05/§4).
+  4. Abschnitt Listen: Ausgaben-/Einnahmenkategorien, Plattformen, Kampagnen-Plattformen und -Formate: hinzufügen, ausblenden/einblenden (PE-54).
+- **Schnittstellen:** nutzt `window.api` über AP-10-Hooks.
+- **Akzeptanzkriterien:** neuer Kurs wird sofort als Vorschlag in neuen Buchungen genutzt; ausgeblendete Kategorie nicht mehr wählbar, alte Buchungen zeigen sie weiter.
+- **Tests:** Vitest für Eingabevalidierung (Kursformat, Währungscode)
+- **Review-Schwerpunkte:** kein Pfad aus dem Renderer, Rückfragen bei Wiederherstellen, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-11): add settings, rates and lists`
+
+#### AP-12 – Projekte (Liste, Detail)
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W2
+- **Ziel:** Projekte anlegen, bearbeiten, archivieren und auf einer Detailseite mit Kennzahlen, Diensten und Buchungen ansehen.
+- **Pflichtlektüre:** F-01, F-02, PE-34, PE-35, PE-50, PE-51
+- **Abhängigkeiten:** AP-09, AP-10
+- **Parallel möglich mit:** AP-11, AP-13, AP-14, AP-15
+- **Dateien (Eigentum):** `src/renderer/pages/projects/**`
+- **Nicht anfassen:** `src/renderer/features/**` (Platzhalter-Tabs nur importieren), andere Seiten
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Liste: Karten oder Tabelle mit Name, Plattformen, Phase, Saldo (aktuelles Jahr); Filter Phase, „archivierte zeigen“.
+  2. Dialog anlegen/bearbeiten mit allen Feldern PE-34; Links mit URL-Prüfung (nur http/https); Wechsel auf „Eingestellt“ schlägt Enddatum heute vor.
+  3. Archivieren; Löschen nur ohne Bezüge, sonst verständliche Meldung (`IN_USE`).
+  4. Detailseite `/projects/:id` mit Tabs: Übersicht (KPIs: Einnahmen, Ausgaben, Saldo im Zeitraum, Fixkosten/Monat; Links öffnen über `shell:openExternal`), Dienste (Dienste, die das Projekt nutzen, mit Anteil und Kosten), Buchungen (Journal-Einträge des Projekts aus `buildLedger`, mit Herkunft), sowie Tabs Personen, Kampagnen, Nutzer, Statistik, die die Platzhalter aus `src/renderer/features/*/ProjectTab.tsx` mit Prop `projectId` rendern.
+- **Schnittstellen:** nutzt AP-09-Kern und AP-10-Bausteine; definiert Prop-Vertrag `ProjectTab({ projectId })` für AP-17, AP-18, AP-19, AP-22.
+- **Akzeptanzkriterien:** Projekt mit allen Feldern anlegbar; Dienst-Anteile und Buchungen stimmen mit Seed-Daten; Löschen mit Bezügen wird verhindert.
+- **Tests:** Vitest für Formular-Validierung und Ableitungen (z. B. Enddatum-Vorschlag)
+- **Review-Schwerpunkte:** Löschregeln, externe Links, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-12): add projects pages`
+
+#### AP-13 – Dienste
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W2
+- **Ziel:** Deploy-Dienste mit verknüpften Kosten verwalten.
+- **Pflichtlektüre:** F-02, PE-12, PE-35, PE-48
+- **Abhängigkeiten:** AP-09, AP-10
+- **Parallel möglich mit:** AP-11, AP-12, AP-14, AP-15
+- **Dateien (Eigentum):** `src/renderer/pages/services/**`
+- **Nicht anfassen:** `src/renderer/features/**`, andere Seiten
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Liste gruppiert nach Zweck (Frontend, Backend, DB, Hosting, Storage, Domain, Sonstiges), Spalten Anbieter, Tarif, Projekte, Kosten/Monat (PE-51).
+  2. Dialog anlegen/bearbeiten: Anbieter, Zweck, Tarif, URL, Notiz, Aufteilung (`AllocationEditor`).
+  3. Kosten des Dienstes: Liste der verknüpften Ausgaben, „+ Kosten“ legt eine Ausgabe mit `serviceId`, passender Kategorie und der Aufteilung des Dienstes an (einmalig oder wiederkehrend, `MoneyInput`, `RecurrenceEditor`).
+  4. Löschen fragt, ob verknüpfte Kosten mitgelöscht werden (PE-35).
+- **Schnittstellen:** nutzt AP-09/AP-10.
+- **Akzeptanzkriterien:** geteilter Dienst erscheint in beiden Projekten (über AP-12) mit korrektem Anteil; Löschen-Dialog bietet beide Optionen.
+- **Tests:** Vitest für Zweck→Kategorie-Zuordnung und Validierung
+- **Review-Schwerpunkte:** Konsistenz Dienst↔Ausgabe, Löschregel, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-13): add services pages`
+
+#### AP-14 – Ausgaben und Einnahmen
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W2
+- **Ziel:** Alle Ausgaben (inkl. KI-Abos und -Guthaben) und Einnahmen erfassen, bearbeiten und filtern.
+- **Pflichtlektüre:** F-03, F-04, F-06, PE-05–PE-10, PE-26, PE-29, PE-48
+- **Abhängigkeiten:** AP-09, AP-10
+- **Parallel möglich mit:** AP-11, AP-12, AP-13, AP-15
+- **Dateien (Eigentum):** `src/renderer/pages/expenses/**`, `src/renderer/pages/incomes/**`, `src/renderer/features/bookings/**`
+- **Nicht anfassen:** andere Seiten und Features
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `features/bookings/ExpenseForm.tsx` (exportiert, Props für Vorbelegung: `category`, `personId`, `serviceId`): einmalig/wiederkehrend, Kategorie steuert Zusatzfelder (Person bei Mitarbeiter/Freelancer, Dienst bei Dienstkategorien), `MoneyInput`, `AllocationEditor`, Beschreibung.
+  2. Schnellknöpfe „+ Personenzahlung“, „+ KI-Guthaben“, „+ Abo“ (PE-48).
+  3. `IncomeForm.tsx`: Projekt (genau eins), Kategorie, netto, einmalig/wiederkehrend.
+  4. Listen mit Filter Zeitraum (`PeriodPicker`), Projekt, Kategorie; Spalten inkl. Originalbetrag und Anzeigebetrag; Warnsymbol bei nicht zuordenbaren Einträgen.
+  5. Bearbeiten, Löschen mit Rückfrage.
+- **Schnittstellen:** stellt `ExpenseForm` für AP-17 bereit.
+- **Akzeptanzkriterien:** Smoke-Test-Punkte M1 zu Kurs, 100 €/3 und 31. → Februar erfüllt; KI-Guthaben als einmalige Ausgabe am Aufladetag.
+- **Tests:** Vitest für Formular→Entität-Abbildung (alle Varianten) und Validierung
+- **Review-Schwerpunkte:** korrekte Abbildung auf Schemas, Kurs-Snapshot, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-14): add expenses and incomes`
+
+#### AP-15 – Einfache Übersicht (Startseite v1)
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W2
+- **Ziel:** Startseite mit den wichtigsten Kennzahlen für den Prototyp.
+- **Pflichtlektüre:** F-09 (Teil), PE-50, PE-51
+- **Abhängigkeiten:** AP-09, AP-10
+- **Parallel möglich mit:** AP-11, AP-12, AP-13, AP-14
+- **Dateien (Eigentum):** `src/renderer/pages/home/**`
+- **Nicht anfassen:** andere Seiten
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:** `PeriodPicker` (Standard: aktueller Monat); KPI-Karten Einnahmen, Ausgaben, Saldo, Fixkosten/Monat; Tabelle Projekte nach Saldo; Hinweis bei nicht zuordenbaren Buchungen.
+- **Schnittstellen:** nutzt AP-09/AP-10.
+- **Akzeptanzkriterien:** Werte stimmen mit Seed-Szenario (Lead rechnet einen Monat nach).
+- **Tests:** keine eigenen außer Hilfsfunktionen
+- **Review-Schwerpunkte:** keine Rechenlogik in der UI
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** S · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** ja (wird in AP-23 ersetzt; dann zeigt M1 nur Projektseiten)
+- **Commit-Typ:** `feat(AP-15): add simple overview`
 
 ### M2 – Menschen & Marketing
 
-⟦Details folgen⟧
+#### AP-16 – Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen
+
+- **Meilenstein, Lane, Welle:** M2 · CORE · W1
+- **Ziel:** Exakte Kennzahlen für Personen, Kampagnen und Nutzerzahlen.
+- **Pflichtlektüre:** F-07, F-11, F-13, PE-11, PE-36, PE-49, PE-52, `src/core/ledger/**`
+- **Abhängigkeiten:** AP-09
+- **Parallel möglich mit:** AP-21 (und M1 W2)
+- **Dateien (Eigentum):** `src/core/metrics/**`
+- **Nicht anfassen:** übrige `src/core/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `personSummary(ledger, personId, range)` → gesamt, je Projekt, je Monat.
+  2. `campaignKpis(campaign)` → CPC, Kosten pro Nutzer (EUR-Cents, gerundet half-up), CTR (Basispunkte); Division durch 0 → `null`. `campaignUsersByProject` (Größter-Rest auf ganze Nutzer, PE-49).
+  3. `userMetrics(snapshots, ledger, campaigns, projectId?, range)` nach PE-52: letzter Stand, Zuwachs, Kosten pro Nutzer, Einnahmen pro zahlendem Nutzer, Kampagnenanteil.
+  4. `campaignRanking(campaigns, by: 'costPerUser'|'rating')`.
+- **Schnittstellen:** für AP-17, AP-18, AP-19, AP-20, AP-22.
+- **Akzeptanzkriterien:** Referenzfälle: 100 € / 400 Klicks = 0,25 € CPC; 0 Klicks → „–“; Person mit 100 € auf 2 Projekte → je 50 €.
+- **Tests:** Tabellen- und Randfalltests, Abdeckung 100 % Zeilen
+- **Review-Schwerpunkte:** Definitionen PE-52, Rundung, Division durch 0
+- **Design-Review:** nein
+- **Doku-Pflichten:** `src/core/README.md` ergänzen (Abschnitt Kennzahlen) – Datei gehört in dieser Welle AP-16
+- **Aufwand:** M · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** Kern
+- **Kürzbar bei Budgetnot:** nein (PE-24)
+- **Commit-Typ:** `feat(AP-16): add person, campaign and user metrics core`
+
+#### AP-21 – Diagramm-Bausteine
+
+- **Meilenstein, Lane, Welle:** M2 · UI · W1
+- **Ziel:** Einheitliche Recharts-Bausteine im Theme, für App und PDF.
+- **Pflichtlektüre:** PE-21, PE-25, PE-47
+- **Abhängigkeiten:** AP-10
+- **Parallel möglich mit:** AP-16 (und M1 W2)
+- **Dateien (Eigentum):** `src/renderer/components/charts/**`
+- **Nicht anfassen:** übrige `src/renderer/**`
+- **Freigegebene Abhängigkeiten:** keine neuen (`recharts` vorhanden)
+- **Umsetzung:** `BarChartMonthly` (Einnahmen/Ausgaben/Saldo), `LineChartSeries`, `DonutChart` (Kategorien), `Sparkline`; Farben nur aus CSS-Variablen; Achsen/Tooltips mit Formatierern aus AP-04; Prop `static` schaltet Animationen ab (für PDF); feste Größen-Option für Druck.
+- **Schnittstellen:** für AP-19, AP-22, AP-23, AP-24.
+- **Akzeptanzkriterien:** Diagramme folgen Hell/Dunkel; `static` rendert ohne Animation.
+- **Tests:** Vitest für Datenaufbereitungs-Helfer
+- **Review-Schwerpunkte:** Theme-Treue, Barrierearmut (Beschriftungen), i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-21): add chart components`
+
+#### AP-17 – Mitarbeiterverwaltung
+
+- **Meilenstein, Lane, Welle:** M2 · UI · W2
+- **Ziel:** Personen mit kleinem Profil verwalten und ihre Zahlungen nach Projekt und Zeitraum überblicken.
+- **Pflichtlektüre:** F-05, F-11, PE-09, PE-35, PE-36, PE-48
+- **Abhängigkeiten:** AP-14, AP-16
+- **Parallel möglich mit:** AP-18, AP-19, AP-20
+- **Dateien (Eigentum):** `src/renderer/pages/people/**`, `src/renderer/features/people/**`
+- **Nicht anfassen:** `src/renderer/features/bookings/**` (nur importieren), andere Seiten
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Liste: Name, Rolle, Status, Summe aktuelles Jahr; Filter aktiv/inaktiv.
+  2. Profil `/people/:id`: Name, Rolle, Status, Notiz bearbeiten; KPIs gesamt und im Zeitraum; Tabelle je Projekt; Zahlungsliste (Datum, Kurzbeschreibung, Betrag, Projekte); „+ Zahlung“ öffnet `ExpenseForm` mit `personId` und Kategorie Mitarbeiter/Freelancer.
+  3. Löschen mit Rückfrage; Zahlungen bleiben als „gelöschte Person“ (PE-35).
+  4. `features/people/ProjectTab.tsx`: Personen mit Zahlungen im Projekt und Summen.
+- **Schnittstellen:** nutzt `ExpenseForm` (AP-14), `personSummary` (AP-16); erfüllt `ProjectTab`-Vertrag (AP-12).
+- **Akzeptanzkriterien:** Smoke-Test-Punkte M2 zu Personen erfüllt; keine Kontaktdatenfelder.
+- **Tests:** Vitest für Hilfslogik
+- **Review-Schwerpunkte:** Datensparsamkeit (R2, PE-09), Löschregel, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (Prio 1, PE-39)
+- **Commit-Typ:** `feat(AP-17): add staff management`
+
+#### AP-18 – Werbekampagnen
+
+- **Meilenstein, Lane, Welle:** M2 · UI · W2
+- **Ziel:** Kampagnen erfassen, bewerten und vergleichen.
+- **Pflichtlektüre:** F-07, PE-11, PE-26, PE-49, PE-54
+- **Abhängigkeiten:** AP-16
+- **Parallel möglich mit:** AP-17, AP-19, AP-20
+- **Dateien (Eigentum):** `src/renderer/pages/campaigns/**`, `src/renderer/features/campaigns/**`
+- **Nicht anfassen:** andere Seiten und Features
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:** Liste mit Name, Plattform, Format, Zeitraum, Kosten, Klicks, Nutzer, CPC, Kosten/Nutzer, CTR, Sterne; Sortierung nach Kennzahlen; Dialog mit allen Feldern, `MoneyInput`, `AllocationEditor`, `StarRating`; Plattform/Format aus Settings-Listen; `features/campaigns/ProjectTab.tsx` mit Kampagnen des Projekts (anteilige Kosten und Nutzer).
+- **Schnittstellen:** nutzt AP-16; erfüllt `ProjectTab`-Vertrag.
+- **Akzeptanzkriterien:** Smoke-Test-Punkte M2 zu Kampagnen erfüllt; Kampagnenkosten erscheinen nicht zusätzlich als manuelle Ausgabe.
+- **Tests:** Vitest für Formular→Entität
+- **Review-Schwerpunkte:** Kennzahlen nur aus Kern, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-18): add campaigns`
+
+#### AP-19 – Nutzerzahlen
+
+- **Meilenstein, Lane, Welle:** M2 · UI · W2
+- **Ziel:** Nutzerstände je Projekt erfassen und den Verlauf mit Kennzahlen zeigen.
+- **Pflichtlektüre:** F-13, PE-38, PE-52
+- **Abhängigkeiten:** AP-16, AP-21
+- **Parallel möglich mit:** AP-17, AP-18, AP-20
+- **Dateien (Eigentum):** `src/renderer/pages/metrics/**`, `src/renderer/features/metrics/**`
+- **Nicht anfassen:** andere Seiten und Features
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:** Projektwahl; Tabelle der Stichtage (gesamt, aktiv, zahlend, optional je Plattform); „+ Stichtag“; Liniendiagramm (`LineChartSeries`); KPI-Karten nach PE-52 für gewählten Zeitraum; `features/metrics/ProjectTab.tsx`.
+- **Schnittstellen:** nutzt AP-16, AP-21; erfüllt `ProjectTab`-Vertrag.
+- **Akzeptanzkriterien:** Smoke-Test-Punkt M2 zu Nutzerständen erfüllt; Division durch 0 zeigt „–“.
+- **Tests:** Vitest für Validierung (aktiv ≤ gesamt, zahlend ≤ gesamt)
+- **Review-Schwerpunkte:** Validierung, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `feat(AP-19): add user metrics`
 
 ### M3 – Auswertung
 
-⟦Details folgen⟧
+#### AP-20 – Kern: Prognose, Break-even, Zielfortschritt
+
+- **Meilenstein, Lane, Welle:** M3 · CORE · W1
+- **Ziel:** 12-Monats-Prognose, Break-even je Projekt und Fortschritt aller Zielarten exakt berechnen.
+- **Pflichtlektüre:** F-09, F-12, PE-16, PE-29, PE-30, PE-37, PE-53, `src/core/**`
+- **Abhängigkeiten:** AP-16
+- **Parallel möglich mit:** AP-17, AP-18, AP-19
+- **Dateien (Eigentum):** `src/core/forecast/**`, `src/core/goals/**`, `src/core/README.md`
+- **Nicht anfassen:** übrige `src/core/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `forecast(data, today, months = 12)`: künftige Fälligkeiten aller laufenden wiederkehrenden Posten ab morgen bis Monatsende +12, Aufteilung nach am Fälligkeitstag aktiven Projekten; Ergebnis je Monat und Projekt.
+  2. `breakEven(ledgerHistory, forecast, projectId)`: erster Monat mit kumulierten Einnahmen ≥ kumulierten Ausgaben ab Projektstart; Ergebnis `{ reachedAt } | { expectedAt } | 'notInSight'`.
+  3. `goalProgress(goal, data, today)` für alle Arten nach PE-53 → `{ value, target, ratio (Basispunkte, max 10 000), status }`.
+- **Schnittstellen:** für AP-22, AP-23, AP-24.
+- **Akzeptanzkriterien:** Referenzszenarien je Zielart und Break-even-Fall (erreicht, erwartet, nicht in Sicht); Prognose eines Jahresabos erscheint genau im Fälligkeitsmonat.
+- **Tests:** Szenario- und Randfalltests (heute = Monatsletzter, Projektende in der Prognose, Ziel ohne Daten), Abdeckung 100 % Zeilen; Gesamtabdeckung `src/core/` ≥ 95 % prüfen
+- **Review-Schwerpunkte:** Definitionen PE-30/PE-53, Datumsgrenzen, Determinismus („heute“ als Parameter)
+- **Design-Review:** nein
+- **Doku-Pflichten:** `src/core/README.md` ergänzen
+- **Aufwand:** L · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** groß (L), Kern
+- **Kürzbar bei Budgetnot:** nein (PE-24)
+- **Commit-Typ:** `feat(AP-20): add forecast, break-even and goal progress core`
+
+#### AP-22 – Statistikseite
+
+- **Meilenstein, Lane, Welle:** M3 · UI · W2
+- **Ziel:** Alle Statistiken nach PE-16 für Portfolio und je Projekt.
+- **Pflichtlektüre:** F-09, PE-16, PE-30, PE-50, PE-51
+- **Abhängigkeiten:** AP-20, AP-21
+- **Parallel möglich mit:** AP-23, AP-24
+- **Dateien (Eigentum):** `src/renderer/pages/stats/**`, `src/renderer/features/stats/**`
+- **Nicht anfassen:** andere Seiten und Features
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:** Umschalter Portfolio/Projekt, `PeriodPicker`; Abschnitte: KPI-Karten, Monatsverlauf, Ausgaben nach Kategorie, Projekt-Ranking nach Saldo, Fixkosten/Monat je Projekt, Kampagnen-Ranking, Prognose 12 Monate, Break-even je Projekt; Tabellen unter den Diagrammen; `features/stats/ProjectTab.tsx` (Projektansicht derselben Abschnitte).
+- **Schnittstellen:** nutzt AP-09, AP-16, AP-20, AP-21.
+- **Akzeptanzkriterien:** Zahlen identisch mit Kern-Ergebnissen für Seed-Daten; Zeitraumwechsel aktualisiert alles.
+- **Tests:** Vitest für Daten-Mapping Kern→Diagramm
+- **Review-Schwerpunkte:** keine Rechenlogik in UI, i18n, Leistung bei großen Datenmengen (memoization)
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** teilweise (Kampagnen-Ranking und Fixkosten je Projekt zuletzt)
+- **Commit-Typ:** `feat(AP-22): add statistics page`
+
+#### AP-23 – Startseite mit Zielen
+
+- **Meilenstein, Lane, Welle:** M3 · UI · W2
+- **Ziel:** Startseite zeigt Ziele mit Fortschritt und die Monatskennzahlen; Ziele sind verwaltbar.
+- **Pflichtlektüre:** F-12, PE-37, PE-53
+- **Abhängigkeiten:** AP-20, AP-21
+- **Parallel möglich mit:** AP-22, AP-24
+- **Dateien (Eigentum):** `src/renderer/pages/home/**`, `src/renderer/features/goals/**`
+- **Nicht anfassen:** andere Seiten
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:** obere Zeile KPI-Karten (aus AP-15 übernehmen); Zielliste gruppiert nach Portfolio/Projekt mit `Progress`, Status-Badge, Stichtag; Dialog Ziel anlegen/bearbeiten (Art, Projekt oder Portfolio, Titel, Zielwert, ab, Stichtag); freie Ziele abhakbar; Sparkline Saldo letzte 6 Monate.
+- **Schnittstellen:** nutzt AP-20, AP-21.
+- **Akzeptanzkriterien:** Smoke-Test-Punkt M3 zu Zielen erfüllt; Status „verfehlt“ nach Stichtag.
+- **Tests:** Vitest für Formular→Entität
+- **Review-Schwerpunkte:** i18n, Klarheit der Darstellung
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (Prio 2, PE-39)
+- **Commit-Typ:** `feat(AP-23): add home with goals`
+
+#### AP-24 – PDF-Bericht
+
+- **Meilenstein, Lane, Welle:** M3 · MAIN + UI · W2
+- **Ziel:** PDF für Portfolio und einzelne Projekte, gleiche Zahlen und Diagramme wie die App.
+- **Pflichtlektüre:** F-10, PE-14, PE-25, PE-47, §5 (Härtung), `src/main/window.ts`, `src/main/security.ts`
+- **Abhängigkeiten:** AP-20, AP-21
+- **Parallel möglich mit:** AP-22, AP-23
+- **Dateien (Eigentum):** `src/main/pdf/**`, `src/main/index.ts` (nur PDF-Registrierung), `src/renderer/pages/reports/**`, `src/renderer/pages/print/**`
+- **Nicht anfassen:** `src/main/storage/**`, `src/main/ipc/**` (außer neue Datei `src/main/pdf/ipc.ts`), andere Seiten
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Seite `/reports`: Bereich (Portfolio/Projekt), Zeitraum, Sprache, Anzeigewährung → „PDF erstellen“ (`pdf:export`).
+  2. Main: verstecktes Fenster mit denselben Sicherheitsoptionen lädt `#/print?…`; wartet auf `pdf:ready` (Zeitlimit 30 s, dann Fehler); `printToPDF` (A4, Ränder, Hintergründe an); Speichern nur über nativen Speichern-Dialog; Fenster schließen.
+  3. Seite `/print`: druckoptimiertes Layout, Diagramme mit `static`, Tabellen (Projektbericht: Einnahmen, Ausgaben nach Kategorie, Dienste, Personenzahlungen, Kampagnen; Portfolio: alle Projekte im Vergleich), Kopf mit Zeitraum und Erstelldatum, Fußzeile mit Seitenzahl; meldet `pdf:ready` nach dem Rendern.
+- **Schnittstellen:** setzt `pdf:export`, `pdf:ready` aus AP-02 um.
+- **Akzeptanzkriterien:** beide PDFs entstehen; Zahlen = App (Lead vergleicht Stichproben); keine Dateipfade aus dem Renderer.
+- **Tests:** Unit-Tests für Parameter-Validierung und Zeitlimit-Logik (mit Mocks)
+- **Review-Schwerpunkte:** Sicherheit des versteckten Fensters, Pfad nur über Dialog, i18n
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (F-10 Pflicht)
+- **Commit-Typ:** `feat(AP-24): add pdf reports`
 
 ### M4 – Release
 
-⟦Details folgen⟧
+#### AP-25 – Export/Import ZIP
+
+- **Meilenstein, Lane, Welle:** M4 · MAIN + UI · W1
+- **Ziel:** Alle Daten als ZIP sichern und sicher wieder einspielen.
+- **Pflichtlektüre:** F-14, §5 (ZIP-Import, Limits), PE-17, `src/main/storage/**`
+- **Abhängigkeiten:** AP-07, AP-11, AP-24 (wegen `src/main/index.ts` nie parallel zu AP-24)
+- **Parallel möglich mit:** AP-26, AP-27
+- **Dateien (Eigentum):** `src/main/transfer/**`, `src/main/index.ts` (nur Registrierung), `src/renderer/features/transfer/**`
+- **Nicht anfassen:** `src/main/storage/**` (nur dessen öffentliche Funktionen nutzen), `src/renderer/pages/settings/**`
+- **Freigegebene Abhängigkeiten:** keine neuen (`jszip` vorhanden)
+- **Umsetzung:**
+  1. `export:zip`: alle Collection-Dateien + `manifest.json` (App-Version, Schema-Version, Datum), Speichern über nativen Dialog.
+  2. `import:zip`: Datei nur über nativen Öffnen-Dialog; Größenlimit 50 MB; nur erwartete Dateinamen ohne Pfadanteile (Zip-Slip-Schutz), keine weiteren Einträge; jede Datei mit zod validieren; Schema-Version prüfen; erst danach Backup des aktuellen Stands und atomares Ersetzen aller Dateien; bei Fehler nichts ändern.
+  3. `TransferSection.tsx` ersetzt den Platzhalter: Knöpfe Export/Import mit Rückfrage und Ergebnisanzeige.
+- **Schnittstellen:** setzt `export:zip`, `import:zip` aus AP-02 um.
+- **Akzeptanzkriterien:** Export → Import in leeren Ordner ergibt identische Daten; manipuliertes ZIP (`../`, Zusatzdatei, ungültiges JSON, zu groß) wird abgelehnt, nichts geändert.
+- **Tests:** Unit-Tests für alle Ablehnungsfälle und den Erfolgsfall (temporäre Verzeichnisse)
+- **Review-Schwerpunkte:** Sicherheit (Zip-Slip, Größen, Validierung), Datenverlust
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** M · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** Sicherheit
+- **Kürzbar bei Budgetnot:** nein (Abnahmekriterium)
+- **Commit-Typ:** `feat(AP-25): add zip export and import`
+
+#### AP-26 – E2E-Tests
+
+- **Meilenstein, Lane, Welle:** M4 · OPS · W1
+- **Ziel:** Drei Kernabläufe automatisch gegen die gebaute Electron-App prüfen.
+- **Pflichtlektüre:** PE-24, §6 (`APP_DATA_DIR`)
+- **Abhängigkeiten:** AP-24
+- **Parallel möglich mit:** AP-25, AP-27
+- **Dateien (Eigentum):** `e2e/**`, `playwright.config.ts`
+- **Nicht anfassen:** `src/**`, `package.json`
+- **Freigegebene Abhängigkeiten:** keine neuen (`@playwright/test` vorhanden, Electron über `_electron`)
+- **Umsetzung:** je Test ein frisches temporäres `APP_DATA_DIR`; Ablauf 1: Projekt anlegen, bearbeiten; Ablauf 2: drei Projekte, 100 € Lizenz auf „alle“ → Projektseiten zeigen 33,34/33,33/33,33; Ablauf 3: Einnahme + Ausgabe → Startseite-Saldo stimmt, PDF-Export erzeugt Datei (Speicherdialog im Test über Main-Testhook umgehen ist **nicht** erlaubt; stattdessen `dialog.showSaveDialog` per Playwright `electronApp.evaluate` stubben).
+- **Schnittstellen:** –
+- **Akzeptanzkriterien:** `npm run build && npm run test:e2e` grün, lokal unter Windows stabil (3 Läufe hintereinander).
+- **Tests:** die drei Abläufe
+- **Review-Schwerpunkte:** keine echten Datenpfade, Stabilität (keine festen Wartezeiten)
+- **Design-Review:** nein
+- **Doku-Pflichten:** Abschnitt „Tests“ als Kommentar in `playwright.config.ts`
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** ja, auf Ablauf 2 (Kürzung K1)
+- **Commit-Typ:** `test(AP-26): add e2e flows`
+
+#### AP-27 – Installer-Feinschliff, README
+
+- **Meilenstein, Lane, Welle:** M4 · OPS · W1
+- **Ziel:** Release-fähiger Installer mit Vorschlag `D:\appManager` und eine README für das öffentliche Repo.
+- **Pflichtlektüre:** PE-03, PE-18, PE-19, PE-20, PE-22, PE-47, H-01
+- **Abhängigkeiten:** AP-24, H-01
+- **Parallel möglich mit:** AP-25, AP-26
+- **Dateien (Eigentum):** `electron-builder.yml`, `build/**` (z. B. `installer.nsh`), `package.json` (nur `version`, `description`, `license`), `README.md`
+- **Nicht anfassen:** `LICENSE` (legt der Nutzer an), `src/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. NSIS: Standard-Installationsordner `D:\appManager` über `build/installer.nsh` (Zielordner bleibt änderbar), Startmenü-Eintrag, Deinstallation lässt Datenordner unberührt.
+  2. `package.json`: `version` 1.0.0, `license` `SEE LICENSE IN LICENSE`.
+  3. README (Deutsch, kurze englische Zusammenfassung): Zweck, Funktionen, Datenschutz (keine Datenübertragung, Daten nur lokal), Datenordner und Backups, Entwicklung (`npm ci`, `npm run dev`, `npm run seed`, Checks), Installer bauen (`npm run dist`), Lizenz-Hinweis PolyForm Noncommercial 1.0.0 (keine kommerzielle Nutzung).
+- **Schnittstellen:** –
+- **Akzeptanzkriterien:** `npm run dist` erzeugt Installer mit Vorschlag `D:\appManager`; README vollständig, keine echten Daten oder Pfade des Nutzers außer Repo-URL.
+- **Tests:** keine (Lead baut Installer einmal)
+- **Review-Schwerpunkte:** Lizenzangaben, keine personenbezogenen Daten, R3-Hinweis (keine Webseite)
+- **Design-Review:** nein
+- **Doku-Pflichten:** README
+- **Aufwand:** S · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `docs(AP-27): add readme and installer defaults`
 
 ---
 
@@ -922,16 +1321,24 @@ flowchart LR
 
 | Meilenstein | Pakete | Agent-Aufwand | Geschätzte 5-h-Fenster bei 30 % Team-Budget |
 |---|---|---|---|
-| M{{x}} | {{n}} | {{h}} | {{n}} |
-| **Gesamt** | | | |
+| M0 | 8 (5 opus) | 13,25 h | 4–5 |
+| M1 | 7 (1 opus) | 12,75 h | 3–4 |
+| M2 | 5 (1 opus) | 7,5 h | 2 |
+| M3 | 4 (1 opus) | 9 h | 2–3 |
+| M4 | 3 (1 opus) | 3,75 h | 1 |
+| **Gesamt** | **27** | **46,25 h** + Reviews | **12–15** |
 
-**Zeit des Nutzers:** {{Freigaben, Entscheidungen, Deployments, Smoke-Tests – geschätzt h}}
+**Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
-**Ehrliche Einschätzung:** {{…}}
+**Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. 5 parallele Coder (PE-23) erreichen den Zielwert von 30 % schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“). Design-Pakete nach H-05 kommen zusätzlich.
 
 | Stufe | Kürzung | Ersparnis | Betroffene Pakete |
 |---|---|---|---|
-| K1 | {{…}} | {{…}} | {{…}} |
+| K1 | E2E auf Ablauf 2 reduzieren | ~0,5 h | AP-26 |
+| K2 | Startseite v1 entfällt (M1 zeigt Projektseiten) | ~0,75 h | AP-15 |
+| K3 | Statistik ohne Kampagnen-Ranking und Fixkosten je Projekt | ~0,75 h | AP-22 |
+| K4 | Optionen O-01–O-04 nicht bauen | – (sind ohnehin nicht geplant) | – |
+| Nie | Rechenkern-Tests, Sicherheit, Speicher/Backups, Export/Import | – | AP-02, AP-03, AP-05–AP-07, AP-09, AP-16, AP-20, AP-25 |
 
 ---
 
@@ -943,7 +1350,15 @@ flowchart LR
 | RI-2 | Vertrag aus derselben Welle wird genutzt | Verträge eine Welle früher | Vertragsnutzer |
 | RI-3 | Budget reicht nicht für die geplante Parallelität | Parallelität §7.2, Kürzungen §14 | alle |
 | RI-4 | Prompt-Injection über Abhängigkeiten, Doku oder Daten | Wächter, Review-Punkt „Verdächtige Inhalte“, nur freigegebene Abhängigkeiten | alle |
-| RI-{{n}} | {{…}} | {{…}} | {{…}} |
+| RI-5 | Rechenfehler durch Rundung, Kalender- oder Zeitzonenfehler | Cent-Ganzzahlen, `decimal.js`, reiner Kern mit „heute“ als Parameter, 100 % Abdeckung je Kernpaket, Abnahme-Rechenbeispiel | AP-05, AP-06, AP-09, AP-16, AP-20 |
+| RI-6 | Echte Daten gelangen ins Repo oder in Agent-Sicht | Datenordner außerhalb des Projekts (PE-18), `.gitignore`, Seed schreibt nur `data-dev/`, Review | AP-01, AP-08, alle |
+| RI-7 | Werkzeug-Inkompatibilität (Tailwind v4 + shadcn, electron-vite, Electron-Version) | AP-01 prüft Zusammenspiel zuerst; bei Problemen meldet der Coder, Lead fragt den Nutzer | AP-01, AP-04 |
+| RI-8 | PDF zeigt unfertige Diagramme (Animation, Timing) | `static`-Modus, `pdf:ready`-Signal, Zeitlimit | AP-21, AP-24 |
+| RI-9 | Design-Umbau nach dem Designer-Gespräch | Farben/Abstände nur über Theme-Variablen (PE-21) | alle UI-Pakete |
+| RI-10 | i18n-Lücken (fehlende Übersetzungen) | Wörterbuch-Typ erzwingt gleiche Schlüssel, Review | alle UI-Pakete |
+| RI-11 | Playwright mit Electron unter Windows instabil | keine festen Wartezeiten, 3 Läufe Pflicht, Kürzung K1 | AP-26 |
+| RI-12 | Abdeckungsmessung braucht eine nicht freigegebene Abhängigkeit (`@vitest/coverage-v8`) | Q-08 an den Nutzer | AP-01, Abnahme |
+| RI-13 | Mehrere Pakete ändern `src/main/index.ts` | streng nacheinander in getrennten Wellen (§8) | AP-01, AP-03, AP-07, AP-24, AP-25 |
 
 ---
 
@@ -1018,13 +1433,14 @@ flowchart LR
 | Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | geklärt → PE-18 |
 | Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | geklärt → PE-20 |
 | Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
+| Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | offen |
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
-| {{…}} | {{…}} | {{…}} | {{Lead / Reviewer / Planner}} |
+| – | keine | – | – |
 
 ---
 
@@ -1032,10 +1448,31 @@ flowchart LR
 
 | Anforderung oder Regel | Pakete |
 |---|---|
-| {{F-01 …}} | {{AP-xx}} |
-| R2 DSGVO | {{…}} |
-| R3 Impressum | {{…}} |
-| R4 Secrets | alle (Review) |
+| F-01 Projekte | AP-02, AP-07, AP-12 |
+| F-02 Dienste | AP-13, AP-12 (Projekt-Tab) |
+| F-03 Ausgaben | AP-05, AP-06, AP-09, AP-10, AP-14 |
+| F-04 Einnahmen | AP-09, AP-14 |
+| F-05 Personenzahlungen | AP-14, AP-17 |
+| F-06 KI-Abos/-Guthaben | AP-14 |
+| F-07 Kampagnen | AP-16, AP-18 |
+| F-08 Währungen | AP-05, AP-10, AP-11 |
+| F-09 Statistiken | AP-09, AP-15, AP-16, AP-20, AP-21, AP-22 |
+| F-10 PDF | AP-24 |
+| F-11 Mitarbeiterverwaltung | AP-16, AP-17 |
+| F-12 Ziele/Startseite | AP-20, AP-23 |
+| F-13 Nutzerzahlen | AP-16, AP-19 |
+| F-14 Datensicherung | AP-07, AP-11, AP-25 |
+| PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
+| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26 |
+| §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24 |
+| §5 ZIP-Import | AP-25 |
+| R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
+| R2 DSGVO | AP-02, AP-07, AP-08, AP-17, Review |
+| R3 Impressum | entfällt (keine Webseite), Hinweis in README: AP-27 |
+| R4 Secrets | alle (Review); App ohne Secrets |
+| R5 Rollen | §7.3, alle |
+| R6 Prompt-Injection / OWASP | AP-03, AP-07, AP-25, Review „Verdächtige Inhalte“ |
+| Abnahme G3 | M4-DEP, AP-26 |
 
 ---
 
@@ -1043,4 +1480,4 @@ flowchart LR
 
 | Datum | Änderung | Grund | Betroffene Pakete | Freigabe |
 |---|---|---|---|---|
-| {{JJJJ-MM-TT}} | {{…}} | {{…}} | {{…}} | {{Nutzer / Lead + Planner}} |
+| 2026-10-25 | Plan v1 im Interview erstellt (14 Runden), 27 Pakete in M0–M4 | Projektstart | alle | Nutzer |
