@@ -38,20 +38,19 @@ export class DataService {
   }
 
   /**
-   * Opens a data folder: creates it if needed, makes the start backup
-   * (a failed backup is logged, the app still starts) and loads all files.
+   * Opens a data folder: creates it if needed, loads all files and makes the
+   * start backup (a failed backup is logged, the app still starts). While a
+   * collection is invalid, old backups are not rotated away.
+   *
+   * `beforeActivate` (e.g. persisting the choice) runs before switching; if it
+   * fails, the previous folder stays active and the error is thrown.
    */
-  async open(dir: string): Promise<DataStore> {
+  async open(dir: string, beforeActivate?: () => Promise<void>): Promise<DataStore> {
     try {
       await mkdir(dir, { recursive: true })
     } catch {
       this.log('dataDir', 'IO')
       throw new StorageError('IO', 'dataDir: folder could not be created')
-    }
-    try {
-      await createBackup(dir, this.deps.now(), this.keep)
-    } catch {
-      this.log('backups', 'IO')
     }
     const store = new DataStore(dir, {
       now: this.deps.now,
@@ -59,7 +58,14 @@ export class DataService {
       fs: this.deps.fs,
       log: this.log
     })
+    // Loading never writes, so the backup still captures the files as found.
     await store.loadAll()
+    try {
+      await createBackup(dir, this.deps.now(), store.allUsable() ? this.keep : null)
+    } catch {
+      this.log('backups', 'IO')
+    }
+    if (beforeActivate) await beforeActivate()
     const previous = this.active
     if (previous) await previous.idle()
     this.active = store
@@ -74,7 +80,13 @@ export class DataService {
   async restoreBackup(name: string): Promise<void> {
     const store = this.store
     await store.replaceFiles(() =>
-      restoreBackup(store.dir, name, this.deps.now(), this.deps.fs, this.keep)
+      restoreBackup(
+        store.dir,
+        name,
+        this.deps.now(),
+        this.deps.fs,
+        store.allUsable() ? this.keep : null
+      )
     )
   }
 

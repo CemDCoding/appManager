@@ -39,21 +39,27 @@ function openMainWindow(): void {
 /** Datenordner bestimmen, Start-Backup anlegen, alle Collections laden. */
 async function openDataFolder(): Promise<void> {
   const userDataDir = app.getPath('userData')
-  const config = await readAppConfig(userDataDir)
+  const isDev = !app.isPackaged
+  // Im Dev-Modus gilt die gespeicherte Wahl nie (PE-18): gar nicht erst lesen.
+  const config = isDev ? {} : await readAppConfig(userDataDir)
   const resolved = resolveDataDir({
     envValue: process.env['APP_DATA_DIR'],
     storedDir: config.dataDir,
-    isDev: !app.isPackaged,
+    isDev,
     repoDir: app.getAppPath(),
     userDataDir
   })
   await dataService.open(resolved.path)
 }
 
-/** Nativer Ordnerdialog; die Wahl wird erst nach erfolgreichem Oeffnen gespeichert. */
+/**
+ * Nativer Ordnerdialog (nur paketiert). Die Wahl wird gespeichert, bevor
+ * umgeschaltet wird; scheitert das Speichern, bleibt der alte Ordner aktiv.
+ */
 async function chooseAndSwitchDataDir(): Promise<string | null> {
   const dir = await chooseDataDir({
     envOverride: isEnvOverride(process.env['APP_DATA_DIR']),
+    isDev: !app.isPackaged,
     showOpenDialog: () => {
       const options: OpenDialogOptions = {
         properties: ['openDirectory', 'createDirectory']
@@ -64,12 +70,15 @@ async function chooseAndSwitchDataDir(): Promise<string | null> {
     }
   })
   if (dir === null) return null
-  await dataService.open(dir)
-  try {
-    await writeAppConfig(app.getPath('userData'), { dataDir: dir })
-  } catch {
-    throw new StorageError('IO', 'dataDir: choice could not be saved')
-  }
+  await dataService.open(dir, async () => {
+    // Doppelte Sicherung: im Dev-Modus wird die Config nie geschrieben.
+    if (!app.isPackaged) throw new StorageError('CONFLICT', 'dataDir: not saved in development')
+    try {
+      await writeAppConfig(app.getPath('userData'), { dataDir: dir })
+    } catch {
+      throw new StorageError('IO', 'dataDir: choice could not be saved')
+    }
+  })
   return dir
 }
 

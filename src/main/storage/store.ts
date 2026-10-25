@@ -95,6 +95,11 @@ export class DataStore {
     return result
   }
 
+  /** True if every collection is loaded and valid. */
+  allUsable(): boolean {
+    return COLLECTION_NAMES.every((n) => this.repos[n].status.state === 'ok')
+  }
+
   // ---------- entities ----------
 
   async list<C extends EntityCollectionName>(collection: C): Promise<EntityMap[C][]> {

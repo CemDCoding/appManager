@@ -88,6 +88,8 @@ async function isFile(path: string): Promise<boolean> {
 /**
  * Copies all existing collection files (also broken ones, byte for byte) into
  * `backups/<timestamp>/` and keeps only the newest `keep` backups.
+ * `keep: null` skips the rotation (used while a collection is invalid, so
+ * good older backups are never rotated away).
  * Returns the backup name, or null if there was nothing to back up.
  * The folder is filled under a temp name first, so incomplete backups never
  * show up in the list.
@@ -95,7 +97,7 @@ async function isFile(path: string): Promise<boolean> {
 export async function createBackup(
   dataDir: string,
   now: Date,
-  keep: number = MAX_BACKUPS
+  keep: number | null = MAX_BACKUPS
 ): Promise<string | null> {
   const present: string[] = []
   for (const name of COLLECTION_NAMES) {
@@ -119,7 +121,7 @@ export async function createBackup(
     await rm(temp, { recursive: true, force: true }).catch(() => {})
     throw new StorageError('IO', 'backups: backup could not be created')
   }
-  await rotateBackups(dataDir, keep)
+  if (keep !== null) await rotateBackups(dataDir, keep)
   return name
 }
 
@@ -205,7 +207,7 @@ export async function restoreBackup(
   name: string,
   now: Date,
   fs: AtomicFs = nodeAtomicFs,
-  keep: number = MAX_BACKUPS
+  keep: number | null = MAX_BACKUPS
 ): Promise<void> {
   // Read first: rotation below may delete the backup we restore from.
   const contents = await readBackup(dataDir, name)

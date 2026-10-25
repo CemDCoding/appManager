@@ -11,13 +11,20 @@ const base = {
   cwd: resolve('/cwd')
 }
 
-describe('resolveDataDir (order: env -> config -> dev -> default)', () => {
+describe('resolveDataDir (dev: env -> data-dev; packaged: env -> config -> default)', () => {
   const stored = resolve('/stored')
 
-  it('prefers APP_DATA_DIR', () => {
+  it.each([true, false])('prefers APP_DATA_DIR (isDev=%s)', (isDev) => {
     expect(
-      resolveDataDir({ ...base, envValue: resolve('/env'), storedDir: stored, isDev: true })
+      resolveDataDir({ ...base, envValue: resolve('/env'), storedDir: stored, isDev })
     ).toEqual({ path: resolve('/env'), source: 'env' })
+  })
+
+  it('ignores the stored choice in dev (PE-18: never the real data folder)', () => {
+    expect(resolveDataDir({ ...base, envValue: '  ', storedDir: stored, isDev: true })).toEqual({
+      path: join(base.repoDir, 'data-dev'),
+      source: 'dev'
+    })
   })
 
   it('resolves a relative APP_DATA_DIR against cwd', () => {
@@ -26,8 +33,8 @@ describe('resolveDataDir (order: env -> config -> dev -> default)', () => {
     ).toBe(join(base.cwd, 'data-dev'))
   })
 
-  it('uses the stored choice when env is empty', () => {
-    expect(resolveDataDir({ ...base, envValue: '  ', storedDir: stored, isDev: true })).toEqual({
+  it('uses the stored choice when packaged and env is empty', () => {
+    expect(resolveDataDir({ ...base, envValue: '  ', storedDir: stored, isDev: false })).toEqual({
       path: stored,
       source: 'config'
     })
@@ -88,27 +95,39 @@ describe('app config', () => {
 describe('chooseDataDir', () => {
   it('returns null when cancelled', async () => {
     const showOpenDialog = vi.fn(async () => ({ canceled: true, filePaths: [] }))
-    expect(await chooseDataDir({ envOverride: false, showOpenDialog })).toBeNull()
+    expect(await chooseDataDir({ envOverride: false, isDev: false, showOpenDialog })).toBeNull()
   })
 
   it('returns the chosen absolute folder', async () => {
     const picked = resolve('/picked')
     const showOpenDialog = vi.fn(async () => ({ canceled: false, filePaths: [picked] }))
-    expect(await chooseDataDir({ envOverride: false, showOpenDialog })).toBe(picked)
+    expect(await chooseDataDir({ envOverride: false, isDev: false, showOpenDialog })).toBe(picked)
   })
 
   it('rejects relative paths', async () => {
     const showOpenDialog = vi.fn(async () => ({ canceled: false, filePaths: ['rel'] }))
-    await expect(chooseDataDir({ envOverride: false, showOpenDialog })).rejects.toMatchObject({
+    await expect(
+      chooseDataDir({ envOverride: false, isDev: false, showOpenDialog })
+    ).rejects.toMatchObject({
       code: 'VALIDATION'
     })
   })
 
   it('does not open the dialog when APP_DATA_DIR overrides the folder', async () => {
     const showOpenDialog = vi.fn(async () => ({ canceled: true, filePaths: [] }))
-    await expect(chooseDataDir({ envOverride: true, showOpenDialog })).rejects.toMatchObject({
+    await expect(
+      chooseDataDir({ envOverride: true, isDev: false, showOpenDialog })
+    ).rejects.toMatchObject({
       code: 'CONFLICT'
     })
+    expect(showOpenDialog).not.toHaveBeenCalled()
+  })
+
+  it('refuses in dev without opening the dialog (nothing is persisted)', async () => {
+    const showOpenDialog = vi.fn(async () => ({ canceled: false, filePaths: [resolve('/real')] }))
+    await expect(
+      chooseDataDir({ envOverride: false, isDev: true, showOpenDialog })
+    ).rejects.toMatchObject({ code: 'CONFLICT' })
     expect(showOpenDialog).not.toHaveBeenCalled()
   })
 })

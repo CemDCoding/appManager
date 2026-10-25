@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { readdir } from 'node:fs/promises'
+import { readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { StorageError } from '../errors'
 import { DataService } from '../service'
 import { makeTempDir, personInput, projectInput, removeDir, testId } from './fixtures'
 
@@ -54,6 +55,43 @@ describe('DataService', () => {
     await service.restoreBackup(backup!.name)
     expect(await service.store.list('projects')).toHaveLength(1)
     expect((await readdir(join(dir, 'backups'))).length).toBe(2)
+  })
+
+  it('does not rotate good backups away while a collection is invalid', async () => {
+    const dir = join(root, 'data')
+    const now = clock()
+    const service = new DataService({ now, newId: testId, keepBackups: 2 })
+    await service.open(dir)
+    await service.store.create('persons', personInput())
+    await service.open(dir)
+    await service.open(dir)
+    const good = (await service.listBackups()).map((b) => b.name)
+    expect(good).toHaveLength(2)
+
+    await writeFile(join(dir, 'persons.json'), 'broken', 'utf8')
+    await service.open(dir)
+    await service.open(dir)
+    const names = (await service.listBackups()).map((b) => b.name)
+    expect(names).toHaveLength(4)
+    for (const name of good) expect(names).toContain(name)
+
+    // valid again -> rotation resumes
+    await writeFile(join(dir, 'persons.json'), '{"schemaVersion":1,"items":[]}', 'utf8')
+    await service.open(dir)
+    expect(await service.listBackups()).toHaveLength(2)
+  })
+
+  it('keeps the previous folder active if beforeActivate fails', async () => {
+    const service = new DataService({ now: clock(), newId: testId })
+    await service.open(join(root, 'a'))
+    await expect(
+      service.open(join(root, 'b'), async () => {
+        throw new StorageError('IO', 'save failed')
+      })
+    ).rejects.toMatchObject({ code: 'IO' })
+    expect(service.dir).toBe(join(root, 'a'))
+    await service.open(join(root, 'b'), async () => {})
+    expect(service.dir).toBe(join(root, 'b'))
   })
 
   it('switches to another folder', async () => {
