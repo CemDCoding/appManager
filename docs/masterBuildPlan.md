@@ -139,7 +139,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | F-06 | KI-/Coder-Abos | Abos als wiederkehrender Posten; tokenbasierte Kosten als Guthaben-Aufladung am Tag der Aufladung; aufgeteilt auf Projekte (PE-10) | ⟦offen⟧ |
 | F-07 | Werbekampagnen | Name, Plattform, Format, Zeitraum, Kosten, Impressionen, Klicks, gewonnene Nutzer, 0–5 Sterne, Notiz; berechnet CPC, Kosten pro Nutzer, CTR; auf Projekte aufteilbar; zählt in Ausgaben-Statistik (PE-11) | ⟦offen⟧ |
 | F-08 | Währungen | Kurstabelle pflegen, Beträge in Originalwährung, Anzeigewährung umschaltbar (PE-04, PE-05) | ⟦offen⟧ |
-| F-09 | Statistiken | Auswertungen über Portfolio und pro Projekt | ⟦offen⟧ |
+| F-09 | Statistiken | Auswertungen über Portfolio und pro Projekt (Umfang PE-16, inkl. Prognose und Break-even) | ⟦offen⟧ |
 | F-10 | PDF-Bericht | PDF für gesamtes Portfolio und für einzelne Projekte, Inhalt wie App-Auswertung plus Tabellen (PE-14) | ⟦offen⟧ |
 
 ### Optional
@@ -527,6 +527,8 @@ flowchart LR
 | PE-13 | Feste Basiswährung EUR. Kurse als „1 X = k EUR“; Buchungen speichern Kurs zu EUR; Anzeige in anderer Währung rechnet mit dem neuesten Kurs um | stabile Werte, einfache Pflege | Nutzer am 2026-10-25 |
 | PE-14 | PDF enthält dieselben Kennzahlen und Diagramme wie die App für den gewählten Zeitraum plus Tabellen; Projekt- und Portfoliobericht; schlichtes Layout ohne Logo | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 | PE-15 | Meilenstein-Reihenfolge wird erst am Ende des Interviews festgelegt | Wunsch des Nutzers | Nutzer am 2026-10-25 |
+| PE-16 | Statistiken: Einnahmen/Ausgaben/Saldo nach Zeitraum, Monatsverlauf, Ausgaben nach Kategorie, Projekt-Ranking, laufende Fixkosten, Kampagnen-Ranking, 12-Monats-Prognose der Fixkosten, Break-even je Projekt | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-17 | Datenordner liegt im Projekt und steht in `.gitignore` (Nutzer legt ihn an). (angenommen) Eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | Wunsch des Nutzers; Details siehe Q-04 | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
@@ -535,6 +537,7 @@ flowchart LR
 | Q-01 | Ist eine Kommerzialisierung denkbar? | W | §1, §5 | nein, privat | offen |
 | Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | geklärt → PE-05 |
 | Q-03 | Reihenfolge der Meilensteine / erster Kernfluss | K | §2, §9 | Projekte+Dienste+Buchungen zuerst | zurückgestellt bis Interviewende (PE-15) |
+| Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | offen |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
