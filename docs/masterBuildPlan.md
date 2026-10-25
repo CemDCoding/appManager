@@ -132,12 +132,12 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | ID | Funktion | Beschreibung aus Nutzersicht | Kernfluss |
 |---|---|---|---|
 | F-01 | Projekte verwalten | Projekte/Apps anlegen, bearbeiten, archivieren; Plattformen (Mobile, Web, Webseite, Desktop, Steam) | ⟦offen⟧ |
-| F-02 | Deploy- und Dienstübersicht | Pro Projekt die genutzten Dienste (z. B. Railway, Vercel, Supabase) mit Zweck und Kosten eintragen und einsehen | ⟦offen⟧ |
+| F-02 | Deploy- und Dienstübersicht | Dienste (Anbieter, Zweck, Tarif, URL, Notiz, z. B. Railway, Vercel, Supabase) mit verknüpften Kosten; ein Dienst kann mehreren Projekten dienen, Kosten nach PE-06 geteilt; pro Projekt einsehbar (PE-12) | ⟦offen⟧ |
 | F-03 | Ausgaben erfassen | Einmalige und wiederkehrende Ausgaben (DB, Server, Lizenzen …) mit Kategorie; Aufteilung auf ein, mehrere oder alle Projekte (PE-06, PE-07) | ⟦offen⟧ |
 | F-04 | Einnahmen erfassen | Von Hand, einmalig oder wiederkehrend, netto, einem Projekt zugeordnet, mit Kategorie (PE-08) | ⟦offen⟧ |
-| F-05 | Mitarbeiter und Coder | Personen anlegen, Kosten pro Arbeitspaket oder als periodische Abrechnung, aufgeteilt auf Projekte | ⟦offen⟧ |
-| F-06 | KI-/Coder-Abos | Kosten als Abo oder nach Token, aufgeteilt auf Projekte | ⟦offen⟧ |
-| F-07 | Werbekampagnen | Kampagnen mit Kosten, akquirierten Nutzern, Klicks, Format, 0–5 Sternen; Projekten zuordenbar; fließen in Ausgaben-Statistik ein | ⟦offen⟧ |
+| F-05 | Mitarbeiter und Coder | Personen anlegen (Name, Kurzbeschreibung); Zahlungen pro Arbeitspaket (gezahlter Betrag, Datum, Kurzbeschreibung) oder als periodische Abrechnung, aufgeteilt auf Projekte (PE-09) | ⟦offen⟧ |
+| F-06 | KI-/Coder-Abos | Abos als wiederkehrender Posten; tokenbasierte Kosten als Guthaben-Aufladung am Tag der Aufladung; aufgeteilt auf Projekte (PE-10) | ⟦offen⟧ |
+| F-07 | Werbekampagnen | Name, Plattform, Format, Zeitraum, Kosten, Impressionen, Klicks, gewonnene Nutzer, 0–5 Sterne, Notiz; berechnet CPC, Kosten pro Nutzer, CTR; auf Projekte aufteilbar; zählt in Ausgaben-Statistik (PE-11) | ⟦offen⟧ |
 | F-08 | Währungen | Kurstabelle pflegen, Beträge in Originalwährung, Anzeigewährung umschaltbar (PE-04, PE-05) | ⟦offen⟧ |
 | F-09 | Statistiken | Auswertungen über Portfolio und pro Projekt | ⟦offen⟧ |
 | F-10 | PDF-Bericht | PDF für gesamtes Portfolio und für einzelne Projekte | ⟦offen⟧ |
@@ -202,7 +202,17 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | Entität | Wichtige Felder | Gehört zu | Löschverhalten |
 |---|---|---|---|
-| {{…}} | {{…}} | {{…}} | {{…}} |
+| Projekt | Name, Beschreibung, Plattformen[], Status (aktiv/archiviert), aktiv von/bis | Besitzer (PE-01) | (angenommen) archivieren; endgültig löschen nur ohne verknüpfte Buchungen |
+| Dienst | Anbieter, Zweck, Tarif, URL, Notiz, Aufteilung | Besitzer | (angenommen) löschen fragt, ob verknüpfte Kosten mitgelöscht werden |
+| Person | Name/Kürzel, Kurzbeschreibung | Besitzer | (angenommen) löschbar; Zahlungen bleiben mit Vermerk „gelöschte Person“ |
+| Ausgabe | Kategorie, Betrag, Währung, Kurs-Snapshot, Datum **oder** Wiederholung, Aufteilung, Beschreibung, optional Verweis auf Dienst/Person | Besitzer | löschbar |
+| Wiederholung (Teil einer Ausgabe/Einnahme) | Intervall, Start, Ende?, Preisänderungen [ab Datum, Betrag] | Ausgabe/Einnahme | mit Eltern |
+| Einnahme | Kategorie, Betrag netto, Währung, Kurs-Snapshot, Datum oder Wiederholung, Projekt | Besitzer | löschbar |
+| Kampagne | Name, Plattform, Format, Zeitraum, Kosten, Währung, Kurs-Snapshot, Impressionen, Klicks, Nutzer, Sterne 0–5, Notiz, Aufteilung | Besitzer | löschbar |
+| Kurs | Währung, Kurs, eingetragen am | Besitzer | nie löschen, nur neue Einträge (Historie) (angenommen) |
+| Aufteilung (Wertobjekt) | Modus `alle` / `ausgewählt`, gleichmäßig oder Prozent je Projekt (Summe 100 %) | – | – |
+
+Arbeitspakete von Personen, Guthaben-Aufladungen und Dienstkosten sind Ausgaben mit passender Kategorie und Verweis (angenommen), damit Statistik und PDF nur eine Kostenquelle kennen.
 
 **Verträge:** {{Ort und Format}}. Regel: Jeder Vertrag entsteht in einem eigenen Paket mindestens eine Welle vor seinen Nutzern.
 
@@ -510,6 +520,10 @@ flowchart LR
 | PE-06 | Aufteilung gleichmäßig oder nach Prozent, auf bestimmte oder alle (zum Zeitpunkt aktiven) Projekte | flexibel, alte Monate bleiben stabil | Nutzer am 2026-10-25 |
 | PE-07 | Wiederkehrende Kosten als ein Posten mit Intervall, Start, Ende, Preisänderung ab Datum | wenig Pflegeaufwand | Nutzer am 2026-10-25 |
 | PE-08 | Einnahmen von Hand, einmalig/wiederkehrend, netto, je Projekt, mit Kategorie | einfach; CSV-Import nicht in Pflicht | Nutzer am 2026-10-25 |
+| PE-09 | Personen ohne Stundensatz: nur gezahlter Betrag pro Arbeitspaket/Abrechnung plus Kurzbeschreibung; keine Kontakt- oder Bankdaten | Datensparsamkeit (R2), Wunsch des Nutzers | Nutzer am 2026-10-25 |
+| PE-10 | Tokenbasierte KI-Kosten = Guthaben-Aufladung als einmalige Ausgabe am Aufladetag; Abos wiederkehrend | Nutzer trägt Aufladungen ein | Nutzer am 2026-10-25 |
+| PE-11 | Kampagnenfelder wie F-07, Plattform- und Formatlisten erweiterbar, Kennzahlen berechnet | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-12 | Dienste mit Kosten verknüpft, mehrfach nutzbar, Kosten nach PE-06 geteilt | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
