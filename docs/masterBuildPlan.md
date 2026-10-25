@@ -106,7 +106,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | Zielgruppe | Nur der Nutzer selbst, ein Rechner, kein Login (PE-01) |
 | Lieferumfang | Repository + Windows-Installer (.exe), den der Nutzer lokal baut (PE-03) |
 | Termin | keiner (PE-04) |
-| Kommerzialisierung | nein. Öffentliches GitHub-Repo, Nachbau erlaubt, kommerzielle Nutzung verboten (PE-19, Lizenz ⟦offen: Q-05⟧) |
+| Kommerzialisierung | nein. Öffentliches GitHub-Repo, Nachbau erlaubt, kommerzielle Nutzung verboten (PE-19, Lizenz PolyForm Noncommercial 1.0.0, PE-20) |
 | Projektdokumentation | `idee.txt` (Ausgangsidee des Nutzers, 2026-10-25) |
 
 **Leitprinzipien (in Rangfolge):**
@@ -170,6 +170,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 |---|---|---|
 | Sprache | TypeScript | ein Stack für Main-Prozess und Oberfläche (PE-02) |
 | Frontend | React + Vite im Electron-Renderer | wiederverwendbar für spätere Web-/Mobil-Version (PE-02) |
+| UI / Design | Tailwind CSS + shadcn/ui, Grundsätze PE-21 | modern, schlicht, später zentral umstellbar |
 | Backend | Electron-Main-Prozess (lokal, kein Server) | Dateizugriff nur hier (PE-02) |
 | Datenbank / ORM | lokale JSON-Dateien, Speicher hinter einer Schnittstelle, damit später eine DB folgen kann | Wunsch des Nutzers (`idee.txt`) |
 | Auth | keine (Einzelnutzer, lokal) | PE-01 |
@@ -308,9 +309,9 @@ flowchart TD
 
 ### 7.2 Parallelität, Budget, Modelle
 
-- **Höchstens gleichzeitig:** {{n, Standard 2}} Coder.
+- **Höchstens gleichzeitig:** 5 Coder (PE-23).
 - **Budget (D11b):** Zielwert **30 %** des 5-Stunden-Limits, Obergrenze **36 %** (Zielwert × 1,2). Ab dem Zielwert startet der Wächter keine neuen Coder mehr, laufende Pakete werden bis zur Obergrenze fertig. Dann fragt der Lead den Nutzer. Ohne Antwort geht es nach dem Reset weiter (D11c).
-- **Freigabe:** {{pro Welle | pro Meilenstein}}
+- **Freigabe:** pro Welle (angenommen, PE-23)
 - **Bei mehr Kandidaten als Plätzen:** zuerst kritischer Pfad (§11), dann Verträge, dann der Rest.
 
 | Paket | Modell | Aufwand |
@@ -540,8 +541,8 @@ flowchart LR
 | Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | geklärt → PE-05 |
 | Q-03 | Reihenfolge der Meilensteine / erster Kernfluss | K | §2, §9 | Projekte+Dienste+Buchungen zuerst | zurückgestellt bis Interviewende (PE-15) |
 | Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | geklärt → PE-18 |
-| Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | offen |
-| Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | siehe Runde 7 | offen |
+| Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | geklärt → PE-20 |
+| Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
