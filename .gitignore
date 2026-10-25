@@ -1,0 +1,7 @@
+
+# Secrets und lokale Werkzeuge (nicht Teil der Anwendung)
+.env
+.env.*
+!.env.example
+.claude/
+ma-config.json
