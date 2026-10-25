@@ -27,7 +27,7 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 - **Unterbrochen oder laufend:** nichts
 - **Erkenntnisse:** Lead arbeitet autonom über Meilensteine (PE-46); vor dem ersten Push muss `LICENSE` existieren (H-01)
 - **Nächster Schritt:** M0 W1 starten: AP-01
-- **Offene Fragen an den Nutzer:** Q-08 (`@vitest/coverage-v8` freigeben?); Bestätigung der `(angenommen)`-Punkte PE-17, PE-31, PE-49–PE-54
+- **Offene Fragen an den Nutzer:** keine (vor dem ersten Push prüfen: H-01 `LICENSE` erledigt?)
 
 ### Rollen und Dokumente
 
@@ -66,9 +66,9 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 |---|---|---|---|---|
 | 1 | Projektkontext und Ziel | fertig | – | G1 ✔ |
 | 2 | Umfang | fertig | – | G1 ✔ |
-| 3 | Tech-Stack | fertig | Q-08 (W) | G1 ✔ |
-| 4 | Architektur, Datenmodell, Verträge | angenommen | PE-17, PE-31, PE-49–PE-54 (angenommen) | G1 ✔ |
-| 5 | Sicherheit, Datenschutz, Recht, Limits | angenommen | Limits (angenommen) | G1 ✔ |
+| 3 | Tech-Stack | fertig | – | G1 ✔ |
+| 4 | Architektur, Datenmodell, Verträge | fertig | – | G1 ✔ |
+| 5 | Sicherheit, Datenschutz, Recht, Limits | fertig | – | G1 ✔ |
 | 6 | Umgebungen, Branches, Deployment | fertig | – | G1 ✔ |
 | 7 | Team-Steuerung | fertig | – | G1 ✔ |
 | 8 | Lanes und Dateieigentum | fertig | – | G2 ✔ |
@@ -79,7 +79,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 13 | Menschliche Schritte | fertig | H-01, H-07 offen | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
-| 16 | Planungsentscheidungen und offene Fragen | laufend | Q-08 | laufend |
+| 16 | Planungsentscheidungen und offene Fragen | laufend | – | laufend |
 | 17 | Abdeckungsmatrix | fertig | – | G2 ✔ |
 | 18 | Änderungsprotokoll | laufend | – | laufend |
 
@@ -190,7 +190,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 - App/Bau: `electron`, `electron-vite`, `electron-builder`, `react`, `react-dom`, `react-router-dom`, `typescript`, `vite`, `@vitejs/plugin-react`
 - UI: `tailwindcss` (+ dessen offizielles Vite-/PostCSS-Plugin), shadcn/ui-Bausteine `@radix-ui/*`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, `@fontsource/inter`
 - Logik: `zod`, `date-fns`, `decimal.js`, `jszip`, `recharts`
-- Qualität: `vitest`, `@playwright/test`, `eslint`, `typescript-eslint`, `eslint-plugin-react-hooks`, `prettier`, `@types/*` passend zu den freigegebenen Paketen
+- Qualität: `vitest`, `@vitest/coverage-v8` (PE-55), `@playwright/test`, `eslint`, `typescript-eslint`, `eslint-plugin-react-hooks`, `prettier`, `@types/*` passend zu den freigegebenen Paketen
 
 ---
 
@@ -229,8 +229,8 @@ flowchart LR
 
 | Entität | Wichtige Felder | Gehört zu | Löschverhalten |
 |---|---|---|---|
-| Projekt | Name, Beschreibung, Plattformen[], Status (aktiv/archiviert), aktiv von/bis | Besitzer (PE-01) | (angenommen) archivieren; endgültig löschen nur ohne verknüpfte Buchungen |
-| Dienst | Anbieter, Zweck, Tarif, URL, Notiz, Aufteilung | Besitzer | (angenommen) löschen fragt, ob verknüpfte Kosten mitgelöscht werden |
+| Projekt | Name, Beschreibung, Plattformen[], Phase, Startdatum, Enddatum?, Links[], archiviert (PE-34) | Besitzer (PE-01) | archivieren; endgültig löschen nur ohne verknüpfte Buchungen (PE-35) |
+| Dienst | Anbieter, Zweck, Tarif, URL, Notiz, Aufteilung | Besitzer | löschen fragt, ob verknüpfte Kosten mitgelöscht werden (PE-35) |
 | Person | Name/Kürzel, Rolle, Status aktiv/inaktiv, Notiz (PE-36) | Besitzer | löschbar; Zahlungen bleiben mit Vermerk „gelöschte Person“ (PE-35) |
 | Ziel | Projekt oder Portfolio, Art (Einnahmen, Break-even, Nutzer, Kostenlimit/Monat, frei), Titel, Zielwert, ab-Datum, Stichtag, erledigt (nur frei) (PE-53) | Besitzer | löschbar |
 | Einstellungen | Anzeigewährung, Kategorien-/Plattform-/Formatlisten mit Ausblenden-Flag (PE-54) | Besitzer | – |
@@ -239,10 +239,10 @@ flowchart LR
 | Wiederholung (Teil einer Ausgabe/Einnahme) | Intervall, Start, Ende?, Preisänderungen [ab Datum, Betrag] | Ausgabe/Einnahme | mit Eltern |
 | Einnahme | Kategorie, Betrag netto, Währung, Kurs-Snapshot, Datum oder Wiederholung, Projekt | Besitzer | löschbar |
 | Kampagne | Name, Plattform, Format, Start, Ende, Kosten, Währung, Kurs-Snapshot, Impressionen, Klicks, Nutzer, Sterne 0–5, Notiz, Aufteilung (PE-49) | Besitzer | löschbar |
-| Kurs | Währung, Kurs, eingetragen am | Besitzer | nie löschen, nur neue Einträge (Historie) (angenommen) |
+| Kurs | Währung, Kurs, eingetragen am | Besitzer | nie löschen, nur neue Einträge (Historie) (PE-35) |
 | Aufteilung (Wertobjekt) | Modus `alle` / `ausgewählt`, gleichmäßig oder Prozent je Projekt (Summe 100 %) | – | – |
 
-Arbeitspakete von Personen, Guthaben-Aufladungen und Dienstkosten sind Ausgaben mit passender Kategorie und Verweis (angenommen), damit Statistik und PDF nur eine Kostenquelle kennen.
+Arbeitspakete von Personen, Guthaben-Aufladungen und Dienstkosten sind Ausgaben mit passender Kategorie und Verweis, damit Statistik und PDF nur eine Kostenquelle kennen.
 
 **Verträge:** `src/shared/` (zod-Schemas → abgeleitete TS-Typen, `ipc.ts` mit Kanalnamen und Payload-Typen, `money.ts`). Regel: Jeder Vertrag entsteht in einem eigenen Paket mindestens eine Welle vor seinen Nutzern.
 
@@ -267,9 +267,9 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 
 | Limit | Standard | Ebene |
 |---|---|---|
-| Größe ZIP-Import | 50 MB (angenommen) | global |
-| Anzahl Backups | 10 (angenommen) | global |
-| Textfelder (Name, Beschreibung, Notiz) | 200 / 2 000 / 5 000 Zeichen (angenommen) | je Feld |
+| Größe ZIP-Import | 50 MB | global |
+| Anzahl Backups | 10 | global |
+| Textfelder (Name, Beschreibung, Notiz) | 200 / 2 000 / 5 000 Zeichen | je Feld |
 
 **Nie kürzbar:** Electron-Härtung, zod-Validierung, Zip-Slip-Schutz, atomares Schreiben + Backups, Tests des Rechenkerns.
 
@@ -619,7 +619,7 @@ flowchart LR
   2. Alle freigegebenen Abhängigkeiten installieren.
   3. npm-Skripte: `dev`, `build`, `lint`, `format`, `typecheck` (Main/Preload und Renderer getrennt), `test` (Vitest, `--run`), `test:coverage`, `test:e2e` (Playwright, darf bis AP-26 „no tests“ melden), `seed` = `vitest run --config vitest.seed.config.ts` (eigene Vitest-Konfiguration, die nur `scripts/**/*.seed.ts` ausführt; so funktionieren Aliase ohne neue Abhängigkeit wie `tsx`), `dist` (`electron-vite build && electron-builder --win`). `vitest.seed.config.ts` gehört ebenfalls AP-01; die normale `vitest.config.ts` schließt `*.seed.ts` aus.
   4. Tailwind CSS v4 + shadcn/ui initialisieren (`components.json`, `lib/utils.ts` mit `cn`), `globals.css` mit CSS-Variablen für hell/dunkel nach PE-21, Schrift Inter über `@fontsource/inter`.
-  5. ESLint (typescript-eslint, react-hooks), Prettier, Vitest (Umgebung node, Testdateien `src/**/*.test.ts(x)` und `scripts/**/*.test.ts`; Coverage nur, wenn ohne neue Abhängigkeit möglich – `@vitest/coverage-v8` ist **nicht** freigegeben: dann Coverage-Skript weglassen und dem Lead melden, er fragt den Nutzer).
+  5. ESLint (typescript-eslint, react-hooks), Prettier, Vitest (Umgebung node, Testdateien `src/**/*.test.ts(x)` und `scripts/**/*.test.ts`; Coverage mit `@vitest/coverage-v8` (PE-55), Skript `test:coverage`, Schwellwert für `src/core/**` 95 % Zeilen, ab AP-05 wirksam).
   6. `electron-builder.yml`: Windows, NSIS, `oneClick: false`, `allowToChangeInstallationDirectory: true`, `appId` `de.cemdogan.appmanager`, Produktname `appManager`, Ausgabe `release/`.
   7. `.gitignore` ergänzen: `node_modules/`, `out/`, `dist/`, `release/`, `coverage/`, `data/`, `data-dev/`, `test-results/`, `playwright-report/` (bestehende Einträge behalten). `.env.example`: `APP_DATA_DIR=` mit Kommentar.
   8. Minimales `src/main/index.ts` öffnet ein Fenster mit dem Renderer; Renderer zeigt „appManager“.
@@ -1357,7 +1357,7 @@ flowchart LR
 | RI-9 | Design-Umbau nach dem Designer-Gespräch | Farben/Abstände nur über Theme-Variablen (PE-21) | alle UI-Pakete |
 | RI-10 | i18n-Lücken (fehlende Übersetzungen) | Wörterbuch-Typ erzwingt gleiche Schlüssel, Review | alle UI-Pakete |
 | RI-11 | Playwright mit Electron unter Windows instabil | keine festen Wartezeiten, 3 Läufe Pflicht, Kürzung K1 | AP-26 |
-| RI-12 | Abdeckungsmessung braucht eine nicht freigegebene Abhängigkeit (`@vitest/coverage-v8`) | Q-08 an den Nutzer | AP-01, Abnahme |
+| RI-12 | Abdeckungsmessung fehlt | erledigt: `@vitest/coverage-v8` freigegeben (PE-55) | AP-01, Abnahme |
 | RI-13 | Mehrere Pakete ändern `src/main/index.ts` | streng nacheinander in getrennten Wellen (§8) | AP-01, AP-03, AP-07, AP-24, AP-25 |
 
 ---
@@ -1372,7 +1372,7 @@ flowchart LR
 | PE-02 | Electron + React + TypeScript + Vite | Node vorhanden, React später für Web/Mobil nutzbar, reife Diagramm-/PDF-Bibliotheken | Nutzer am 2026-10-25 |
 | PE-03 | Nur Windows, Installer (.exe) baut der Nutzer lokal | einziges Zielsystem des Nutzers | Nutzer am 2026-10-25 |
 | PE-04 | Mehrere Währungen: Betrag in Originalwährung speichern, Kurs trägt der Nutzer selbst ein. Zusätzlich wählbare Anzeigewährung, in die alle Ansichten umgerechnet werden. Kein Termin. | Abos oft in USD; keine Online-Kursdienste | Nutzer am 2026-10-25 |
-| PE-05 | Nutzer pflegt Kurse in eigenem Tempo. Neue Buchungen speichern den beim Eintragen neuesten Kurs (Snapshot). (angenommen) Der Kurs einer einzelnen Buchung bleibt nachträglich von Hand änderbar. | stabile Auswertungen | Nutzer am 2026-10-25 |
+| PE-05 | Nutzer pflegt Kurse in eigenem Tempo. Neue Buchungen speichern den beim Eintragen neuesten Kurs (Snapshot). Der Kurs einer einzelnen Buchung bleibt nachträglich von Hand änderbar. | stabile Auswertungen | Nutzer am 2026-10-25 |
 | PE-06 | Aufteilung gleichmäßig oder nach Prozent, auf bestimmte oder alle (zum Zeitpunkt aktiven) Projekte | flexibel, alte Monate bleiben stabil | Nutzer am 2026-10-25 |
 | PE-07 | Wiederkehrende Kosten als ein Posten mit Intervall, Start, Ende, Preisänderung ab Datum | wenig Pflegeaufwand | Nutzer am 2026-10-25 |
 | PE-08 | Einnahmen von Hand, einmalig/wiederkehrend, netto, je Projekt, mit Kategorie | einfach; CSV-Import nicht in Pflicht | Nutzer am 2026-10-25 |
@@ -1384,7 +1384,7 @@ flowchart LR
 | PE-14 | PDF enthält dieselben Kennzahlen und Diagramme wie die App für den gewählten Zeitraum plus Tabellen; Projekt- und Portfoliobericht; schlichtes Layout ohne Logo | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 | PE-15 | Meilenstein-Reihenfolge wird erst am Ende des Interviews festgelegt | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 | PE-16 | Statistiken: Einnahmen/Ausgaben/Saldo nach Zeitraum, Monatsverlauf, Ausgaben nach Kategorie, Projekt-Ranking, laufende Fixkosten, Kampagnen-Ranking, 12-Monats-Prognose der Fixkosten, Break-even je Projekt | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
-| PE-17 | (ersetzt durch PE-18) ~~Datenordner im Projekt~~. Weiter gültig (angenommen): eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | – | Nutzer am 2026-10-25 |
+| PE-17 | (ersetzt durch PE-18) ~~Datenordner im Projekt~~. Weiter gültig (bestätigt): eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | – | Nutzer am 2026-10-25 |
 | PE-18 | Datenpfad ist in der App einstellbar. Echte Daten liegen in einem externen Ordner auf `D:`, den nur der Nutzer anlegt und den kein Agent liest. Agents dürfen im Projekt einen Testdaten-Ordner `data-dev/` (gitignored) mit erfundenen Daten anlegen (Seed-Skript). Installation nur auf Laufwerk `D:` (Installer mit wählbarem Zielordner, Vorschlag auf `D:`). | R2, Agents sollen echte Daten nicht sehen | Nutzer am 2026-10-25 |
 | PE-19 | Nicht kommerziell. Repository wird öffentlich auf GitHub, Nachbau erlaubt, Weiterverkauf und kommerzielle Nutzung verboten → nicht-kommerzielle Quelltext-Lizenz (Wahl: Q-05). Abhängigkeiten nur mit freizügigen Lizenzen (MIT, Apache-2.0, BSD, ISC). | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 | PE-20 | Lizenz PolyForm Noncommercial 1.0.0 (`LICENSE` im Repo-Wurzelverzeichnis). Keine Rechtsberatung (D12b). | für Software formuliert, verbietet kommerzielle Nutzung | Nutzer am 2026-10-25 |
@@ -1398,7 +1398,7 @@ flowchart LR
 | PE-28 | Rundung bei Aufteilung: Größter-Rest-Verfahren auf Cent; Summe ergibt immer exakt den Ausgangsbetrag; Restcent nach fester, deterministischer Regel (erstes Projekt in der Liste) | Summen müssen exakt stimmen | Nutzer am 2026-10-25 |
 | PE-29 | Wiederkehrende Kosten/Einnahmen zählen „wie gezahlt“: voller Betrag am Fälligkeitstag; Fälligkeit am 29.–31. fällt in kürzeren Monaten auf den Monatsletzten; Aufteilung „alle“ nach am Fälligkeitstag aktiven Projekten | entspricht dem Kontoauszug | Nutzer am 2026-10-25 |
 | PE-30 | Prognose = laufende wiederkehrende Ausgaben und Einnahmen der nächsten 12 Monate nach PE-29. Break-even = erster Monat, in dem kumulierte Einnahmen eines Projekts ≥ kumulierte Ausgaben (rückblickend + Prognose); sonst „nicht in Sicht“ | klare, testbare Definition | Nutzer am 2026-10-25 |
-| PE-31 | Kurs- und Umrechnungsmathematik mit `decimal.js`; Ergebnis wird erst am Ende auf Cent gerundet (kaufmännisch, half-up) | exakte Rechnungen (PE-24) | angenommen vom Planner |
+| PE-31 | Kurs- und Umrechnungsmathematik mit `decimal.js`; Ergebnis wird erst am Ende auf Cent gerundet (kaufmännisch, half-up) | exakte Rechnungen (PE-24) | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-33 | Nicht im Umfang: siehe §2 „Bewusst nicht im Umfang“ | Fokus | Nutzer am 2026-10-25 |
 | PE-34 | Projektfelder: Name, Beschreibung, Plattformen (Mehrfachauswahl), Phase (Idee, Entwicklung, Live, Pausiert, Eingestellt), Startdatum, Enddatum (optional, gesetzt bei „Eingestellt“), Links. „Aktiv“ für Aufteilung = Datum zwischen Start und Ende | klare Regel für PE-06 | Nutzer am 2026-10-25 |
 | PE-35 | Löschverhalten wie in §4 (Projekte archivieren, Dienst fragt nach Kosten, Zahlungen gelöschter Personen bleiben, Kurse nie löschen, jede Löschung mit Rückfrage) | Daten- und Rechenkonsistenz | Nutzer am 2026-10-25 |
@@ -1415,12 +1415,13 @@ flowchart LR
 | PE-46 | Lead arbeitet ohne Freigabe pro Welle autonom über alle Meilensteine, bis der Nutzer „stopp“ sagt. M<x>-DEP (Smoke-Test, Merges) läuft nebenher und blockiert den nächsten Meilenstein nicht. Eskalation bleibt bei §7.3-Fällen. Budget voll → Pause bis Reset. Designer-Gespräch (H-05) blockiert M2 nicht; Design-Pakete werden danach eingeschoben. | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 | PE-47 | App zweisprachig Deutsch/Englisch, umschaltbar; Zahlen/Datum im Format der Sprache (`Intl`, de-DE / en-US). Eigene kleine i18n-Lösung ohne neue Abhängigkeit (`t()`-Funktion, Wörterbücher je Bereich). Sprache und Theme sind UI-Präferenzen in `localStorage`. PDF in der gewählten Sprache. | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 | PE-48 | Eine Ausgaben-Maske, Felder je Kategorie (Person bei „Mitarbeiter/Freelancer“, Dienst bei Dienstkategorien), Schnellknöpfe „+ Personenzahlung“, „+ KI-Guthaben“, „+ Abo“; Personenzahlung auch im Personenprofil; Aufteilung immer derselbe Baustein | einfache Bedienung | Nutzer am 2026-10-25 |
-| PE-49 | Kampagnenkosten zählen am Startdatum der Kampagne (einmalig), Nutzer einer Kampagne werden wie die Kosten auf Projekte verteilt (Größter-Rest auf ganze Nutzer) | klare Regel | angenommen vom Planner |
-| PE-50 | Rechenreihenfolge: Buchung → EUR mit Snapshot-Kurs (auf Cent) → Aufteilung auf Projekte (Größter-Rest) → Aggregation in EUR (exakt). Anzeige in anderer Währung: jede angezeigte Zahl einzeln aus EUR umgerechnet; Hinweis „umgerechnet“ in der Anzeige | Summen in EUR exakt; Anzeige folgt PE-13 | angenommen vom Planner |
-| PE-51 | Kennzahl „Fixkosten pro Monat“ = monatliches Äquivalent aller am Stichtag aktiven wiederkehrenden Ausgaben (täglich × 365/12, wöchentlich × 52/12, monatlich × 1, jährlich / 12, auf Cent gerundet). Nur Kennzahl, ändert die Buchung „wie gezahlt“ (PE-29) nicht | aussagekräftiger Monatswert | angenommen vom Planner |
-| PE-52 | Nutzer-Kennzahlen: Kosten pro Nutzer = Ausgaben im Zeitraum / Nutzerzuwachs im Zeitraum; Einnahmen pro zahlendem Nutzer = Einnahmen im Zeitraum / zahlende Nutzer am letzten Stichtag; Kampagnenanteil = Kampagnen-Nutzer im Zeitraum / Nutzerzuwachs; Division durch 0 → „–“ | testbare Definitionen | angenommen vom Planner |
-| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei) | testbare Definitionen | angenommen vom Planner |
-| PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner |
+| PE-49 | Kampagnenkosten zählen am Startdatum der Kampagne (einmalig), Nutzer einer Kampagne werden wie die Kosten auf Projekte verteilt (Größter-Rest auf ganze Nutzer) | klare Regel | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-50 | Rechenreihenfolge: Buchung → EUR mit Snapshot-Kurs (auf Cent) → Aufteilung auf Projekte (Größter-Rest) → Aggregation in EUR (exakt). Anzeige in anderer Währung: jede angezeigte Zahl einzeln aus EUR umgerechnet; Hinweis „umgerechnet“ in der Anzeige | Summen in EUR exakt; Anzeige folgt PE-13 | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-51 | Kennzahl „Fixkosten pro Monat“ = monatliches Äquivalent aller am Stichtag aktiven wiederkehrenden Ausgaben (täglich × 365/12, wöchentlich × 52/12, monatlich × 1, jährlich / 12, auf Cent gerundet). Nur Kennzahl, ändert die Buchung „wie gezahlt“ (PE-29) nicht | aussagekräftiger Monatswert | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-52 | Nutzer-Kennzahlen: Kosten pro Nutzer = Ausgaben im Zeitraum / Nutzerzuwachs im Zeitraum; Einnahmen pro zahlendem Nutzer = Einnahmen im Zeitraum / zahlende Nutzer am letzten Stichtag; Kampagnenanteil = Kampagnen-Nutzer im Zeitraum / Nutzerzuwachs; Division durch 0 → „–“ | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei) | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-55 | `@vitest/coverage-v8` (MIT) freigegeben, Abdeckung wird gemessen (`npm run test:coverage`) | Abnahmekriterium ≥ 95 % | Nutzer am 2026-10-25 |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1433,7 +1434,7 @@ flowchart LR
 | Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | geklärt → PE-18 |
 | Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | geklärt → PE-20 |
 | Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
-| Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | offen |
+| Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | geklärt → PE-55 |
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
@@ -1481,3 +1482,4 @@ flowchart LR
 | Datum | Änderung | Grund | Betroffene Pakete | Freigabe |
 |---|---|---|---|---|
 | 2026-10-25 | Plan v1 im Interview erstellt (14 Runden), 27 Pakete in M0–M4 | Projektstart | alle | Nutzer |
+| 2026-10-25 | Annahmen bestätigt, Coverage-Abhängigkeit freigegeben (PE-55), Interview beendet („stop“) | Abschluss Interview | AP-01 | Nutzer |
