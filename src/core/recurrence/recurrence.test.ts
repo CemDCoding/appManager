@@ -140,6 +140,17 @@ describe('occurrences', () => {
   })
 })
 
+describe('occurrences near the calendar maximum', () => {
+  it.each([
+    ['daily', '9999-12-30', ['9999-12-30', '9999-12-31']],
+    ['weekly', '9999-12-25', ['9999-12-25']],
+    ['monthly', '9999-11-30', ['9999-11-30', '9999-12-30']],
+    ['yearly', '9999-12-31', ['9999-12-31']]
+  ] as const)('%s from %s terminates at year 9999', (interval, start, expected) => {
+    expect(occurrences(rec(interval, start), start, '9999-12-31')).toEqual(expected)
+  })
+})
+
 describe('amountAt', () => {
   const r = rec('monthly', '2026-01-01', undefined, [
     { fromDate: '2026-09-15', cents: 1500 },

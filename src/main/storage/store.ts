@@ -29,9 +29,6 @@ type Repos = { [C in CollectionName]: CollectionRepository<C> }
 
 const LIST_NAMES = Object.keys(DEFAULT_LISTS) as DefaultListName[]
 
-/** Prefix used in CONFLICT messages for the PE-35 delete rule (no IN_USE code in the contract). */
-export const IN_USE_PREFIX = 'IN_USE'
-
 function validationMessage(collection: string, error: z.ZodError): string {
   const first = error.issues[0]
   const where = first ? first.path.join('.') : ''
@@ -162,7 +159,7 @@ export class DataStore {
 
   /**
    * Delete rules (PE-35):
-   * - projects: only without references, otherwise CONFLICT "IN_USE ...".
+   * - projects: only without references, otherwise IN_USE.
    * - services: `cascade` also deletes expenses with this serviceId; without
    *   it the expenses stay (dangling serviceId, like deleted persons).
    * - persons: expenses keep their personId ("deleted person").
@@ -184,10 +181,7 @@ export class DataStore {
       if (collection === 'projects') {
         const usedIn = this.projectReferences(id)
         if (usedIn.length > 0) {
-          throw new StorageError(
-            'CONFLICT',
-            `${IN_USE_PREFIX}: project is referenced in ${usedIn.join(', ')}`
-          )
+          throw new StorageError('IN_USE', `project is referenced in ${usedIn.join(', ')}`)
         }
       }
       if (collection === 'services' && options.cascade === true) {

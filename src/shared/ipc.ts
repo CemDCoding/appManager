@@ -35,6 +35,7 @@ export const IPC_ERROR_CODES = [
   'VALIDATION',
   'NOT_FOUND',
   'CONFLICT',
+  'IN_USE',
   'IO',
   'INVALID_DATA',
   'CANCELLED',

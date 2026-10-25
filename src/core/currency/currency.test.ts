@@ -65,6 +65,12 @@ describe('fromEur', () => {
     expect(fromEur(1, '0')).toEqual({ ok: false, error: 'invalidRate' })
     expect(fromEur(Number.MAX_SAFE_INTEGER, '0.5')).toEqual({ ok: false, error: 'overflow' })
   })
+  it.each([-1, 1.5, Number.NaN, Number.POSITIVE_INFINITY, Number.MAX_SAFE_INTEGER + 1])(
+    'rejects invalid eurCents %s',
+    (cents) => {
+      expect(fromEur(cents, '0.92')).toEqual({ ok: false, error: 'invalidAmount' })
+    }
+  )
 })
 
 describe('latestRate', () => {

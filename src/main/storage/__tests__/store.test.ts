@@ -150,8 +150,7 @@ describe('DataStore delete rules (PE-35)', () => {
     const free = await store.create('projects', projectInput('Free'))
     await store.create('expenses', expenseInput({ allocation: selected(used.id) }))
     await expect(store.delete('projects', used.id)).rejects.toMatchObject({
-      code: 'CONFLICT',
-      message: expect.stringMatching(/^IN_USE/)
+      code: 'IN_USE'
     })
     expect(await store.list('projects')).toHaveLength(2)
     await store.delete('projects', free.id)
@@ -169,7 +168,7 @@ describe('DataStore delete rules (PE-35)', () => {
     const project = await store.create('projects', projectInput())
     await store.create(collection, input(project.id))
     await expect(store.delete('projects', project.id)).rejects.toMatchObject({
-      code: 'CONFLICT'
+      code: 'IN_USE'
     })
   })
 

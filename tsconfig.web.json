@@ -22,5 +22,5 @@
       "@core/*": ["./src/core/*"]
     }
   },
-  "include": ["src/renderer/**/*", "src/shared/**/*", "src/core/**/*"]
+  "include": ["src/renderer/**/*", "src/shared/**/*", "src/core/**/*", "src/preload/index.d.ts"]
 }
