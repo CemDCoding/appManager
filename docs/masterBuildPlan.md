@@ -112,7 +112,10 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 **Leitprinzipien (in Rangfolge):**
 
 1. Sicherheit und Datenschutz werden nie gekürzt.
-2. {{…}}
+2. Korrekte Zahlen: Berechnungen müssen exakt stimmen und werden gründlichst getestet; Beträge intern als Ganzzahl in Cent (PE-24, PE-27).
+3. Einfache Bedienung.
+4. Funktionsumfang.
+5. Optik (Feinschliff später mit dem Designer, PE-21).
 
 **Abnahmekriterien (G3):** {{prüfbare Liste}}
 
@@ -133,8 +136,8 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 |---|---|---|---|
 | F-01 | Projekte verwalten | Projekte/Apps anlegen, bearbeiten, archivieren; Plattformen (Mobile, Web, Webseite, Desktop, Steam) | ⟦offen⟧ |
 | F-02 | Deploy- und Dienstübersicht | Dienste (Anbieter, Zweck, Tarif, URL, Notiz, z. B. Railway, Vercel, Supabase) mit verknüpften Kosten; ein Dienst kann mehreren Projekten dienen, Kosten nach PE-06 geteilt; pro Projekt einsehbar (PE-12) | ⟦offen⟧ |
-| F-03 | Ausgaben erfassen | Einmalige und wiederkehrende Ausgaben (DB, Server, Lizenzen …) mit Kategorie; Aufteilung auf ein, mehrere oder alle Projekte (PE-06, PE-07) | ⟦offen⟧ |
-| F-04 | Einnahmen erfassen | Von Hand, einmalig oder wiederkehrend, netto, einem Projekt zugeordnet, mit Kategorie (PE-08) | ⟦offen⟧ |
+| F-03 | Ausgaben erfassen | Einmalige und wiederkehrende Ausgaben mit Kategorie; Aufteilung auf ein, mehrere oder alle Projekte (PE-06, PE-07). Startkategorien (erweiterbar): Hosting/Server, Datenbank, Domain, Storage/CDN, Software-Lizenz, KI-Abo, KI-Guthaben, Mitarbeiter/Freelancer, Werbung (aus Kampagnen), Store-/Plattformgebühr, Hardware, Sonstiges (PE-26) | ⟦offen⟧ |
+| F-04 | Einnahmen erfassen | Von Hand, einmalig oder wiederkehrend, netto, einem Projekt zugeordnet, mit Kategorie (PE-08). Startkategorien (erweiterbar): Store-Verkauf, Steam, In-App-Kauf, Abo, Auftrag/Kunde, Spende, Sonstiges (PE-26) | ⟦offen⟧ |
 | F-05 | Mitarbeiter und Coder | Personen anlegen (Name, Kurzbeschreibung); Zahlungen pro Arbeitspaket (gezahlter Betrag, Datum, Kurzbeschreibung) oder als periodische Abrechnung, aufgeteilt auf Projekte (PE-09) | ⟦offen⟧ |
 | F-06 | KI-/Coder-Abos | Abos als wiederkehrender Posten; tokenbasierte Kosten als Guthaben-Aufladung am Tag der Aufladung; aufgeteilt auf Projekte (PE-10) | ⟦offen⟧ |
 | F-07 | Werbekampagnen | Name, Plattform, Format, Zeitraum, Kosten, Impressionen, Klicks, gewonnene Nutzer, 0–5 Sterne, Notiz; berechnet CPC, Kosten pro Nutzer, CTR; auf Projekte aufteilbar; zählt in Ausgaben-Statistik (PE-11) | ⟦offen⟧ |
@@ -174,8 +177,9 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | Backend | Electron-Main-Prozess (lokal, kein Server) | Dateizugriff nur hier (PE-02) |
 | Datenbank / ORM | lokale JSON-Dateien, Speicher hinter einer Schnittstelle, damit später eine DB folgen kann | Wunsch des Nutzers (`idee.txt`) |
 | Auth | keine (Einzelnutzer, lokal) | PE-01 |
-| Tests | {{…}} | {{…}} |
-| Code-Qualität | {{…}} | {{…}} |
+| Tests | Vitest (Rechenkern gründlichst: Aufteilung, Währung, Wiederholung, Prognose, Break-even, Rundung, Randfälle); Playwright gegen die Electron-App für 2–3 Kernabläufe | Rechnungen müssen perfekt sitzen (PE-24) |
+| Code-Qualität | ESLint (typescript-eslint), Prettier, `tsc --noEmit` | Standard |
+| Diagramme / PDF | Recharts; PDF über Electron `webContents.printToPDF` aus einer Berichtsseite | keine zweite Layout-Welt (PE-25) |
 | Hosting | keins; Auslieferung als Windows-Installer | PE-03 |
 
 **Checks, die jedes Paket bestehen muss:** `{{z. B. npm run lint}}`, `{{npm run typecheck}}`, `{{npm test}}`
@@ -536,6 +540,10 @@ flowchart LR
 | PE-21 | Prototyp ohne Designer: Tailwind CSS + shadcn/ui; Grundsätze: neutrale Grautöne, eine Akzentfarbe, viel Weißraum, Schrift Inter, Hell-/Dunkelmodus, linke Seitenleiste, Tabellen und Karten, Diagramme in Akzentfarbe. Farben/Abstände nur über Tailwind-Theme/CSS-Variablen an einer Stelle, damit der Designer später zentral umstellen kann. Designer-Interview nach dem Prototyp. | Nutzer will erst Prototyp sehen | Nutzer am 2026-10-25 |
 | PE-22 | Öffentliches GitHub-Repo `CemDCoding/appManager` ist angelegt und als `origin` eingetragen. `stage` = Installer-Test mit Testdaten, `master` = Release (optional GitHub Release mit `.exe`). Nie echte Daten im Repo. | – | Nutzer am 2026-10-25 |
 | PE-23 | Bis zu 5 Coder gleichzeitig. (angenommen) Freigabe pro Welle. | Wunsch des Nutzers; Budget-Wächter bremst bei 30 % | Nutzer am 2026-10-25 |
+| PE-24 | Rechnungen müssen perfekt stimmen und werden gründlichst getestet: Vitest-Unit-Tests für den gesamten Rechenkern inkl. Randfällen, ESLint, Prettier, Typecheck, 2–3 Playwright-E2E-Abläufe | höchste Priorität nach Sicherheit | Nutzer am 2026-10-25 |
+| PE-25 | Diagramme mit Recharts, PDF über Electron `printToPDF` | gleiches Aussehen in App und PDF, keine extra PDF-Bibliothek | Nutzer am 2026-10-25 |
+| PE-26 | Kategorien als erweiterbare Startlisten (siehe F-03/F-04). Werbung ist überwiegend Ausgabe: Kampagnenkosten zählen automatisch als Ausgabenkategorie „Werbung“ (keine Doppelerfassung). (angenommen) „Werbeeinnahmen“ ist nicht in der Startliste der Einnahmen, kann aber ergänzt werden. | Hinweis des Nutzers | Nutzer am 2026-10-25 |
+| PE-27 | Leitprinzipien: Sicherheit/Datenschutz > korrekte Zahlen > einfache Bedienung > Funktionsumfang > Optik | – | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
