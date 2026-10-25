@@ -532,6 +532,10 @@ flowchart LR
 | PE-17 | (ersetzt durch PE-18) ~~Datenordner im Projekt~~. Weiter gültig (angenommen): eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | – | Nutzer am 2026-10-25 |
 | PE-18 | Datenpfad ist in der App einstellbar. Echte Daten liegen in einem externen Ordner auf `D:`, den nur der Nutzer anlegt und den kein Agent liest. Agents dürfen im Projekt einen Testdaten-Ordner `data-dev/` (gitignored) mit erfundenen Daten anlegen (Seed-Skript). Installation nur auf Laufwerk `D:` (Installer mit wählbarem Zielordner, Vorschlag auf `D:`). | R2, Agents sollen echte Daten nicht sehen | Nutzer am 2026-10-25 |
 | PE-19 | Nicht kommerziell. Repository wird öffentlich auf GitHub, Nachbau erlaubt, Weiterverkauf und kommerzielle Nutzung verboten → nicht-kommerzielle Quelltext-Lizenz (Wahl: Q-05). Abhängigkeiten nur mit freizügigen Lizenzen (MIT, Apache-2.0, BSD, ISC). | Wunsch des Nutzers | Nutzer am 2026-10-25 |
+| PE-20 | Lizenz PolyForm Noncommercial 1.0.0 (`LICENSE` im Repo-Wurzelverzeichnis). Keine Rechtsberatung (D12b). | für Software formuliert, verbietet kommerzielle Nutzung | Nutzer am 2026-10-25 |
+| PE-21 | Prototyp ohne Designer: Tailwind CSS + shadcn/ui; Grundsätze: neutrale Grautöne, eine Akzentfarbe, viel Weißraum, Schrift Inter, Hell-/Dunkelmodus, linke Seitenleiste, Tabellen und Karten, Diagramme in Akzentfarbe. Farben/Abstände nur über Tailwind-Theme/CSS-Variablen an einer Stelle, damit der Designer später zentral umstellen kann. Designer-Interview nach dem Prototyp. | Nutzer will erst Prototyp sehen | Nutzer am 2026-10-25 |
+| PE-22 | Öffentliches GitHub-Repo `CemDCoding/appManager` ist angelegt und als `origin` eingetragen. `stage` = Installer-Test mit Testdaten, `master` = Release (optional GitHub Release mit `.exe`). Nie echte Daten im Repo. | – | Nutzer am 2026-10-25 |
+| PE-23 | Bis zu 5 Coder gleichzeitig. (angenommen) Freigabe pro Welle. | Wunsch des Nutzers; Budget-Wächter bremst bei 30 % | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
