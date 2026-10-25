@@ -11,7 +11,9 @@ export default defineConfig({
     resolve: { alias: { '@shared': shared, '@core': core } }
   },
   preload: {
-    resolve: { alias: { '@shared': shared } }
+    resolve: { alias: { '@shared': shared } },
+    // sandbox:true laedt den Preload als CommonJS
+    build: { rollupOptions: { output: { format: 'cjs', entryFileNames: '[name].cjs' } } }
   },
   renderer: {
     resolve: {

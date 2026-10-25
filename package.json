@@ -17,8 +17,8 @@
     "typecheck:web": "tsc -p tsconfig.web.json",
     "test": "vitest --run",
     "test:coverage": "vitest --run --coverage",
-    "test:e2e": "playwright test --pass-with-no-tests",
-    "seed": "vitest run --config vitest.seed.config.ts",
+    "test:e2e": "playwright test e2e --pass-with-no-tests",
+    "seed": "vitest run --passWithNoTests --config vitest.seed.config.ts",
     "dist": "electron-vite build && electron-builder --win"
   },
   "dependencies": {
