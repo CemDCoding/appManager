@@ -144,12 +144,18 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | F-08 | Währungen | Kurstabelle pflegen, Beträge in Originalwährung, Anzeigewährung umschaltbar (PE-04, PE-05) | ⟦offen⟧ |
 | F-09 | Statistiken | Auswertungen über Portfolio und pro Projekt (Umfang PE-16, inkl. Prognose und Break-even) | ⟦offen⟧ |
 | F-10 | PDF-Bericht | PDF für gesamtes Portfolio und für einzelne Projekte, Inhalt wie App-Auswertung plus Tabellen (PE-14) | ⟦offen⟧ |
+| F-11 | Mitarbeiterverwaltung (Prio 1 der Zusatzthemen) | Kleines Profil je Person (Name, Rolle, Status aktiv/inaktiv, Notiz); Übersicht: Summe aller Zahlungen nach Projekt und Zeitraum, Zahlungsliste mit Kurzbeschreibung; keine Kontaktdaten (PE-36) | ⟦offen⟧ |
+| F-12 | Startseite mit Zielen (Prio 2) | Ziele je Projekt oder Portfolio: messbar (Einnahmen X bis Datum, Break-even bis Datum, Nutzer X bis Datum, Kosten ≤ X pro Monat) mit automatischem Fortschritt, oder frei zum Abhaken; Startseite zeigt Fortschrittsbalken und Monatskennzahlen (PE-37) | ⟦offen⟧ |
+| F-13 | Nutzerzahlen (Prio 3) | Stichtage je Projekt von Hand: Nutzer/Downloads gesamt, aktive, zahlende, optional je Plattform; Verlauf; Kosten pro Nutzer, Einnahmen pro Nutzer, Anteil über Kampagnen (PE-38) | ⟦offen⟧ |
 
 ### Optional
 
 | ID | Funktion | Bedingung |
 |---|---|---|
-| O-01 | {{…}} | {{nur wenn alle Pflicht-Meilensteine live sind}} |
+| O-01 | CSV-Export der Tabellen | nur wenn alle Pflicht-Meilensteine live sind |
+| O-02 | PDF-Abschnitte per Häkchen wählen | wie O-01 |
+| O-03 | CSV-Import für Einnahmen (Steam, Stores) | wie O-01 |
+| O-04 | Kampagnen-Verlauf mit Zwischenständen | wie O-01 |
 
 ### Bewusst nicht im Umfang
 
@@ -241,7 +247,9 @@ flowchart LR
 |---|---|---|---|
 | Projekt | Name, Beschreibung, Plattformen[], Status (aktiv/archiviert), aktiv von/bis | Besitzer (PE-01) | (angenommen) archivieren; endgültig löschen nur ohne verknüpfte Buchungen |
 | Dienst | Anbieter, Zweck, Tarif, URL, Notiz, Aufteilung | Besitzer | (angenommen) löschen fragt, ob verknüpfte Kosten mitgelöscht werden |
-| Person | Name/Kürzel, Kurzbeschreibung | Besitzer | (angenommen) löschbar; Zahlungen bleiben mit Vermerk „gelöschte Person“ |
+| Person | Name/Kürzel, Rolle, Status aktiv/inaktiv, Notiz (PE-36) | Besitzer | löschbar; Zahlungen bleiben mit Vermerk „gelöschte Person“ (PE-35) |
+| Ziel | Projekt oder Portfolio, Art (Einnahmen, Break-even, Nutzer, Kostenlimit/Monat, frei), Zielwert, Stichtag, erledigt (nur frei), Titel | Besitzer | löschbar |
+| Nutzerstand | Projekt, Datum, Nutzer gesamt, aktiv, zahlend, optional je Plattform | Besitzer | löschbar |
 | Ausgabe | Kategorie, Betrag, Währung, Kurs-Snapshot, Datum **oder** Wiederholung, Aufteilung, Beschreibung, optional Verweis auf Dienst/Person | Besitzer | löschbar |
 | Wiederholung (Teil einer Ausgabe/Einnahme) | Intervall, Start, Ende?, Preisänderungen [ab Datum, Betrag] | Ausgabe/Einnahme | mit Eltern |
 | Einnahme | Kategorie, Betrag netto, Währung, Kurs-Snapshot, Datum oder Wiederholung, Projekt | Besitzer | löschbar |
@@ -592,6 +600,10 @@ flowchart LR
 | PE-33 | Nicht im Umfang: siehe §2 „Bewusst nicht im Umfang“ | Fokus | Nutzer am 2026-10-25 |
 | PE-34 | Projektfelder: Name, Beschreibung, Plattformen (Mehrfachauswahl), Phase (Idee, Entwicklung, Live, Pausiert, Eingestellt), Startdatum, Enddatum (optional, gesetzt bei „Eingestellt“), Links. „Aktiv“ für Aufteilung = Datum zwischen Start und Ende | klare Regel für PE-06 | Nutzer am 2026-10-25 |
 | PE-35 | Löschverhalten wie in §4 (Projekte archivieren, Dienst fragt nach Kosten, Zahlungen gelöschter Personen bleiben, Kurse nie löschen, jede Löschung mit Rückfrage) | Daten- und Rechenkonsistenz | Nutzer am 2026-10-25 |
+| PE-36 | Mitarbeiterverwaltung Pflicht: Profil (Name, Rolle, Status, Notiz) + Übersicht nach Projekt/Zeitraum; keine Kontaktdaten | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-37 | Ziele Pflicht: messbare (automatischer Fortschritt) und freie Ziele, je Projekt oder Portfolio, auf der Startseite | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-38 | Nutzerzahlen Pflicht: manuelle Stichtage, Verlauf, Kennzahlen pro Nutzer | keine Netzwerkzugriffe | Nutzer am 2026-10-25 |
+| PE-39 | Priorität der Zusatzthemen: F-11 vor F-12 vor F-13; Optionen O-01–O-04 danach | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -604,7 +616,7 @@ flowchart LR
 | Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | geklärt → PE-18 |
 | Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | geklärt → PE-20 |
 | Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
-| Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | offen |
+| Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
