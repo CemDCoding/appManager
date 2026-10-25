@@ -182,9 +182,14 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | Diagramme / PDF | Recharts; PDF über Electron `webContents.printToPDF` aus einer Berichtsseite | keine zweite Layout-Welt (PE-25) |
 | Hosting | keins; Auslieferung als Windows-Installer | PE-03 |
 
-**Checks, die jedes Paket bestehen muss:** `{{z. B. npm run lint}}`, `{{npm run typecheck}}`, `{{npm test}}`
+**Checks, die jedes Paket bestehen muss:** `npm run lint`, `npm run typecheck`, `npm test` (Vitest); ab Einführung der E2E-Tests zusätzlich `npm run test:e2e` bei Paketen mit UI-Abläufen. Paketmanager: npm, ein `package.json` im Wurzelverzeichnis (kein Monorepo).
 
-**Freigegebene Abhängigkeiten (PE-xx):** {{Liste. Coder installieren nur diese, und nur wenn ihnen die betroffene package.json gehört. Alles andere geht über Lead und Nutzer.}}
+**Freigegebene Abhängigkeiten (PE-32):** Coder installieren nur diese, und nur wenn ihnen `package.json` im Paket gehört. Versionen legt das Gerüst-Paket fest. Alles andere geht über Lead und Nutzer.
+
+- App/Bau: `electron`, `electron-vite`, `electron-builder`, `react`, `react-dom`, `react-router-dom`, `typescript`, `vite`, `@vitejs/plugin-react`
+- UI: `tailwindcss` (+ dessen offizielles Vite-/PostCSS-Plugin), shadcn/ui-Bausteine `@radix-ui/*`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, `@fontsource/inter`
+- Logik: `zod`, `date-fns`, `decimal.js`, `jszip`, `recharts`
+- Qualität: `vitest`, `@playwright/test`, `eslint`, `typescript-eslint`, `eslint-plugin-react-hooks`, `prettier`, `@types/*` passend zu den freigegebenen Paketen
 
 ---
 
@@ -544,6 +549,11 @@ flowchart LR
 | PE-25 | Diagramme mit Recharts, PDF über Electron `printToPDF` | gleiches Aussehen in App und PDF, keine extra PDF-Bibliothek | Nutzer am 2026-10-25 |
 | PE-26 | Kategorien als erweiterbare Startlisten (siehe F-03/F-04). Werbung ist überwiegend Ausgabe: Kampagnenkosten zählen automatisch als Ausgabenkategorie „Werbung“ (keine Doppelerfassung). (angenommen) „Werbeeinnahmen“ ist nicht in der Startliste der Einnahmen, kann aber ergänzt werden. | Hinweis des Nutzers | Nutzer am 2026-10-25 |
 | PE-27 | Leitprinzipien: Sicherheit/Datenschutz > korrekte Zahlen > einfache Bedienung > Funktionsumfang > Optik | – | Nutzer am 2026-10-25 |
+| PE-28 | Rundung bei Aufteilung: Größter-Rest-Verfahren auf Cent; Summe ergibt immer exakt den Ausgangsbetrag; Restcent nach fester, deterministischer Regel (erstes Projekt in der Liste) | Summen müssen exakt stimmen | Nutzer am 2026-10-25 |
+| PE-29 | Wiederkehrende Kosten/Einnahmen zählen „wie gezahlt“: voller Betrag am Fälligkeitstag; Fälligkeit am 29.–31. fällt in kürzeren Monaten auf den Monatsletzten; Aufteilung „alle“ nach am Fälligkeitstag aktiven Projekten | entspricht dem Kontoauszug | Nutzer am 2026-10-25 |
+| PE-30 | Prognose = laufende wiederkehrende Ausgaben und Einnahmen der nächsten 12 Monate nach PE-29. Break-even = erster Monat, in dem kumulierte Einnahmen eines Projekts ≥ kumulierte Ausgaben (rückblickend + Prognose); sonst „nicht in Sicht“ | klare, testbare Definition | Nutzer am 2026-10-25 |
+| PE-31 | Kurs- und Umrechnungsmathematik mit `decimal.js`; Ergebnis wird erst am Ende auf Cent gerundet (kaufmännisch, half-up) | exakte Rechnungen (PE-24) | angenommen vom Planner |
+| PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
