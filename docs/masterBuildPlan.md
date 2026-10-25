@@ -7,11 +7,11 @@ Er ist der einzige Agent, der diese Datei ändert. Der Lead (ma-lead) steuert de
 Grundlage der Regeln: MultiAgent/entscheidungen.md
 -->
 
-# Master-Build-Plan {{PROJEKTNAME}}
+# Master-Build-Plan appManager
 
-**Stand:** {{JJJJ-MM-TT}} · **Planversion:** {{n}} · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** {{NAME}}
+**Stand:** 2026-10-25 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
-{{KURZÜBERBLICK: höchstens zehn Zeilen. Was baut das Projekt, für wen? Wie viele Meilensteine und Pakete hat der Plan?}}
+appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, auf Projekte aufteilt und auswertet. Daten liegen in lokalen JSON-Dateien. Meilensteine und Pakete folgen nach G1.
 
 ---
 
@@ -63,12 +63,12 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | § | Abschnitt | Status | Offene Fragen | Nötig für Gate |
 |---|---|---|---|---|
-| 1 | Projektkontext und Ziel | leer | – | G1 |
-| 2 | Umfang | leer | – | G1 |
-| 3 | Tech-Stack | leer | – | G1 |
-| 4 | Architektur, Datenmodell, Verträge | leer | – | G1 |
-| 5 | Sicherheit, Datenschutz, Recht, Limits | leer | – | G1 |
-| 6 | Umgebungen, Branches, Deployment | leer | – | G1 |
+| 1 | Projektkontext und Ziel | in Klärung | Kommerzialisierung, Leitprinzipien, Abnahme | G1 |
+| 2 | Umfang | in Klärung | Rohfassung aus `idee.txt`, Details offen | G1 |
+| 3 | Tech-Stack | in Klärung | Speicher-Details, Diagramme, PDF, Tests | G1 |
+| 4 | Architektur, Datenmodell, Verträge | in Klärung | Entitäten, Aufteilungsregeln, Währungsumrechnung | G1 |
+| 5 | Sicherheit, Datenschutz, Recht, Limits | in Klärung | Backup, Mitarbeiterdaten | G1 |
+| 6 | Umgebungen, Branches, Deployment | in Klärung | stage/master für Desktop-App | G1 |
 | 7 | Team-Steuerung | leer | – | G1 |
 | 8 | Lanes und Dateieigentum | leer | – | G2 |
 | 9 | Meilensteine und Wellen | leer | – | G2 |
@@ -102,12 +102,12 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | Feld | Wert |
 |---|---|
-| Einzeiler | {{…}} |
-| Zielgruppe | {{…}} |
-| Lieferumfang | {{…}} |
-| Termin | {{JJJJ-MM-TT oder „keiner“}} |
-| Kommerzialisierung | {{nein / später möglich / geplant}} |
-| Projektdokumentation | {{Verweis oder „keine“}} |
+| Einzeiler | Lokale Desktop-App, um Ausgaben und Einnahmen privater Software-Projekte zu erfassen, auf Projekte aufzuteilen und auszuwerten (Statistiken, PDF). |
+| Zielgruppe | Nur der Nutzer selbst, ein Rechner, kein Login (PE-01) |
+| Lieferumfang | Repository + Windows-Installer (.exe), den der Nutzer lokal baut (PE-03) |
+| Termin | keiner (PE-04) |
+| Kommerzialisierung | ⟦offen: Q-01⟧ |
+| Projektdokumentation | `idee.txt` (Ausgangsidee des Nutzers, 2026-10-25) |
 
 **Leitprinzipien (in Rangfolge):**
 
@@ -159,14 +159,14 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | Bereich | Technologie | Begründung |
 |---|---|---|
-| Sprache | {{…}} | {{…}} |
-| Frontend | {{…}} | {{…}} |
-| Backend | {{…}} | {{…}} |
-| Datenbank / ORM | {{…}} | {{…}} |
-| Auth | {{…}} | {{…}} |
+| Sprache | TypeScript | ein Stack für Main-Prozess und Oberfläche (PE-02) |
+| Frontend | React + Vite im Electron-Renderer | wiederverwendbar für spätere Web-/Mobil-Version (PE-02) |
+| Backend | Electron-Main-Prozess (lokal, kein Server) | Dateizugriff nur hier (PE-02) |
+| Datenbank / ORM | lokale JSON-Dateien, Speicher hinter einer Schnittstelle, damit später eine DB folgen kann | Wunsch des Nutzers (`idee.txt`) |
+| Auth | keine (Einzelnutzer, lokal) | PE-01 |
 | Tests | {{…}} | {{…}} |
 | Code-Qualität | {{…}} | {{…}} |
-| Hosting | {{…}} | {{…}} |
+| Hosting | keins; Auslieferung als Windows-Installer | PE-03 |
 
 **Checks, die jedes Paket bestehen muss:** `{{z. B. npm run lint}}`, `{{npm run typecheck}}`, `{{npm test}}`
 
@@ -488,13 +488,17 @@ flowchart LR
 
 | ID | Entscheidung | Begründung | Quelle |
 |---|---|---|---|
-| PE-01 | {{…}} | {{…}} | {{Nutzer am JJJJ-MM-TT / angenommen vom Planner}} |
+| PE-01 | Einzelnutzer, lokal, kein Login. Datenmodell bekommt trotzdem ein Besitzer-Feld für späteren Online-Betrieb. | einfachster Weg, Online später möglich | Nutzer am 2026-10-25 |
+| PE-02 | Electron + React + TypeScript + Vite | Node vorhanden, React später für Web/Mobil nutzbar, reife Diagramm-/PDF-Bibliotheken | Nutzer am 2026-10-25 |
+| PE-03 | Nur Windows, Installer (.exe) baut der Nutzer lokal | einziges Zielsystem des Nutzers | Nutzer am 2026-10-25 |
+| PE-04 | Mehrere Währungen: Betrag in Originalwährung speichern, Kurs trägt der Nutzer selbst ein. Zusätzlich wählbare Anzeigewährung, in die alle Ansichten umgerechnet werden. Kein Termin. | Abos oft in USD; keine Online-Kursdienste | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
 | ID | Frage | Priorität | Betrifft | Empfehlung | Status |
 |---|---|---|---|---|---|
-| Q-01 | {{…}} | {{K/W/O}} | {{…}} | {{…}} | offen |
+| Q-01 | Ist eine Kommerzialisierung denkbar? | W | §1, §5 | nein, privat | offen |
+| Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | offen |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
