@@ -106,7 +106,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | Zielgruppe | Nur der Nutzer selbst, ein Rechner, kein Login (PE-01) |
 | Lieferumfang | Repository + Windows-Installer (.exe), den der Nutzer lokal baut (PE-03) |
 | Termin | keiner (PE-04) |
-| Kommerzialisierung | ⟦offen: Q-01⟧ |
+| Kommerzialisierung | nein. Öffentliches GitHub-Repo, Nachbau erlaubt, kommerzielle Nutzung verboten (PE-19, Lizenz ⟦offen: Q-05⟧) |
 | Projektdokumentation | `idee.txt` (Ausgangsidee des Nutzers, 2026-10-25) |
 
 **Leitprinzipien (in Rangfolge):**
@@ -528,16 +528,20 @@ flowchart LR
 | PE-14 | PDF enthält dieselben Kennzahlen und Diagramme wie die App für den gewählten Zeitraum plus Tabellen; Projekt- und Portfoliobericht; schlichtes Layout ohne Logo | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 | PE-15 | Meilenstein-Reihenfolge wird erst am Ende des Interviews festgelegt | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 | PE-16 | Statistiken: Einnahmen/Ausgaben/Saldo nach Zeitraum, Monatsverlauf, Ausgaben nach Kategorie, Projekt-Ranking, laufende Fixkosten, Kampagnen-Ranking, 12-Monats-Prognose der Fixkosten, Break-even je Projekt | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
-| PE-17 | Datenordner liegt im Projekt und steht in `.gitignore` (Nutzer legt ihn an). (angenommen) Eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | Wunsch des Nutzers; Details siehe Q-04 | Nutzer am 2026-10-25 |
+| PE-17 | (ersetzt durch PE-18) ~~Datenordner im Projekt~~. Weiter gültig (angenommen): eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | – | Nutzer am 2026-10-25 |
+| PE-18 | Datenpfad ist in der App einstellbar. Echte Daten liegen in einem externen Ordner auf `D:`, den nur der Nutzer anlegt und den kein Agent liest. Agents dürfen im Projekt einen Testdaten-Ordner `data-dev/` (gitignored) mit erfundenen Daten anlegen (Seed-Skript). Installation nur auf Laufwerk `D:` (Installer mit wählbarem Zielordner, Vorschlag auf `D:`). | R2, Agents sollen echte Daten nicht sehen | Nutzer am 2026-10-25 |
+| PE-19 | Nicht kommerziell. Repository wird öffentlich auf GitHub, Nachbau erlaubt, Weiterverkauf und kommerzielle Nutzung verboten → nicht-kommerzielle Quelltext-Lizenz (Wahl: Q-05). Abhängigkeiten nur mit freizügigen Lizenzen (MIT, Apache-2.0, BSD, ISC). | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
 | ID | Frage | Priorität | Betrifft | Empfehlung | Status |
 |---|---|---|---|---|---|
-| Q-01 | Ist eine Kommerzialisierung denkbar? | W | §1, §5 | nein, privat | offen |
+| Q-01 | Ist eine Kommerzialisierung denkbar? | W | §1, §5 | nein, privat | geklärt → PE-19 |
 | Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | geklärt → PE-05 |
 | Q-03 | Reihenfolge der Meilensteine / erster Kernfluss | K | §2, §9 | Projekte+Dienste+Buchungen zuerst | zurückgestellt bis Interviewende (PE-15) |
-| Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | offen |
+| Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | geklärt → PE-18 |
+| Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | offen |
+| Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | siehe Runde 7 | offen |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
