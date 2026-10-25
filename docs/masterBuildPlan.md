@@ -140,7 +140,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | F-07 | Werbekampagnen | Name, Plattform, Format, Zeitraum, Kosten, Impressionen, Klicks, gewonnene Nutzer, 0–5 Sterne, Notiz; berechnet CPC, Kosten pro Nutzer, CTR; auf Projekte aufteilbar; zählt in Ausgaben-Statistik (PE-11) | ⟦offen⟧ |
 | F-08 | Währungen | Kurstabelle pflegen, Beträge in Originalwährung, Anzeigewährung umschaltbar (PE-04, PE-05) | ⟦offen⟧ |
 | F-09 | Statistiken | Auswertungen über Portfolio und pro Projekt | ⟦offen⟧ |
-| F-10 | PDF-Bericht | PDF für gesamtes Portfolio und für einzelne Projekte | ⟦offen⟧ |
+| F-10 | PDF-Bericht | PDF für gesamtes Portfolio und für einzelne Projekte, Inhalt wie App-Auswertung plus Tabellen (PE-14) | ⟦offen⟧ |
 
 ### Optional
 
@@ -524,6 +524,9 @@ flowchart LR
 | PE-10 | Tokenbasierte KI-Kosten = Guthaben-Aufladung als einmalige Ausgabe am Aufladetag; Abos wiederkehrend | Nutzer trägt Aufladungen ein | Nutzer am 2026-10-25 |
 | PE-11 | Kampagnenfelder wie F-07, Plattform- und Formatlisten erweiterbar, Kennzahlen berechnet | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 | PE-12 | Dienste mit Kosten verknüpft, mehrfach nutzbar, Kosten nach PE-06 geteilt | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-13 | Feste Basiswährung EUR. Kurse als „1 X = k EUR“; Buchungen speichern Kurs zu EUR; Anzeige in anderer Währung rechnet mit dem neuesten Kurs um | stabile Werte, einfache Pflege | Nutzer am 2026-10-25 |
+| PE-14 | PDF enthält dieselben Kennzahlen und Diagramme wie die App für den gewählten Zeitraum plus Tabellen; Projekt- und Portfoliobericht; schlichtes Layout ohne Logo | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-15 | Meilenstein-Reihenfolge wird erst am Ende des Interviews festgelegt | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
 
@@ -531,6 +534,7 @@ flowchart LR
 |---|---|---|---|---|---|
 | Q-01 | Ist eine Kommerzialisierung denkbar? | W | §1, §5 | nein, privat | offen |
 | Q-02 | Welcher Kurs gilt beim Umrechnen in die Anzeigewährung: Kurs am Buchungstag oder aktueller Kurs? | K | §4 Datenmodell | Kurs am Buchungstag, gespeichert in der Buchung | geklärt → PE-05 |
+| Q-03 | Reihenfolge der Meilensteine / erster Kernfluss | K | §2, §9 | Projekte+Dienste+Buchungen zuerst | zurückgestellt bis Interviewende (PE-15) |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
