@@ -5,3 +5,14 @@
 !.env.example
 .claude/
 ma-config.json
+
+# Build und Daten (AP-01)
+node_modules/
+out/
+dist/
+release/
+coverage/
+data/
+data-dev/
+test-results/
+playwright-report/
