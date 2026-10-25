@@ -1,34 +1,53 @@
-import { app, BrowserWindow } from 'electron'
-import { join } from 'node:path'
+import { app, BrowserWindow, session } from 'electron'
+import {
+  buildContentSecurityPolicy,
+  hardenSession,
+  hardenWebContents,
+  parseDevServerOrigin
+} from './security'
+import { createMainWindow } from './window'
 
-function createWindow(): void {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    show: false,
-    webPreferences: {
-      preload: join(import.meta.dirname, '../preload/index.cjs'),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: true
-    }
+// Dev-Server nur, wenn die App nicht paketiert ist und die URL lokal ist.
+// In der paketierten App gibt es keine Ausnahme (keine Abschwaechung in Prod).
+const devServerUrl =
+  !app.isPackaged && parseDevServerOrigin(process.env['ELECTRON_RENDERER_URL'])
+    ? process.env['ELECTRON_RENDERER_URL']
+    : undefined
+
+let mainWindow: BrowserWindow | null = null
+
+function openMainWindow(): void {
+  mainWindow = createMainWindow(devServerUrl)
+  mainWindow.on('closed', () => {
+    mainWindow = null
   })
-  win.once('ready-to-show', () => win.show())
-
-  if (process.env['ELECTRON_RENDERER_URL']) {
-    void win.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    void win.loadFile(join(import.meta.dirname, '../renderer/index.html'))
-  }
 }
 
-void app.whenReady().then(() => {
-  createWindow()
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
+if (!app.requestSingleInstanceLock()) {
+  app.quit()
+} else {
+  app.enableSandbox()
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
+  // Gilt fuer jeden WebContents der App, auch spaeter erzeugte Fenster.
+  app.on('web-contents-created', (_event, contents) => {
+    hardenWebContents(contents)
+  })
+
+  app.on('second-instance', () => {
+    if (!mainWindow) return
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+  })
+
+  void app.whenReady().then(() => {
+    hardenSession(session.defaultSession, buildContentSecurityPolicy(devServerUrl))
+    openMainWindow()
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) openMainWindow()
+    })
+  })
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit()
+  })
+}
