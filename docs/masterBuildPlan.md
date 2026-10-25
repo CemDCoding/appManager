@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-25 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 27 Arbeitspaketen (~46 h Agent-Zeit).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 28 Arbeitspaketen (~47 h Agent-Zeit).
 
 ---
 
@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-25 · Plan v1 fertig, Bau noch nicht begonnen
-- **Fertig:** – · **Offen:** AP-01 `bereit`, AP-02–AP-27 `offen`
+- **Stand:** 2026-10-25 · M0 (W1–W3) fertig, M0-DEP offen (Nutzer)
+- **Fertig:** AP-01–AP-08 (in `dev` gemergt, 258 Tests, Seed und Build grün) · **Offen:** M0-DEP [Mensch]; M1: AP-09 und AP-28 `bereit`, AP-10 nach AP-28 (W1b), AP-11–AP-15 in W2
 - **Unterbrochen oder laufend:** nichts
-- **Erkenntnisse:** Lead arbeitet autonom über Meilensteine (PE-46); vor dem ersten Push muss `LICENSE` existieren (H-01)
-- **Nächster Schritt:** M0 W1 starten: AP-01
-- **Offene Fragen an den Nutzer:** keine (vor dem ersten Push prüfen: H-01 `LICENSE` erledigt?)
+- **Erkenntnisse:** Dev-Datenpfad nur über `APP_DATA_DIR` oder `data-dev/` (PE-56); AP-04 baut Dialog/Select/Tabs ohne Radix (Abweichung zu PE-21, Vorschlag §16); Details §18
+- **Nächster Schritt:** M1 W1 starten: AP-09 und AP-28 parallel, danach AP-10 (W1b), dann W2
+- **Offene Fragen an den Nutzer:** `LICENSE` (H-01) fehlt, daher kein Push; M0-DEP (H-03, Test-Datenordner); PE-56 bestätigen; Radix-Abweichung (AP-04) entscheiden
 
 ### Rollen und Dokumente
 
@@ -377,14 +377,15 @@ flowchart TD
 
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
-| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version) | M0 W1, M4 W1 |
-| `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade | – |
+| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version) und AP-28 (`tsconfig.web.json`, `.env.example`) | M0 W1, M1 W1, M4 W1 |
+| `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`) | M1 W1 (AP-28) |
 | `electron-builder.yml` | AP-01, später AP-27 | M0 W1, M4 W1 |
-| `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket | M0 W2 |
+| `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
 | `src/preload/index.ts` | AP-01 → AP-07 | M0 W1, W3 |
+| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround) | M0 W3, M1 W1 |
 | `src/renderer/app/routes.tsx`, `src/renderer/app/Layout.tsx` | AP-04 | M0 W2 |
-| `src/renderer/components/ui/**` (shadcn) | AP-04 legt Grundsatz an; AP-10 ergänzt | M0 W2, M1 W1 |
+| `src/renderer/components/ui/**` (shadcn) | AP-04 legt Grundsatz an; AP-10 ergänzt | M0 W2, M1 W1b |
 | `src/renderer/styles/globals.css` (Design-Variablen) | AP-01 → AP-04; später Design-Pakete | – |
 
 ---
@@ -440,7 +441,8 @@ flowchart TD
 
 | Welle | Pakete (parallel) |
 |---|---|
-| W1 | AP-09, AP-10 |
+| W1 | AP-09, AP-28 |
+| W1b | AP-10 (vorgezogen, startet nach AP-28, weil es die `window.api`-Typen braucht) |
 | W2 | AP-11, AP-12, AP-13, AP-14, AP-15 |
 | W3 | M1-DEP [Mensch], danach H-05 Designer-Gespräch |
 
@@ -515,23 +517,24 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 
 | ID | Titel | M | Lane | Welle | Abhängigkeiten | Aufwand | Modell | Coder / Branch | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| AP-01 | Projektgerüst | M0 | OPS | W1 | – | M | sonnet | – | bereit |
-| AP-02 | Verträge: Schemas, Geldtyp, IPC | M0 | SH | W2 | AP-01 | M | opus | – | offen |
-| AP-03 | Fenster und Electron-Härtung | M0 | MAIN | W2 | AP-01 | M | opus | – | offen |
-| AP-04 | App-Shell, Theme, i18n, Routen | M0 | UI | W2 | AP-01 | L | sonnet | – | offen |
-| AP-05 | Kern: Geld, Währung, Aufteilung | M0 | CORE | W3 | AP-02 | M | opus | – | offen |
-| AP-06 | Kern: Wiederholung, Aktivzeitraum | M0 | CORE | W3 | AP-02 | M | opus | – | offen |
-| AP-07 | Speicher, Backups, IPC, Preload | M0 | MAIN | W3 | AP-02, AP-03 | L | opus | – | offen |
-| AP-08 | Seed-Testdaten | M0 | OPS | W3 | AP-02 | S | sonnet | – | offen |
+| AP-01 | Projektgerüst | M0 | OPS | W1 | – | M | sonnet | c1 | fertig |
+| AP-02 | Verträge: Schemas, Geldtyp, IPC | M0 | SH | W2 | AP-01 | M | opus | c1 | fertig |
+| AP-03 | Fenster und Electron-Härtung | M0 | MAIN | W2 | AP-01 | M | opus | c2 | fertig |
+| AP-04 | App-Shell, Theme, i18n, Routen | M0 | UI | W2 | AP-01 | L | sonnet | c3 | fertig |
+| AP-05 | Kern: Geld, Währung, Aufteilung | M0 | CORE | W3 | AP-02 | M | opus | c1 | fertig |
+| AP-06 | Kern: Wiederholung, Aktivzeitraum | M0 | CORE | W3 | AP-02 | M | opus | c2 | fertig |
+| AP-07 | Speicher, Backups, IPC, Preload | M0 | MAIN | W3 | AP-02, AP-03 | L | opus | c3 | fertig |
+| AP-08 | Seed-Testdaten | M0 | OPS | W3 | AP-02 | S | sonnet | c4 | fertig |
 | M0-DEP | Deployment M0 | M0 | HUM | W4 | AP-01–AP-08 | H | – | Nutzer | offen |
-| AP-09 | Kern: Buchungs-Engine und Aggregation | M1 | CORE | W1 | AP-05, AP-06 | L | opus | – | offen |
-| AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1 | AP-04, AP-07 | L | sonnet | – | offen |
+| AP-09 | Kern: Buchungs-Engine und Aggregation | M1 | CORE | W1 | AP-05, AP-06 | L | opus | – | bereit |
+| AP-28 | Vertragslücken schließen | M1 | MAIN+SH+CORE+OPS | W1 | AP-02, AP-07 | S | sonnet | – | bereit |
+| AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1b | AP-04, AP-07, AP-28 | L | sonnet | – | offen |
 | AP-11 | Einstellungen, Kurse, Kategorien | M1 | UI | W2 | AP-10 | M | sonnet | – | offen |
 | AP-12 | Projekte (Liste, Detail) | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | – | offen |
 | AP-13 | Dienste | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | – | offen |
 | AP-14 | Ausgaben und Einnahmen | M1 | UI | W2 | AP-09, AP-10 | L | sonnet | – | offen |
 | AP-15 | Einfache Übersicht (Startseite v1) | M1 | UI | W2 | AP-09, AP-10 | S | sonnet | – | offen |
-| M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15 | H | – | Nutzer | offen |
+| M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15, AP-28 | H | – | Nutzer | offen |
 | AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | offen |
 | AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | offen |
 | AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | offen |
@@ -561,6 +564,7 @@ flowchart LR
   end
   subgraph M1["M1 Prototyp"]
     AP09["AP-09"]
+    AP28["AP-28"]
     AP10["AP-10"]
     AP09 & AP10 --> AP12["AP-12"] & AP13["AP-13"] & AP14["AP-14"] & AP15["AP-15"]
     AP10 --> AP11["AP-11"]
@@ -580,12 +584,15 @@ flowchart LR
     AP27["AP-27"]
   end
   AP05 & AP06 --> AP09
-  AP04 & AP07 --> AP10
+  AP02 & AP07 --> AP28
+  AP04 & AP07 & AP28 --> AP10
   AP09 --> AP16 --> AP20
   AP10 --> AP21
   AP07 & AP11 --> AP25
   AP24 --> AP25 & AP26 & AP27
 ```
+
+**Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
 **Kritischer Pfad:** AP-01 → AP-02 → AP-05/AP-06 → AP-09 → AP-16 → AP-20 → AP-22/AP-24 → AP-26 → M4-DEP (Rechenkern-Kette, alles opus).
 
@@ -785,7 +792,7 @@ flowchart LR
 - **Nicht anfassen:** `src/main/window.ts`, `src/main/security.ts`, `src/shared/**`, `src/renderer/**`
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:**
-  1. Datenpfad: Reihenfolge `APP_DATA_DIR` (Umgebung) → gespeicherte Wahl in `app.getPath('userData')/config.json` → im Dev-Modus `<repo>/data-dev` → sonst `userData/data`. `dataDir:choose` öffnet nur einen nativen Ordnerdialog; der Renderer übergibt nie Pfade.
+  1. Datenpfad (PE-18, PE-56). Dev-Modus (nicht paketiert): nur `APP_DATA_DIR` (Umgebung) oder `<repo>/data-dev`; die gespeicherte Wahl gilt dort nicht. Paketiert: `APP_DATA_DIR` (Umgebung) → gespeicherte Wahl in `app.getPath('userData')/config.json` → sonst `userData/data`. `dataDir:choose` öffnet nur einen nativen Ordnerdialog; der Renderer übergibt nie Pfade.
   2. Repository je Collection: Laden mit `parseCollectionFile` (zod), ungültig → Fehlerstatus, Datei bleibt unangetastet, Schreibsperre für diese Collection; Schreiben atomar (Temp-Datei im selben Ordner + `rename`), Schreib-Warteschlange je Datei.
   3. Backup beim Start: alle Collection-Dateien in `backups/<YYYY-MM-DD_HH-mm-ss>/`, nur die neuesten 10 behalten; `backup:list`, `backup:restore` (vorher aktuelles Backup).
   4. IPC-Handler für alle Kanäle aus `ipc.ts` außer `export:*`, `import:*`, `pdf:*` (folgen AP-24/AP-25); jede Eingabe mit zod geprüft; Löschregeln PE-35 (Projekt nur ohne Bezüge löschbar, sonst Fehler `IN_USE`; Person löschen lässt Zahlungen stehen).
@@ -797,7 +804,7 @@ flowchart LR
 - **Tests:** Unit-Tests gegen temporäre Verzeichnisse (atomar, Backups-Rotation, Validierung, Löschregeln, Pfad-Reihenfolge), IPC-Handler mit gemockter `ipcMain`
 - **Review-Schwerpunkte:** Pfad-Sicherheit, Validierung, Datenverlust-Szenarien, keine Daten in Logs (R2)
 - **Design-Review:** nein
-- **Doku-Pflichten:** `.env.example`-Kommentar zu `APP_DATA_DIR` prüfen (Datei gehört AP-01 – nur melden, nicht ändern)
+- **Doku-Pflichten:** `.env.example`-Kommentar zu `APP_DATA_DIR` erledigt in AP-28 (c)
 - **Aufwand:** L · **Modell:** opus · **Effort:** high
 - **Opus-Grund:** groß (L), Sicherheit
 - **Kürzbar bei Budgetnot:** nein
@@ -836,7 +843,7 @@ flowchart LR
 - **Ziel:** Aus allen Ausgaben, Einnahmen und Kampagnen ein exaktes Buchungsjournal je Projekt erzeugen und es für alle Ansichten auswerten.
 - **Pflichtlektüre:** §4 Grundregeln, PE-05–PE-08, PE-13, PE-28–PE-31, PE-49–PE-51, `src/core/**` aus AP-05/AP-06
 - **Abhängigkeiten:** AP-05, AP-06
-- **Parallel möglich mit:** AP-10
+- **Parallel möglich mit:** AP-28
 - **Dateien (Eigentum):** `src/core/ledger/**`, `src/core/aggregate/**`
 - **Nicht anfassen:** übrige `src/core/**`, `src/shared/**`
 - **Freigegebene Abhängigkeiten:** keine neuen
@@ -857,13 +864,40 @@ flowchart LR
 - **Kürzbar bei Budgetnot:** nein (PE-24)
 - **Commit-Typ:** `feat(AP-09): add ledger and aggregation core`
 
+#### AP-28 – Vertragslücken schließen
+
+- **Meilenstein, Lane, Welle:** M1 · MAIN+SH+CORE+OPS · W1
+- **Ziel:** Fünf Lücken aus den M0-Reviews schließen, bevor die Fachpakete darauf aufbauen: echter Fehlercode `IN_USE`, typisiertes `window.api` im Renderer, präzise `.env.example`, Schutz vor Endlosschleife im Kalender, Prüfung von `eurCents` im Kern.
+- **Pflichtlektüre:** PE-18, PE-24, PE-35, §8 (Vertrag-Regel), §18 (Review-Befunde AP-02/05/06/07), `src/shared/ipc.ts`, `src/core/recurrence/recurrence.ts`, `src/core/currency/currency.ts`
+- **Abhängigkeiten:** AP-02, AP-07
+- **Parallel möglich mit:** AP-09
+- **Dateien (Eigentum):** `src/shared/ipc.ts`, `src/shared/**/ipc*.test.ts` (vorhandene IPC-Tests), `src/main/storage/store.ts` (+ Test), `src/main/ipc/handlers.ts` (+ Tests), `tsconfig.web.json`, `.env.example`, `src/core/recurrence/recurrence.ts` (+ Test), `src/core/currency/currency.ts` (+ Test)
+- **Nicht anfassen:** übrige `src/shared/**`, `src/main/**`, `src/core/**`, `src/renderer/**`, `package.json`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `IN_USE` in `IPC_ERROR_CODES` (`src/shared/ipc.ts`) aufnehmen, Tests anpassen. In `src/main/storage/store.ts` und `src/main/ipc/handlers.ts` den Präfix-Workaround (`IN_USE_PREFIX`) durch den Code `IN_USE` ersetzen; Verhalten bleibt gleich, Tests anpassen.
+  2. `tsconfig.web.json` um `src/preload/index.d.ts` ergänzen, damit `window.api` im Renderer typisiert ist. Nachweis: eine Typprobe (Test oder Datei mit `tsc`-Prüfung), die einen falschen Kanal-Payload als Fehler meldet.
+  3. `.env.example`-Kommentar zu `APP_DATA_DIR` präzisieren: wirkt nur über die Umgebung der Shell, keine `.env`-Datei wird geladen; relativer Pfad wird gegen das Arbeitsverzeichnis aufgelöst; im Dev-Modus gilt nur `APP_DATA_DIR` oder `data-dev/`.
+  4. `recurrence.ts`: Die Datumsschleife bricht am Maximum (Jahr 9999) sicher ab. Test für Daten nahe 9999.
+  5. `fromEur` in `src/core/currency/currency.ts` prüft `eurCents`: nur nicht-negative Safe-Integer, sonst Fehlercode `invalidAmount`. Test.
+- **Schnittstellen:** `IPC_ERROR_CODES` um `IN_USE` erweitert; `window.api` im Renderer typisiert (für AP-10).
+- **Akzeptanzkriterien:** `npm run lint`, `npm run typecheck`, `npm test` grün; `window.api` ist im Renderer typisiert (Typprobe nachweisbar); Zeilen- und Branch-Abdeckung 100 % in `src/core/recurrence/` und `src/core/currency/` bleibt; `IN_USE_PREFIX` ist nirgends mehr im Code.
+- **Tests:** Vitest: IPC-Codes und betroffene Tests angepasst; Recurrence-Grenzfall nahe 9999; `fromEur` mit negativen, nicht-ganzen und zu großen Werten.
+- **Review-Schwerpunkte:** keine Verhaltensänderung außer den genannten Punkten; keine Fachdaten in Logs (R2)
+- **Design-Review:** nein
+- **Doku-Pflichten:** `.env.example`-Kommentar (Punkt 3)
+- **Aufwand:** S · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (AP-10 braucht die Typen)
+- **Commit-Typ:** `fix(AP-28): close contract gaps from M0 reviews`
+
 #### AP-10 – UI-Baukasten und Daten-Hooks
 
-- **Meilenstein, Lane, Welle:** M1 · UI · W1
+- **Meilenstein, Lane, Welle:** M1 · UI · W1b
 - **Ziel:** Wiederverwendbare Formular-, Tabellen- und Datenbausteine, damit die Fachseiten schnell und einheitlich entstehen.
-- **Pflichtlektüre:** PE-05, PE-06, PE-07, PE-13, PE-21, PE-47, PE-48, PE-54, `src/shared/ipc.ts`
-- **Abhängigkeiten:** AP-04, AP-07
-- **Parallel möglich mit:** AP-09
+- **Pflichtlektüre:** PE-05, PE-06, PE-07, PE-13, PE-21, PE-47, PE-48, PE-54, `src/shared/ipc.ts`, AP-28 (`window.api`-Typen, `IN_USE`)
+- **Abhängigkeiten:** AP-04, AP-07, AP-28
+- **Parallel möglich mit:** AP-09 (AP-10 startet erst nach dem Merge von AP-28)
 - **Dateien (Eigentum):** `src/renderer/components/forms/**`, `src/renderer/components/data/**`, `src/renderer/hooks/**`, `src/renderer/state/**`, `src/renderer/app/Header.tsx`, `src/renderer/i18n/shared-keys.ts` (+ de/en-Wörterbücher für Kategorien, Plattformen, Formate)
 - **Nicht anfassen:** `src/renderer/pages/**`, `src/renderer/features/**`, übrige `src/renderer/app/**`
 - **Freigegebene Abhängigkeiten:** keine neuen
@@ -1322,15 +1356,15 @@ flowchart LR
 | Meilenstein | Pakete | Agent-Aufwand | Geschätzte 5-h-Fenster bei 30 % Team-Budget |
 |---|---|---|---|
 | M0 | 8 (5 opus) | 13,25 h | 4–5 |
-| M1 | 7 (1 opus) | 12,75 h | 3–4 |
+| M1 | 8 (1 opus) | 13,5 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 4 (1 opus) | 9 h | 2–3 |
 | M4 | 3 (1 opus) | 3,75 h | 1 |
-| **Gesamt** | **27** | **46,25 h** + Reviews | **12–15** |
+| **Gesamt** | **28** | **47 h** + Reviews | **12–15** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
-**Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. 5 parallele Coder (PE-23) erreichen den Zielwert von 30 % schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“). Design-Pakete nach H-05 kommen zusätzlich.
+**Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. 5 parallele Coder (PE-23) erreichen den Zielwert von 30 % schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
 | Stufe | Kürzung | Ersparnis | Betroffene Pakete |
 |---|---|---|---|
@@ -1422,6 +1456,7 @@ flowchart LR
 | PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei) | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-55 | `@vitest/coverage-v8` (MIT) freigegeben, Abdeckung wird gemessen (`npm run test:coverage`) | Abnahmekriterium ≥ 95 % | Nutzer am 2026-10-25 |
+| PE-56 | Dev-Modus: Datenpfad nur über `APP_DATA_DIR` oder `<repo>/data-dev`; die gespeicherte Wahl (`userData/config.json`) gilt nur in der paketierten App. Verfeinert die Umsetzung von PE-18, ändert PE-18 nicht. | Review-Befunde AP-02/05/06/07: Dev-Läufe dürfen nie auf einen gewählten echten Datenordner zeigen (R2, RI-6) | Lead-Auftrag „Wellenabschluss M0“ am 2026-10-25; Nutzer-Bestätigung offen |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1441,7 +1476,8 @@ flowchart LR
 
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
-| – | keine | – | – |
+| PE-56 | Dev-Datenpfad bestätigen (siehe PE-56) | Datenschutz-nahe Regel, nur Nutzer kann freigeben | Planner, Lead-Auftrag M0 |
+| PE-21, AP-04 | AP-04 baut Dialog, Select, Tabs u. a. nativ ohne Radix-Pakete (`package.json` nur `@radix-ui/react-slot`). PE-21 nennt shadcn/ui. Vorschlag: Abweichung bestätigen; oder Radix-Pakete nachziehen (neue Abhängigkeiten, Freigabe nötig). Fokusfalle und Tastaturbedienung der Dialoge prüfen. | Abweichung von PE-21; Barrierefreiheit | Planner, Befund aus M0 |
 
 ---
 
@@ -1449,7 +1485,7 @@ flowchart LR
 
 | Anforderung oder Regel | Pakete |
 |---|---|
-| F-01 Projekte | AP-02, AP-07, AP-12 |
+| F-01 Projekte | AP-02, AP-07, AP-12, AP-28 (Fehlercode `IN_USE`) |
 | F-02 Dienste | AP-13, AP-12 (Projekt-Tab) |
 | F-03 Ausgaben | AP-05, AP-06, AP-09, AP-10, AP-14 |
 | F-04 Einnahmen | AP-09, AP-14 |
@@ -1464,7 +1500,7 @@ flowchart LR
 | F-13 Nutzerzahlen | AP-16, AP-19 |
 | F-14 Datensicherung | AP-07, AP-11, AP-25 |
 | PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
-| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26 |
+| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28 |
 | §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24 |
 | §5 ZIP-Import | AP-25 |
 | R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
@@ -1483,3 +1519,13 @@ flowchart LR
 |---|---|---|---|---|
 | 2026-10-25 | Plan v1 im Interview erstellt (14 Runden), 27 Pakete in M0–M4 | Projektstart | alle | Nutzer |
 | 2026-10-25 | Annahmen bestätigt, Coverage-Abhängigkeit freigegeben (PE-55), Interview beendet („stop“) | Abschluss Interview | AP-01 | Nutzer |
+| 2026-10-25 | Wellenabschluss M0: AP-01–AP-08 auf `fertig` (in `dev` gemergt, 258 Tests, Seed und Build grün), Coder-Zuordnung eingetragen, Lagebericht aktualisiert; M0-DEP bleibt `offen` (Nutzer) | Pflege nach M0 (Lead) | AP-01–AP-08, M0-DEP | Lead-Auftrag |
+| 2026-10-25 | AP-28 „Vertragslücken schließen“ angelegt (M1 W1 parallel zu AP-09); AP-10 als W1b nach AP-28 vorgezogen (Abhängigkeit AP-28); §8, §9.2, §10, §11, §14, §17 angepasst | Review-Befunde AP-02/05/06/07: `IN_USE` nur als Präfix-Workaround, `window.api` nicht typisiert, `.env.example` ungenau, Endlosschleife bei Daten nahe 9999, `fromEur` ohne Prüfung von `eurCents` | AP-28, AP-09, AP-10 | Lead-Auftrag |
+| 2026-10-25 | AP-07 Datenpfad angepasst: Dev-Modus nur `APP_DATA_DIR` oder `<repo>/data-dev`, gespeicherte Wahl nur paketiert (PE-56); Doku-Pflicht `.env.example` an AP-28 übergeben | Review-Befunde AP-02/05/06/07 | AP-07, AP-28 | Lead-Auftrag; Nutzer-Bestätigung offen (PE-56) |
+| 2026-10-25 | Erkenntnis M0: AP-04 baut Dialog, Select, Tabs u. a. nativ, ohne weitere Radix-Pakete (`package.json` nur `@radix-ui/react-slot`); Abweichung von PE-21 als Vorschlag in §16 | Umsetzungsstand AP-04 | AP-04, AP-10 | Planner, Nutzer offen |
+| 2026-10-25 | Erkenntnis M0: `src/preload` bündelt nur `require("electron")`; Kanalnamen stehen als Literale im Preload | Build- und Preload-Vorgabe | AP-07, AP-28 | Planner |
+| 2026-10-25 | Erkenntnis M0: `Recurrence` hat keinen Betrag; Betrag zu einem Datum über `amountAt(recurrence, baseCents, date)` | Vertrag für AP-09 | AP-09 | Planner |
+| 2026-10-25 | Erkenntnis M0: Core-Fehlerform ist `Result<T,E>` aus `@core/money/money`. Importpfade: `@core/money/money`, `@core/currency/currency`, `@core/allocation/allocation`, `@core/recurrence/recurrence`, `@core/projects/activePeriod` | Einheitliche Nutzung der Kernmodule | AP-09, AP-10, AP-28 | Planner |
+| 2026-10-25 | Erkenntnis M0: `resolveProjects` im Modus `selected` filtert nicht nach Aktivität; die Aktivitätsregel PE-50 muss AP-09 selbst anwenden | Rechenregel PE-50 | AP-09 | Planner |
+| 2026-10-25 | Erkenntnis M0: Seed ist deterministisch und schreibt nur in `data-dev/` | Testdaten-Grundlage | AP-08, AP-26 | Planner |
+| 2026-10-25 | Erkenntnis M0: `npm ci` dauert im Worktree über 7 min; nie zwei `npm ci` parallel im selben Worktree | Wellenplanung, Budget | alle Coder | Planner |
