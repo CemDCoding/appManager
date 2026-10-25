@@ -900,7 +900,8 @@ flowchart LR
 
 | ID | Schritt | Ab wann nötig | Blockiert | Erledigt |
 |---|---|---|---|---|
-| H-01 | `LICENSE` anlegen: Text von PolyForm Noncommercial 1.0.0 (polyformproject.org) einfügen, Zeile `Required Notice: Copyright Cem Dogan (https://github.com/CemDCoding/appManager)` ergänzen, auf `dev` committen | vor der ersten Veröffentlichung, spätestens M4 | AP-27, G3 | ☐ |
+| H-01 | `LICENSE` anlegen: Text von PolyForm Noncommercial 1.0.0 (polyformproject.org) einfügen, Zeile `Required Notice: Copyright Cem Dogan (https://github.com/CemDCoding/appManager)` ergänzen, auf `dev` committen | vor dem ersten Push durch den Lead (PE-45) | erster Push, AP-27, G3 | ☐ |
+| H-07 | `idee.txt` löschen (PE-44) | sofort | – | ☐ |
 | H-02 | GitHub-Repo `CemDCoding/appManager` anlegen und als `origin` eintragen | sofort | Push durch Lead | ☑ |
 | H-03 | Test-Datenordner für stage anlegen (Kopie von `data-dev/` nach `npm run seed`) | M0-DEP | Smoke-Tests | ☐ |
 | H-04 | Echten Datenordner auf `D:` anlegen (außerhalb des Projekts) und in der App wählen | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
@@ -985,6 +986,9 @@ flowchart LR
 | PE-40 | Meilensteine: M0 Fundament → M1 Prototyp (danach Designer-Gespräch) → M2 Menschen & Marketing → M3 Auswertung → M4 Release | früher Prototyp für das Design, Rechenkern zuerst | Nutzer am 2026-10-25 |
 | PE-41 | Abnahmekriterien G3 wie §1 | prüfbar | Nutzer am 2026-10-25 |
 | PE-42 | Smoke-Test je Meilenstein: Installer aus `stage` bauen, 5–8 Punkte Checkliste mit Testdaten (~15 min) | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
+| PE-43 | M0-Schnitt (AP-01–AP-08, Wellen W1–W4) bestätigt | – | Nutzer am 2026-10-25 |
+| PE-44 | `idee.txt` kommt nicht ins Repo; der Nutzer löscht sie selbst (Inhalt ist in §1/§2 übernommen) | – | Nutzer am 2026-10-25 |
+| PE-45 | `LICENSE` legt der Nutzer selbst mit dem Originaltext an, vor dem ersten Push (H-01) | Coder haben keinen Webzugang, Text muss exakt sein | Nutzer am 2026-10-25 |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
