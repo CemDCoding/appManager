@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-25 · M0 (W1–W3) fertig, M0-DEP offen (Nutzer)
-- **Fertig:** AP-01–AP-08 (in `dev` gemergt, 258 Tests, Seed und Build grün) · **Offen:** M0-DEP [Mensch]; M1: AP-09 und AP-28 `bereit`, AP-10 nach AP-28 (W1b), AP-11–AP-15 in W2
-- **Unterbrochen oder laufend:** nichts
-- **Erkenntnisse:** Dev-Datenpfad nur über `APP_DATA_DIR` oder `data-dev/` (PE-56); AP-04 baut Dialog/Select/Tabs ohne Radix (Abweichung zu PE-21, Vorschlag §16); Details §18
-- **Nächster Schritt:** M1 W1 starten: AP-09 und AP-28 parallel, danach AP-10 (W1b), dann W2
-- **Offene Fragen an den Nutzer:** `LICENSE` (H-01) fehlt, daher kein Push; M0-DEP (H-03, Test-Datenordner); PE-56 bestätigen; Radix-Abweichung (AP-04) entscheiden
+- **Stand:** 2026-10-26 · M0 fertig, M0-DEP offen (Nutzer) · M1 W1 fertig (AP-09, AP-28 in `dev`, 316/316 Tests, lint/typecheck/build grün)
+- **Fertig:** AP-01–AP-09, AP-28 (in `dev` gemergt) · **Offen:** M0-DEP [Mensch]; M1: AP-10 `bereit` (W1b), AP-11–AP-15 in W2, M1-DEP [Mensch]
+- **Unterbrochen oder laufend:** nichts. Kein Coder läuft. W1b wartet auf den Nutzer (Pause, kein Start mehr).
+- **Erkenntnisse:** UI muss `ledger.errors` und `MonthlyFixedCosts.errors` anzeigen (API in §18); Dev-Datenpfad nur `APP_DATA_DIR` oder `data-dev/` (PE-56); AP-04 ohne Radix (Vorschlag §16); Details §18
+- **Nächster Schritt:** W1b AP-10 (sonnet, L) starten, sobald der Nutzer den Start freigibt; danach W2 (AP-11–AP-15)
+- **Offene Nutzerpunkte:** `LICENSE` (H-01) fehlt, daher kein Push; `idee.txt` löschen (H-07); M0-DEP (H-03, Test-Datenordner); PE-56 bestätigen; Radix-Abweichung AP-04 entscheiden; Vitest-Konfiguration und Branch-Abdeckung AP-09 (§16)
 
 ### Rollen und Dokumente
 
@@ -526,9 +526,9 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-07 | Speicher, Backups, IPC, Preload | M0 | MAIN | W3 | AP-02, AP-03 | L | opus | c3 | fertig |
 | AP-08 | Seed-Testdaten | M0 | OPS | W3 | AP-02 | S | sonnet | c4 | fertig |
 | M0-DEP | Deployment M0 | M0 | HUM | W4 | AP-01–AP-08 | H | – | Nutzer | offen |
-| AP-09 | Kern: Buchungs-Engine und Aggregation | M1 | CORE | W1 | AP-05, AP-06 | L | opus | – | bereit |
-| AP-28 | Vertragslücken schließen | M1 | MAIN+SH+CORE+OPS | W1 | AP-02, AP-07 | S | sonnet | – | bereit |
-| AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1b | AP-04, AP-07, AP-28 | L | sonnet | – | offen |
+| AP-09 | Kern: Buchungs-Engine und Aggregation | M1 | CORE | W1 | AP-05, AP-06 | L | opus | – | fertig |
+| AP-28 | Vertragslücken schließen | M1 | MAIN+SH+CORE+OPS | W1 | AP-02, AP-07 | S | sonnet | – | fertig |
+| AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1b | AP-04, AP-07, AP-28 | L | sonnet | – | bereit |
 | AP-11 | Einstellungen, Kurse, Kategorien | M1 | UI | W2 | AP-10 | M | sonnet | – | offen |
 | AP-12 | Projekte (Liste, Detail) | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | – | offen |
 | AP-13 | Dienste | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | – | offen |
@@ -1478,6 +1478,8 @@ flowchart LR
 |---|---|---|---|
 | PE-56 | Dev-Datenpfad bestätigen (siehe PE-56) | Datenschutz-nahe Regel, nur Nutzer kann freigeben | Planner, Lead-Auftrag M0 |
 | PE-21, AP-04 | AP-04 baut Dialog, Select, Tabs u. a. nativ ohne Radix-Pakete (`package.json` nur `@radix-ui/react-slot`). PE-21 nennt shadcn/ui. Vorschlag: Abweichung bestätigen; oder Radix-Pakete nachziehen (neue Abhängigkeiten, Freigabe nötig). Fokusfalle und Tastaturbedienung der Dialoge prüfen. | Abweichung von PE-21; Barrierefreiheit | Planner, Befund aus M0 |
+| AP-09, `vitest.config.ts` | Coverage-Include `src/core/**` lässt Vitest `src/core/README.md` als Testdatei parsen (Warnung „Failed to parse“). Vorschlag: Include auf `src/core/**/*.ts` einschränken. Nach AP-01 ist keinem Paket erlaubt, `vitest.config.ts` zu ändern (§8). Lead entscheidet: kleines Paket mit diesem Eigentum in W1b/W2 oder Nachpaket. | Befund AP-09-Review | Planner, Befund AP-09 |
+| PE-55, AP-09 | Branch-Abdeckung `fixedCosts` liegt bei 89 %, unter dem Abnahmeziel ≥ 95 % (PE-55, PE-24). Vorschlag: Nachbesserungstests als kleines Paket (sonnet, S) vor AP-16 (Rechenkern M2). | Abnahmeziel Rechenkern | Planner, Befund AP-09 |
 
 ---
 
@@ -1529,3 +1531,8 @@ flowchart LR
 | 2026-10-25 | Erkenntnis M0: `resolveProjects` im Modus `selected` filtert nicht nach Aktivität; die Aktivitätsregel PE-50 muss AP-09 selbst anwenden | Rechenregel PE-50 | AP-09 | Planner |
 | 2026-10-25 | Erkenntnis M0: Seed ist deterministisch und schreibt nur in `data-dev/` | Testdaten-Grundlage | AP-08, AP-26 | Planner |
 | 2026-10-25 | Erkenntnis M0: `npm ci` dauert im Worktree über 7 min; nie zwei `npm ci` parallel im selben Worktree | Wellenplanung, Budget | alle Coder | Planner |
+| 2026-10-26 | Wellenabschluss M1 W1: AP-09 und AP-28 auf `fertig` (in `dev` gemergt, Review Runde 1 bestanden, 316/316 Tests, lint/typecheck/build grün); AP-10 auf `bereit` (AP-04, AP-07, AP-28 erfüllt); Lagebericht aktualisiert | Lead-Auftrag „Wellenabschluss M1 W1“ | AP-09, AP-28, AP-10 | Lead-Auftrag |
+| 2026-10-26 | Erkenntnis M1: API von AP-09: `buildLedger({projects,expenses,incomes,campaigns},{from,to})` liefert `{entries, errors}`; `aggregate(entries,{groupBy,filter?})` arbeitet auf `entries`, nicht auf dem Ledger; `monthlyFixedCosts(expenses,projects,date)`; `toDisplay(eurCents,displayCurrency,rates)`. UI-Pakete müssen `ledger.errors` und `MonthlyFixedCosts.errors` anzeigen (Doku in `src/core/README.md`) | Vertrag für UI-Pakete | AP-10, AP-12–AP-15, AP-16, AP-20 | Planner |
+| 2026-10-26 | Erkenntnis M1: PE-50 (Aktivitätsregel) gilt auch im Modus `selected`. Einnahmen werden ohne Aktivitätsprüfung gebucht (bitte prüfen, ob gewollt). `monthlyFixedCosts` rundet doppelt; Abweichung höchstens 1 Cent gegenüber PE-51 | Rechenregeln PE-50/PE-51 | AP-09, AP-15, AP-16, AP-20 | Planner |
+| 2026-10-26 | Erkenntnis AP-28: `IN_USE` in `IPC_ERROR_CODES`; `tsconfig.web.json` bindet `preload/index.d.ts` ein (wirkt erst, wenn AP-10 `window.api` nutzt; die Typprobe allein beweist den include-Eintrag nicht); Recurrence-Schleife stoppt nahe Jahr 9999; `fromEur` liefert `invalidAmount` bei ungültigem `eurCents` | Vertragslücken aus M0-Review | AP-10, AP-07, AP-09 | Planner |
+| 2026-10-26 | Befund niedrig: Vitest-Coverage warnt „Failed to parse src/core/README.md“ (`vitest.config.ts`, Include `src/core/**`); Branch-Abdeckung `fixedCosts` 89 %. Vorschläge in §16 „Vorgeschlagene Änderungen“ | Qualität Rechenkern | AP-09 | Planner |
