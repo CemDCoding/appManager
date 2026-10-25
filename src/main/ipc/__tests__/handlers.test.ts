@@ -124,8 +124,8 @@ describe('registerIpcHandlers', () => {
     const project = await service.store.create('projects', projectInput())
     await service.store.create('expenses', expenseInput({ allocation: selected(project.id) }))
     const res = await call(IPC_CHANNELS.entityDelete, { collection: 'projects', id: project.id })
-    expect(res).toMatchObject({ ok: false, error: { code: 'CONFLICT' } })
-    expect(deps.log).toHaveBeenCalledWith(IPC_CHANNELS.entityDelete, 'CONFLICT')
+    expect(res).toMatchObject({ ok: false, error: { code: 'IN_USE' } })
+    expect(deps.log).toHaveBeenCalledWith(IPC_CHANNELS.entityDelete, 'IN_USE')
   })
 
   it('rejects calls from untrusted frames', async () => {

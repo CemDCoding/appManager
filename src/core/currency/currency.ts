@@ -2,7 +2,7 @@ import Decimal from 'decimal.js'
 import { BASE_CURRENCY, type Money, type Rate } from '@shared/money'
 import type { Result } from '@core/money/money'
 
-export type CurrencyError = 'missingRate' | 'invalidRate' | 'overflow'
+export type CurrencyError = 'missingRate' | 'invalidRate' | 'invalidAmount' | 'overflow'
 
 /** Minimal rate-history entry ("1 currency = rate EUR"), compatible with ExchangeRate. */
 export interface RateEntry {
@@ -41,9 +41,11 @@ export function toEur(money: Money, rateToEur: Rate): Result<Money, CurrencyErro
 
 /**
  * EUR cents -> cents of another currency: eurCents / rate (rate = "1 X = rate EUR"),
- * rounded half-up once at the end. Invalid rate -> 'invalidRate'.
+ * rounded half-up once at the end. Invalid rate -> 'invalidRate'; `eurCents` must be a
+ * non-negative safe integer, else 'invalidAmount'.
  */
 export function fromEur(eurCents: number, rate: Rate): Result<number, CurrencyError> {
+  if (!Number.isSafeInteger(eurCents) || eurCents < 0) return { ok: false, error: 'invalidAmount' }
   const r = parseRate(rate)
   if (!r) return { ok: false, error: 'invalidRate' }
   return toCents(new D(eurCents).div(r))

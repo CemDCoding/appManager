@@ -96,7 +96,9 @@ export function occurrences(recurrence: Recurrence, from: string, to: string): s
   const result: string[] = []
   for (let n = firstIndex(recurrence, from); ; n++) {
     const due = nthDueDate(recurrence, n)
-    if (due > last) break
+    // Past year 9999 the formatted date gets 5 digits and sorts lexicographically
+    // below `last`; stop there (calendar maximum).
+    if (due.length > 10 || due > last) break
     if (due >= from) result.push(due)
   }
   return result
