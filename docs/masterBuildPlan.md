@@ -69,7 +69,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 4 | Architektur, Datenmodell, Verträge | angenommen | Löschverhalten (angenommen) | G1 |
 | 5 | Sicherheit, Datenschutz, Recht, Limits | angenommen | Limits (angenommen) | G1 |
 | 6 | Umgebungen, Branches, Deployment | fertig | – | G1 |
-| 7 | Team-Steuerung | angenommen | Freigabe pro Welle (angenommen) | G1 |
+| 7 | Team-Steuerung | fertig | – | G1 ✔ |
 | 8 | Lanes und Dateieigentum | leer | – | G2 |
 | 9 | Meilensteine und Wellen | leer | – | G2 |
 | 10 | Statusübersicht | leer | – | G2 |
@@ -248,6 +248,7 @@ flowchart LR
 2. Beträge werden in Originalwährung gespeichert. Beim Anlegen einer Buchung wird der zu diesem Zeitpunkt neueste Kurs aus der Kurstabelle in die Buchung kopiert (Snapshot). Spätere Kursänderungen betreffen nur neue Buchungen (PE-05).
 3. Gemeinsame Kosten werden gleichmäßig oder nach eigenen Prozenten auf bestimmte Projekte oder „alle“ verteilt; „alle“ = die zum Kostenzeitpunkt aktiven Projekte (PE-06).
 4. Wiederkehrende Posten werden einmal angelegt (Betrag, Intervall, Start, optional Ende, Preisänderung ab Datum); Monatswerte berechnet die App (PE-07, PE-29).
+4b. Rechenreihenfolge nach PE-50, Kampagnen nach PE-49, Fixkosten-Kennzahl nach PE-51.
 5. Rechenkern ist rein (keine Datei-, Zeit- oder Zufallszugriffe; „heute“ wird als Parameter übergeben), damit alles deterministisch testbar ist.
 6. Geld immer als Ganzzahl in Cent plus Währungscode; Kurse als Dezimal-String, Rechnung mit `decimal.js`, Rundung nach PE-28/PE-31.
 7. Jede Datei und jede IPC-Nachricht wird im Main-Prozess mit zod geprüft; ungültige Dateien werden nicht überschrieben, sondern gemeldet.
@@ -257,12 +258,13 @@ flowchart LR
 | Projekt | Name, Beschreibung, Plattformen[], Status (aktiv/archiviert), aktiv von/bis | Besitzer (PE-01) | (angenommen) archivieren; endgültig löschen nur ohne verknüpfte Buchungen |
 | Dienst | Anbieter, Zweck, Tarif, URL, Notiz, Aufteilung | Besitzer | (angenommen) löschen fragt, ob verknüpfte Kosten mitgelöscht werden |
 | Person | Name/Kürzel, Rolle, Status aktiv/inaktiv, Notiz (PE-36) | Besitzer | löschbar; Zahlungen bleiben mit Vermerk „gelöschte Person“ (PE-35) |
-| Ziel | Projekt oder Portfolio, Art (Einnahmen, Break-even, Nutzer, Kostenlimit/Monat, frei), Zielwert, Stichtag, erledigt (nur frei), Titel | Besitzer | löschbar |
+| Ziel | Projekt oder Portfolio, Art (Einnahmen, Break-even, Nutzer, Kostenlimit/Monat, frei), Titel, Zielwert, ab-Datum, Stichtag, erledigt (nur frei) (PE-53) | Besitzer | löschbar |
+| Einstellungen | Anzeigewährung, Kategorien-/Plattform-/Formatlisten mit Ausblenden-Flag (PE-54) | Besitzer | – |
 | Nutzerstand | Projekt, Datum, Nutzer gesamt, aktiv, zahlend, optional je Plattform | Besitzer | löschbar |
 | Ausgabe | Kategorie, Betrag, Währung, Kurs-Snapshot, Datum **oder** Wiederholung, Aufteilung, Beschreibung, optional Verweis auf Dienst/Person | Besitzer | löschbar |
 | Wiederholung (Teil einer Ausgabe/Einnahme) | Intervall, Start, Ende?, Preisänderungen [ab Datum, Betrag] | Ausgabe/Einnahme | mit Eltern |
 | Einnahme | Kategorie, Betrag netto, Währung, Kurs-Snapshot, Datum oder Wiederholung, Projekt | Besitzer | löschbar |
-| Kampagne | Name, Plattform, Format, Zeitraum, Kosten, Währung, Kurs-Snapshot, Impressionen, Klicks, Nutzer, Sterne 0–5, Notiz, Aufteilung | Besitzer | löschbar |
+| Kampagne | Name, Plattform, Format, Start, Ende, Kosten, Währung, Kurs-Snapshot, Impressionen, Klicks, Nutzer, Sterne 0–5, Notiz, Aufteilung (PE-49) | Besitzer | löschbar |
 | Kurs | Währung, Kurs, eingetragen am | Besitzer | nie löschen, nur neue Einträge (Historie) (angenommen) |
 | Aufteilung (Wertobjekt) | Modus `alle` / `ausgewählt`, gleichmäßig oder Prozent je Projekt (Summe 100 %) | – | – |
 
@@ -373,7 +375,7 @@ flowchart TD
 
 - **Höchstens gleichzeitig:** 5 Coder (PE-23).
 - **Budget (D11b):** Zielwert **30 %** des 5-Stunden-Limits, Obergrenze **36 %** (Zielwert × 1,2). Ab dem Zielwert startet der Wächter keine neuen Coder mehr, laufende Pakete werden bis zur Obergrenze fertig. Dann fragt der Lead den Nutzer. Ohne Antwort geht es nach dem Reset weiter (D11c).
-- **Freigabe:** pro Welle (angenommen, PE-23)
+- **Freigabe:** keine Freigabe pro Welle; der Lead arbeitet autonom über alle Meilensteine, bis der Nutzer „stopp“ sagt (PE-46). Er meldet sich bei jedem auf `dev` fertigen Meilenstein und in den Eskalationsfällen §7.3.
 - **Bei mehr Kandidaten als Plätzen:** zuerst kritischer Pfad (§11), dann Verträge, dann der Rest.
 
 | Paket | Modell | Aufwand |
@@ -517,7 +519,7 @@ flowchart TD
 
 | Welle | Pakete (parallel) |
 |---|---|
-| W1 | AP-16 (darf vorgezogen parallel zu M1 W2 laufen) |
+| W1 | AP-16, AP-21 (beide dürfen vorgezogen parallel zu M1 W2 laufen, wenn Plätze frei sind) |
 | W2 | AP-17, AP-18, AP-19 |
 | W3 | M2-DEP [Mensch] |
 
@@ -534,7 +536,7 @@ flowchart TD
 
 | Welle | Pakete (parallel) |
 |---|---|
-| W1 | AP-20, AP-21 |
+| W1 | AP-20 (darf parallel zu M2 W2 laufen) |
 | W2 | AP-22, AP-23, AP-24 |
 | W3 | M3-DEP [Mensch] |
 
@@ -574,7 +576,7 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-01 | Projektgerüst | M0 | OPS | W1 | – | M | sonnet | – | bereit |
 | AP-02 | Verträge: Schemas, Geldtyp, IPC | M0 | SH | W2 | AP-01 | M | opus | – | offen |
 | AP-03 | Fenster und Electron-Härtung | M0 | MAIN | W2 | AP-01 | M | opus | – | offen |
-| AP-04 | App-Shell, Theme, Routen | M0 | UI | W2 | AP-01 | M | sonnet | – | offen |
+| AP-04 | App-Shell, Theme, i18n, Routen | M0 | UI | W2 | AP-01 | L | sonnet | – | offen |
 | AP-05 | Kern: Geld, Währung, Aufteilung | M0 | CORE | W3 | AP-02 | M | opus | – | offen |
 | AP-06 | Kern: Wiederholung, Aktivzeitraum | M0 | CORE | W3 | AP-02 | M | opus | – | offen |
 | AP-07 | Speicher, Backups, IPC, Preload | M0 | MAIN | W3 | AP-02, AP-03 | L | opus | – | offen |
@@ -589,19 +591,19 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-15 | Einfache Übersicht (Startseite v1) | M1 | UI | W2 | AP-09, AP-10 | S | sonnet | – | offen |
 | M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15 | H | – | Nutzer | offen |
 | AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | offen |
-| AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-16 | M | sonnet | – | offen |
+| AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | offen |
+| AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | offen |
 | AP-18 | Werbekampagnen | M2 | UI | W2 | AP-16 | M | sonnet | – | offen |
-| AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16 | M | sonnet | – | offen |
-| M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19 | H | – | Nutzer | offen |
+| AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | – | offen |
+| M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19, AP-21 | H | – | Nutzer | offen |
 | AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | – | offen |
-| AP-21 | Diagramm-Bausteine | M3 | UI | W1 | AP-10 | M | sonnet | – | offen |
 | AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
 | AP-23 | Startseite mit Zielen | M3 | UI | W2 | AP-20, AP-21 | M | sonnet | – | offen |
 | AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
-| M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20–AP-24 | H | – | Nutzer | offen |
+| M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24 | H | – | Nutzer | offen |
 | AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11 | M | opus | – | offen |
-| AP-26 | E2E-Tests | M4 | OPS | W1 | M3 | M | sonnet | – | offen |
-| AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | M3 | S | sonnet | – | offen |
+| AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | – | offen |
+| AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | – | offen |
 | M4-DEP | Release und Abnahme | M4 | HUM | W2 | AP-25–AP-27 | H | – | Nutzer | offen |
 
 ---
@@ -623,10 +625,13 @@ flowchart LR
   end
   subgraph M2["M2 Menschen & Marketing"]
     AP16["AP-16"] --> AP17["AP-17"] & AP18["AP-18"] & AP19["AP-19"]
+    AP21["AP-21"] --> AP19
   end
   subgraph M3["M3 Auswertung"]
-    AP20["AP-20"] & AP21["AP-21"] --> AP22["AP-22"] & AP23["AP-23"] & AP24["AP-24"]
+    AP20["AP-20"] --> AP22["AP-22"] & AP23["AP-23"] & AP24["AP-24"]
   end
+  AP21 --> AP22 & AP23 & AP24
+  AP14 --> AP17
   subgraph M4["M4 Release"]
     AP25["AP-25"]
     AP26["AP-26"]
@@ -637,6 +642,7 @@ flowchart LR
   AP09 --> AP16 --> AP20
   AP10 --> AP21
   AP07 & AP11 --> AP25
+  AP24 --> AP26 & AP27
 ```
 
 **Kritischer Pfad:** AP-01 → AP-02 → AP-05/AP-06 → AP-09 → AP-16 → AP-20 → AP-22/AP-24 → AP-26 → M4-DEP (Rechenkern-Kette, alles opus).
@@ -704,9 +710,9 @@ flowchart LR
   2. `schemas/`: je Entität ein Schema mit `id` (UUID), `ownerId` (fest `local`), `createdAt`, `updatedAt`: Project, Service, Person, Expense, Income, Campaign, ExchangeRate, Goal, UserMetric, Settings (Datenpfad nicht hier, nur Anzeigewährung, Kategorien, Plattform-/Formatlisten). Feldlisten exakt nach §4/§2.
   3. Wertobjekte: `Allocation` (`mode: 'all' | 'selected'`, `split: 'equal' | 'percent'`, `shares: {projectId, percentBasisPoints}[]`; Prozent in Basispunkten, Summe = 10 000 bei `percent`), `Recurrence` (`interval: 'daily'|'weekly'|'monthly'|'yearly'`, `startDate`, `endDate?`, `priceChanges: {fromDate, cents}[]`), Datum als `YYYY-MM-DD`-String.
   4. Expense: `kind: 'oneTime' | 'recurring'`, `date` oder `recurrence`, `category`, `amount: Money`, `rateToEur` (Snapshot, bei EUR „1“), `allocation`, `description`, optional `serviceId`, `personId`. Income analog mit genau einem `projectId`. Campaign mit `cost: Money`, `rateToEur`, `allocation`, Kennzahlen-Rohwerte (Ganzzahlen ≥ 0), `rating` 0–5.
-  5. Standardlisten: Ausgaben- und Einnahmenkategorien, Plattformen, Kampagnen-Plattformen und -Formate (PE-26, PE-11) als Konstanten.
+  5. Standardlisten: Ausgaben- und Einnahmenkategorien, Plattformen, Kampagnen-Plattformen und -Formate (PE-26, PE-11) als Konstanten mit stabilen Schlüsseln (z. B. `hosting`) statt Anzeigetexten (Texte übersetzt die UI, PE-47). Eigene Einträge in Settings mit `key`, `label`, `hidden` (PE-54). Kampagne mit `startDate`/`endDate` (PE-49), Ziel mit `fromDate` (PE-53).
   6. `collections.ts`: Map Entitätsname → Schema → Dateiname (`projects.json` …), `SCHEMA_VERSION = 1`, Datei-Hülle `{ schemaVersion, items: [] }`.
-  7. `ipc.ts`: Kanalnamen und Payload-Typen: generisch `entity:list|get|create|update|delete` mit `collection`-Parameter; `settings:get|set`; `dataDir:get|choose`; `backup:list|restore`; `export:zip`, `import:zip`; `pdf:export`; Fehlerform `{ ok: false, error: { code, message } }`. Typ `AppApi` für `window.api`.
+  7. `ipc.ts`: Kanalnamen und Payload-Typen: generisch `entity:list|get|create|update|delete` mit `collection`-Parameter; `settings:get|set`; `dataDir:get|choose`; `backup:list|restore`; `shell:openExternal`; `export:zip`, `import:zip`; `pdf:export` (Eingabe: Bereich portfolio/project, Projekt-ID, Zeitraum, Sprache, Anzeigewährung), `pdf:ready` (Berichtsseite meldet „fertig gerendert“); Fehlerform `{ ok: false, error: { code, message } }`. Typ `AppApi` für `window.api`.
   8. Hilfsfunktionen nur für Validierung (z. B. `parseCollectionFile`), keine Rechenlogik.
 - **Schnittstellen:** stellt bereit: alle Typen für CORE, MAIN, UI, Seed.
 - **Akzeptanzkriterien:**
@@ -749,29 +755,31 @@ flowchart LR
 #### AP-04 – App-Shell, Theme, Routen
 
 - **Meilenstein, Lane, Welle:** M0 · UI · W2
-- **Ziel:** Grundlayout mit Seitenleiste, Hell-/Dunkelmodus, Grund-Komponenten und Platzhalterseiten für alle Bereiche.
-- **Pflichtlektüre:** PE-21, §2, §8 Regel 7
+- **Ziel:** Grundlayout mit Seitenleiste, Hell-/Dunkelmodus, Zweisprachigkeit, Grund-Komponenten und Platzhalterseiten für alle Bereiche.
+- **Pflichtlektüre:** PE-21, PE-47, §2, §8 Regel 7
 - **Abhängigkeiten:** AP-01
 - **Parallel möglich mit:** AP-02, AP-03
-- **Dateien (Eigentum):** `src/renderer/App.tsx`, `src/renderer/app/**` (`routes.tsx`, `Layout.tsx`, `Sidebar.tsx`, `ThemeProvider.tsx`), `src/renderer/components/ui/**`, `src/renderer/pages/**` (nur Platzhalter), `src/renderer/styles/globals.css`
+- **Dateien (Eigentum):** `src/renderer/App.tsx`, `src/renderer/app/**` (`routes.tsx`, `Layout.tsx`, `Sidebar.tsx`, `Header.tsx`, `ThemeProvider.tsx`), `src/renderer/i18n/**`, `src/renderer/components/ui/**`, `src/renderer/pages/**` (nur Platzhalter), `src/renderer/features/**` (nur Platzhalter, siehe Schritt 6), `src/renderer/styles/globals.css`
 - **Nicht anfassen:** `src/shared/**`, `src/main/**`, `src/preload/**`
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:**
-  1. `HashRouter` (Electron, `file://`), Routen: Start `/`, Projekte `/projects`, Projekt `/projects/:id`, Dienste `/services`, Ausgaben `/expenses`, Einnahmen `/incomes`, Personen `/people`, Kampagnen `/campaigns`, Nutzerzahlen `/metrics`, Statistik `/stats`, Einstellungen `/settings`, Bericht `/report` (ohne Layout, für PDF).
+  1. `HashRouter` (Electron, `file://`), Routen: Start `/`, Projekte `/projects`, Projekt `/projects/:id`, Dienste `/services`, Ausgaben `/expenses`, Einnahmen `/incomes`, Personen `/people`, Person `/people/:id`, Kampagnen `/campaigns`, Nutzerzahlen `/metrics`, Statistik `/stats`, Berichte `/reports`, Einstellungen `/settings`, Druckansicht `/print` (ohne Layout, für PDF).
   2. Je Bereich `src/renderer/pages/<bereich>/index.tsx` als Platzhalter (Titel + „folgt“).
-  3. Seitenleiste mit lucide-Icons, aktiver Eintrag hervorgehoben; Kopfzeile mit Seitentitel und Platz für Anzeigewährungs-Wahl (Slot, Logik folgt AP-10).
+  3. Seitenleiste mit lucide-Icons, aktiver Eintrag hervorgehoben; `Header.tsx` mit Seitentitel und Umschaltern für Sprache und Theme; Platz für die Anzeigewährungs-Wahl (Slot, Logik folgt AP-10).
   4. Theme: hell/dunkel/System, gespeichert in `localStorage` (nur UI-Präferenz, keine Fachdaten).
-  5. shadcn-Grundbausteine: Button, Card, Input, Label, Select, Dialog, AlertDialog, Table, Badge, Tabs, Tooltip, Progress, DropdownMenu, Sonner/Toast nur wenn ohne neue Abhängigkeit, sonst einfacher eigener Toast.
-- **Schnittstellen:** Routen und Layout für alle UI-Pakete.
-- **Akzeptanzkriterien:** Alle Bereiche erreichbar; Theme-Umschaltung bleibt nach Neustart; keine hart codierten Farben außerhalb `globals.css`.
-- **Tests:** Vitest-Test für Routenliste (alle Pfade vorhanden); kein DOM-Test-Setup nötig
+  5. i18n (PE-47): `src/renderer/i18n/` mit `I18nProvider`, `useT()`, Sprache `de`/`en` in `localStorage`, Wörterbuch-Typ (fehlende Schlüssel = Typfehler), gemeinsame Wörterbücher (`common`, `nav`, Kategorie- und Plattform-Schlüssel aus `src/shared/` werden in AP-10 ergänzt); Formatierer `formatMoney`, `formatDate`, `formatNumber`, `formatPercent` über `Intl` (de-DE / en-US). Fachseiten legen eigene Wörterbücher in ihrem Ordner an (`pages/<bereich>/i18n.ts`).
+  6. Platzhalter für Projekt-Tabs späterer Pakete: `src/renderer/features/{people,campaigns,metrics,stats}/ProjectTab.tsx` (rendern „folgt“) und `src/renderer/features/transfer/TransferSection.tsx` (Platzhalter für AP-25).
+  7. shadcn-Grundbausteine: Button, Card, Input, Label, Select, Dialog, AlertDialog, Table, Badge, Tabs, Tooltip, Progress, DropdownMenu, Checkbox, RadioGroup, Popover; Toast als einfacher eigener Baustein, falls nur mit neuer Abhängigkeit möglich.
+- **Schnittstellen:** Routen, Layout, i18n und Formatierer für alle UI-Pakete.
+- **Akzeptanzkriterien:** Alle Bereiche erreichbar; Theme- und Sprachumschaltung bleiben nach Neustart; keine hart codierten Farben außerhalb `globals.css`; keine hart codierten sichtbaren Texte außerhalb der Wörterbücher.
+- **Tests:** Vitest-Tests für Routenliste (alle Pfade vorhanden), Formatierer (de/en: 1.234,56 € / €1,234.56, Datum), Wörterbücher de/en haben dieselben Schlüssel
 - **Review-Schwerpunkte:** PE-21 eingehalten, Barrierearmut (Fokus, Tastatur), keine externen Ressourcen
 - **Design-Review:** nein (PE-21)
 - **Doku-Pflichten:** keine
-- **Aufwand:** M · **Modell:** sonnet · **Effort:** medium
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
 - **Opus-Grund:** –
 - **Kürzbar bei Budgetnot:** nein
-- **Commit-Typ:** `feat(AP-04): add app shell, theme and routes`
+- **Commit-Typ:** `feat(AP-04): add app shell, theme, i18n and routes`
 
 #### AP-05 – Kern: Geld, Währung, Aufteilung
 
@@ -784,7 +792,7 @@ flowchart LR
 - **Nicht anfassen:** `src/core/recurrence/**`, `src/core/projects/**`, `src/shared/**`
 - **Freigegebene Abhängigkeiten:** keine neuen (`decimal.js` vorhanden)
 - **Umsetzung:**
-  1. `money`: Addieren/Subtrahieren nur gleicher Währung (sonst Fehler), Formatierung `de-DE` mit Währung.
+  1. `money`: Addieren/Subtrahieren nur gleicher Währung (sonst Fehler), Summen, Vergleich; keine Formatierung (die macht die UI, PE-47).
   2. `currency`: `toEur(money, rateToEur)` und `fromEur(cents, rate)` mit `decimal.js`, Rundung half-up erst am Ende; `latestRate(rates, currency, at?)` = neuester Eintrag; `convertForDisplay(money, rateToEur, displayCurrency, rates)` nach PE-13 (Buchung → EUR mit Snapshot, EUR → Anzeige mit neuestem Kurs); fehlender Kurs → definierter Fehlerwert, keine stille 1.
   3. `allocation`: `resolveProjects(allocation, projects, date, isActive)` (Funktion `isActive` wird injiziert, kommt aus AP-06); `splitCents(totalCents, weights)` Größter-Rest auf Cent, Restcent deterministisch an die Reihenfolge der Liste (PE-28); `equal` und `percent` (Basispunkte); leere Projektmenge → Fehlerwert „nicht zuordenbar“.
 - **Schnittstellen:** stellt Geld-/Währungs-/Aufteilungsfunktionen für AP-09, AP-16, AP-20 bereit.
@@ -967,7 +975,7 @@ flowchart LR
 | PE-20 | Lizenz PolyForm Noncommercial 1.0.0 (`LICENSE` im Repo-Wurzelverzeichnis). Keine Rechtsberatung (D12b). | für Software formuliert, verbietet kommerzielle Nutzung | Nutzer am 2026-10-25 |
 | PE-21 | Prototyp ohne Designer: Tailwind CSS + shadcn/ui; Grundsätze: neutrale Grautöne, eine Akzentfarbe, viel Weißraum, Schrift Inter, Hell-/Dunkelmodus, linke Seitenleiste, Tabellen und Karten, Diagramme in Akzentfarbe. Farben/Abstände nur über Tailwind-Theme/CSS-Variablen an einer Stelle, damit der Designer später zentral umstellen kann. Designer-Interview nach dem Prototyp. | Nutzer will erst Prototyp sehen | Nutzer am 2026-10-25 |
 | PE-22 | Öffentliches GitHub-Repo `CemDCoding/appManager` ist angelegt und als `origin` eingetragen. `stage` = Installer-Test mit Testdaten, `master` = Release (optional GitHub Release mit `.exe`). Nie echte Daten im Repo. | – | Nutzer am 2026-10-25 |
-| PE-23 | Bis zu 5 Coder gleichzeitig. (angenommen) Freigabe pro Welle. | Wunsch des Nutzers; Budget-Wächter bremst bei 30 % | Nutzer am 2026-10-25 |
+| PE-23 | Bis zu 5 Coder gleichzeitig. Freigabe: siehe PE-46. | Wunsch des Nutzers; Budget-Wächter bremst bei 30 % | Nutzer am 2026-10-25 |
 | PE-24 | Rechnungen müssen perfekt stimmen und werden gründlichst getestet: Vitest-Unit-Tests für den gesamten Rechenkern inkl. Randfällen, ESLint, Prettier, Typecheck, 2–3 Playwright-E2E-Abläufe | höchste Priorität nach Sicherheit | Nutzer am 2026-10-25 |
 | PE-25 | Diagramme mit Recharts, PDF über Electron `printToPDF` | gleiches Aussehen in App und PDF, keine extra PDF-Bibliothek | Nutzer am 2026-10-25 |
 | PE-26 | Kategorien als erweiterbare Startlisten (siehe F-03/F-04). Werbung ist überwiegend Ausgabe: Kampagnenkosten zählen automatisch als Ausgabenkategorie „Werbung“ (keine Doppelerfassung). (angenommen) „Werbeeinnahmen“ ist nicht in der Startliste der Einnahmen, kann aber ergänzt werden. | Hinweis des Nutzers | Nutzer am 2026-10-25 |
@@ -989,6 +997,15 @@ flowchart LR
 | PE-43 | M0-Schnitt (AP-01–AP-08, Wellen W1–W4) bestätigt | – | Nutzer am 2026-10-25 |
 | PE-44 | `idee.txt` kommt nicht ins Repo; der Nutzer löscht sie selbst (Inhalt ist in §1/§2 übernommen) | – | Nutzer am 2026-10-25 |
 | PE-45 | `LICENSE` legt der Nutzer selbst mit dem Originaltext an, vor dem ersten Push (H-01) | Coder haben keinen Webzugang, Text muss exakt sein | Nutzer am 2026-10-25 |
+| PE-46 | Lead arbeitet ohne Freigabe pro Welle autonom über alle Meilensteine, bis der Nutzer „stopp“ sagt. M<x>-DEP (Smoke-Test, Merges) läuft nebenher und blockiert den nächsten Meilenstein nicht. Eskalation bleibt bei §7.3-Fällen. Budget voll → Pause bis Reset. Designer-Gespräch (H-05) blockiert M2 nicht; Design-Pakete werden danach eingeschoben. | Wunsch des Nutzers | Nutzer am 2026-10-25 |
+| PE-47 | App zweisprachig Deutsch/Englisch, umschaltbar; Zahlen/Datum im Format der Sprache (`Intl`, de-DE / en-US). Eigene kleine i18n-Lösung ohne neue Abhängigkeit (`t()`-Funktion, Wörterbücher je Bereich). Sprache und Theme sind UI-Präferenzen in `localStorage`. PDF in der gewählten Sprache. | Wunsch des Nutzers | Nutzer am 2026-10-25 |
+| PE-48 | Eine Ausgaben-Maske, Felder je Kategorie (Person bei „Mitarbeiter/Freelancer“, Dienst bei Dienstkategorien), Schnellknöpfe „+ Personenzahlung“, „+ KI-Guthaben“, „+ Abo“; Personenzahlung auch im Personenprofil; Aufteilung immer derselbe Baustein | einfache Bedienung | Nutzer am 2026-10-25 |
+| PE-49 | Kampagnenkosten zählen am Startdatum der Kampagne (einmalig), Nutzer einer Kampagne werden wie die Kosten auf Projekte verteilt (Größter-Rest auf ganze Nutzer) | klare Regel | angenommen vom Planner |
+| PE-50 | Rechenreihenfolge: Buchung → EUR mit Snapshot-Kurs (auf Cent) → Aufteilung auf Projekte (Größter-Rest) → Aggregation in EUR (exakt). Anzeige in anderer Währung: jede angezeigte Zahl einzeln aus EUR umgerechnet; Hinweis „umgerechnet“ in der Anzeige | Summen in EUR exakt; Anzeige folgt PE-13 | angenommen vom Planner |
+| PE-51 | Kennzahl „Fixkosten pro Monat“ = monatliches Äquivalent aller am Stichtag aktiven wiederkehrenden Ausgaben (täglich × 365/12, wöchentlich × 52/12, monatlich × 1, jährlich / 12, auf Cent gerundet). Nur Kennzahl, ändert die Buchung „wie gezahlt“ (PE-29) nicht | aussagekräftiger Monatswert | angenommen vom Planner |
+| PE-52 | Nutzer-Kennzahlen: Kosten pro Nutzer = Ausgaben im Zeitraum / Nutzerzuwachs im Zeitraum; Einnahmen pro zahlendem Nutzer = Einnahmen im Zeitraum / zahlende Nutzer am letzten Stichtag; Kampagnenanteil = Kampagnen-Nutzer im Zeitraum / Nutzerzuwachs; Division durch 0 → „–“ | testbare Definitionen | angenommen vom Planner |
+| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei) | testbare Definitionen | angenommen vom Planner |
+| PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
