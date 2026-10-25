@@ -134,7 +134,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | ID | Funktion | Beschreibung aus Nutzersicht | Kernfluss |
 |---|---|---|---|
-| F-01 | Projekte verwalten | Projekte/Apps anlegen, bearbeiten, archivieren; Plattformen (Mobile, Web, Webseite, Desktop, Steam) | ⟦offen⟧ |
+| F-01 | Projekte verwalten | Projekte/Apps anlegen, bearbeiten, archivieren; Felder nach PE-34; Plattformen (Mobile, Web, Webseite, Desktop, Steam) | ⟦offen⟧ |
 | F-02 | Deploy- und Dienstübersicht | Dienste (Anbieter, Zweck, Tarif, URL, Notiz, z. B. Railway, Vercel, Supabase) mit verknüpften Kosten; ein Dienst kann mehreren Projekten dienen, Kosten nach PE-06 geteilt; pro Projekt einsehbar (PE-12) | ⟦offen⟧ |
 | F-03 | Ausgaben erfassen | Einmalige und wiederkehrende Ausgaben mit Kategorie; Aufteilung auf ein, mehrere oder alle Projekte (PE-06, PE-07). Startkategorien (erweiterbar): Hosting/Server, Datenbank, Domain, Storage/CDN, Software-Lizenz, KI-Abo, KI-Guthaben, Mitarbeiter/Freelancer, Werbung (aus Kampagnen), Store-/Plattformgebühr, Hardware, Sonstiges (PE-26) | ⟦offen⟧ |
 | F-04 | Einnahmen erfassen | Von Hand, einmalig oder wiederkehrend, netto, einem Projekt zugeordnet, mit Kategorie (PE-08). Startkategorien (erweiterbar): Store-Verkauf, Steam, In-App-Kauf, Abo, Auftrag/Kunde, Spende, Sonstiges (PE-26) | ⟦offen⟧ |
@@ -155,7 +155,13 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 | Ausgeschlossen | Begründung |
 |---|---|
-| {{…}} | {{…}} |
+| Handy-App | später (PE-33) |
+| Online-Betrieb, Synchronisierung, Datenbank | später; Speicher hinter Schnittstelle |
+| Login, mehrere Nutzer | Einzelnutzer (PE-01) |
+| Import aus Bank-Dateien oder Shops, automatische Wechselkurse | keine Netzwerkzugriffe, Aufwand |
+| Steuern, Umsatzsteuer, Buchhaltung, Rechnungen schreiben | kein Steuer-/Buchhaltungs-Tool |
+| Automatische Updates | keine Netzwerkzugriffe |
+| macOS, Linux | nur Windows (PE-03) |
 
 ---
 
@@ -583,6 +589,9 @@ flowchart LR
 | PE-29 | Wiederkehrende Kosten/Einnahmen zählen „wie gezahlt“: voller Betrag am Fälligkeitstag; Fälligkeit am 29.–31. fällt in kürzeren Monaten auf den Monatsletzten; Aufteilung „alle“ nach am Fälligkeitstag aktiven Projekten | entspricht dem Kontoauszug | Nutzer am 2026-10-25 |
 | PE-30 | Prognose = laufende wiederkehrende Ausgaben und Einnahmen der nächsten 12 Monate nach PE-29. Break-even = erster Monat, in dem kumulierte Einnahmen eines Projekts ≥ kumulierte Ausgaben (rückblickend + Prognose); sonst „nicht in Sicht“ | klare, testbare Definition | Nutzer am 2026-10-25 |
 | PE-31 | Kurs- und Umrechnungsmathematik mit `decimal.js`; Ergebnis wird erst am Ende auf Cent gerundet (kaufmännisch, half-up) | exakte Rechnungen (PE-24) | angenommen vom Planner |
+| PE-33 | Nicht im Umfang: siehe §2 „Bewusst nicht im Umfang“ | Fokus | Nutzer am 2026-10-25 |
+| PE-34 | Projektfelder: Name, Beschreibung, Plattformen (Mehrfachauswahl), Phase (Idee, Entwicklung, Live, Pausiert, Eingestellt), Startdatum, Enddatum (optional, gesetzt bei „Eingestellt“), Links. „Aktiv“ für Aufteilung = Datum zwischen Start und Ende | klare Regel für PE-06 | Nutzer am 2026-10-25 |
+| PE-35 | Löschverhalten wie in §4 (Projekte archivieren, Dienst fragt nach Kosten, Zahlungen gelöschter Personen bleiben, Kurse nie löschen, jede Löschung mit Rückfrage) | Daten- und Rechenkonsistenz | Nutzer am 2026-10-25 |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -595,6 +604,7 @@ flowchart LR
 | Q-04 | Datenordner im Projekt: Pfad konfigurierbar (installierte App vs. Entwicklung)? Echte Daten von Agents fernhalten? | K | §4, §5, §6 | Pfad per Einstellung; Entwicklung nur mit Testdaten in `data-dev/` | geklärt → PE-18 |
 | Q-05 | Welche nicht-kommerzielle Lizenz? | W | §1, Repo | PolyForm Noncommercial 1.0.0 | geklärt → PE-20 |
 | Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
+| Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | offen |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
