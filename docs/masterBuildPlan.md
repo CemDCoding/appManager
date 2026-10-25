@@ -65,11 +65,11 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 |---|---|---|---|---|
 | 1 | Projektkontext und Ziel | in Klärung | Kommerzialisierung, Leitprinzipien, Abnahme | G1 |
 | 2 | Umfang | in Klärung | Rohfassung aus `idee.txt`, Details offen | G1 |
-| 3 | Tech-Stack | in Klärung | Speicher-Details, Diagramme, PDF, Tests | G1 |
-| 4 | Architektur, Datenmodell, Verträge | in Klärung | Entitäten, Aufteilungsregeln, Währungsumrechnung | G1 |
-| 5 | Sicherheit, Datenschutz, Recht, Limits | in Klärung | Backup, Mitarbeiterdaten | G1 |
-| 6 | Umgebungen, Branches, Deployment | in Klärung | stage/master für Desktop-App | G1 |
-| 7 | Team-Steuerung | leer | – | G1 |
+| 3 | Tech-Stack | fertig | – | G1 |
+| 4 | Architektur, Datenmodell, Verträge | angenommen | Löschverhalten (angenommen) | G1 |
+| 5 | Sicherheit, Datenschutz, Recht, Limits | angenommen | Limits (angenommen) | G1 |
+| 6 | Umgebungen, Branches, Deployment | fertig | – | G1 |
+| 7 | Team-Steuerung | angenommen | Freigabe pro Welle (angenommen) | G1 |
 | 8 | Lanes und Dateieigentum | leer | – | G2 |
 | 9 | Meilensteine und Wellen | leer | – | G2 |
 | 10 | Statusübersicht | leer | – | G2 |
@@ -201,14 +201,35 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 [W] Wo liegen die gemeinsamen Verträge (Schemas, API-Typen), damit parallel gebaut werden kann?
 -->
 
-**Bausteine:** {{Diagramm (Mermaid oder ASCII) und je Baustein ein Satz}}
+**Bausteine:**
+
+```mermaid
+flowchart LR
+  UI["renderer (React)"] -->|"window.api (typisiert)"| PRE["preload (contextBridge)"]
+  PRE -->|"IPC, zod-geprüft"| MAIN["main (Electron)"]
+  MAIN --> STORE["storage: JSON-Repository"]
+  STORE --> FS[("Datenordner: data-dev/ bzw. externer Ordner auf D:")]
+  UI --> CORE["core (Rechenkern, rein)"]
+  MAIN --> PDF["printToPDF (Berichtsseite)"]
+  SHARED["shared (Schemas, Typen, IPC-Vertrag)"] -.-> UI & PRE & MAIN & CORE
+```
+
+- `src/shared/`: Verträge – zod-Schemas und TS-Typen aller Entitäten, Geldtyp (Cent-Ganzzahl + Währung), IPC-Kanalliste mit Ein-/Ausgabetypen.
+- `src/core/`: reiner Rechenkern ohne Electron/React (Aufteilung, Währung, Wiederholung, Aggregation, Prognose, Break-even, Kampagnen-Kennzahlen). Vollständig mit Vitest getestet.
+- `src/main/`: Fenster, Sicherheitseinstellungen, Speicher (Repository je Entität, atomares Schreiben, Backups, Export/Import), Einstellungen (Datenpfad, Anzeigewährung), IPC-Handler, PDF-Export.
+- `src/preload/`: stellt `window.api` bereit, nichts weiter.
+- `src/renderer/`: Oberfläche; ruft für Auswertungen `src/core/` auf Daten aus `window.api` auf.
+- `scripts/seed-dev-data.ts`: erzeugt erfundene Testdaten in `data-dev/`. `e2e/`: Playwright-Tests.
 
 **Grundregeln:**
 
 1. Nur der Electron-Main-Prozess liest und schreibt Dateien; die Oberfläche spricht über eine typisierte IPC-Schnittstelle mit ihm (PE-02).
 2. Beträge werden in Originalwährung gespeichert. Beim Anlegen einer Buchung wird der zu diesem Zeitpunkt neueste Kurs aus der Kurstabelle in die Buchung kopiert (Snapshot). Spätere Kursänderungen betreffen nur neue Buchungen (PE-05).
 3. Gemeinsame Kosten werden gleichmäßig oder nach eigenen Prozenten auf bestimmte Projekte oder „alle“ verteilt; „alle“ = die zum Kostenzeitpunkt aktiven Projekte (PE-06).
-4. Wiederkehrende Posten werden einmal angelegt (Betrag, Intervall, Start, optional Ende, Preisänderung ab Datum); Monatswerte berechnet die App (PE-07).
+4. Wiederkehrende Posten werden einmal angelegt (Betrag, Intervall, Start, optional Ende, Preisänderung ab Datum); Monatswerte berechnet die App (PE-07, PE-29).
+5. Rechenkern ist rein (keine Datei-, Zeit- oder Zufallszugriffe; „heute“ wird als Parameter übergeben), damit alles deterministisch testbar ist.
+6. Geld immer als Ganzzahl in Cent plus Währungscode; Kurse als Dezimal-String, Rechnung mit `decimal.js`, Rundung nach PE-28/PE-31.
+7. Jede Datei und jede IPC-Nachricht wird im Main-Prozess mit zod geprüft; ungültige Dateien werden nicht überschrieben, sondern gemeldet.
 
 | Entität | Wichtige Felder | Gehört zu | Löschverhalten |
 |---|---|---|---|
@@ -224,7 +245,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 
 Arbeitspakete von Personen, Guthaben-Aufladungen und Dienstkosten sind Ausgaben mit passender Kategorie und Verweis (angenommen), damit Statistik und PDF nur eine Kostenquelle kennen.
 
-**Verträge:** {{Ort und Format}}. Regel: Jeder Vertrag entsteht in einem eigenen Paket mindestens eine Welle vor seinen Nutzern.
+**Verträge:** `src/shared/` (zod-Schemas → abgeleitete TS-Typen, `ipc.ts` mit Kanalnamen und Payload-Typen, `money.ts`). Regel: Jeder Vertrag entsteht in einem eigenen Paket mindestens eine Welle vor seinen Nutzern.
 
 ---
 
@@ -243,17 +264,26 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 
 | Regel | Umsetzung (grob) | Testart | Paket |
 |---|---|---|---|
-| {{z. B. Jede Abfrage filtert nach user_id}} | {{…}} | {{…}} | {{AP-xx}} |
-| Impressum und Datenschutzerklärung (R3) | {{…}} | {{Seite erreichbar}} | {{AP-xx}} |
-| Secrets nur in `.env`, `.env.example` gepflegt (R4) | {{…}} | {{Review}} | alle |
+| Electron-Härtung (R6): `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, strikte CSP ohne Fremdquellen, Navigation und neue Fenster blockiert, kein Laden entfernter Inhalte | Fenster-Setup in `src/main/` | Unit-Test der Optionen + Review | ⟦AP folgt⟧ |
+| Externe Links (Dienst-URLs) nur `https:`/`http:`, Öffnen über `shell.openExternal` nach Protokollprüfung | Main-Prozess | Unit-Test | ⟦AP folgt⟧ |
+| IPC-Eingaben und JSON-Dateien mit zod validiert, keine freien Dateipfade vom Renderer | `src/main/` + `src/shared/` | Unit-Tests | ⟦AP folgt⟧ |
+| ZIP-Import: Zip-Slip-Schutz, nur erwartete Dateinamen, Größenlimit, Validierung vor dem Überschreiben, Backup vorher | `src/main/` | Unit-Tests | ⟦AP folgt⟧ |
+| Keine Netzwerkzugriffe, keine Telemetrie, Schrift lokal (`@fontsource/inter`) | ganze App | Review, CSP | alle |
+| Datensparsamkeit (R2): Personen nur Name/Kürzel + Kurzbeschreibung (PE-09); löschbar; keine Daten in Logs | Datenmodell, Logging | Review | ⟦AP folgt⟧ |
+| Echte Daten nie im Repo, Agents nur mit erfundenen Daten in `data-dev/` (PE-18) | `.gitignore`, Seed-Skript | Review | ⟦AP folgt⟧ |
+| Impressum und Datenschutzerklärung (R3) | entfällt: keine Webseite, App sendet keine Daten. README nennt Lizenz und dass keine Daten übertragen werden. | Review | ⟦AP folgt⟧ |
+| Secrets nur in `.env`, `.env.example` gepflegt (R4) | App braucht keine Secrets; `.env.example` dokumentiert nur `APP_DATA_DIR` (Datenpfad-Override für Entwicklung/Tests) | Review | alle |
+| Abhängigkeiten nur mit freizügiger Lizenz (PE-19) | `npm`-Lizenzprüfung im Review | Review | alle |
 
 | Limit | Standard | Ebene |
 |---|---|---|
-| {{…}} | {{…}} | {{pro Nutzer / global}} |
+| Größe ZIP-Import | 50 MB (angenommen) | global |
+| Anzahl Backups | 10 (angenommen) | global |
+| Textfelder (Name, Beschreibung, Notiz) | 200 / 2 000 / 5 000 Zeichen (angenommen) | je Feld |
 
-**Nie kürzbar:** {{Liste}}
+**Nie kürzbar:** Electron-Härtung, zod-Validierung, Zip-Slip-Schutz, atomares Schreiben + Backups, Tests des Rechenkerns.
 
-**Vom Nutzer rechtlich zu prüfen (vor Kommerzialisierung):** {{z. B. Impressumsangaben, AGB, Auftragsverarbeitungsverträge}}
+**Vom Nutzer rechtlich zu prüfen:** Lizenztext PolyForm Noncommercial 1.0.0 und Lizenzen der Abhängigkeiten bei Veröffentlichung (keine Rechtsberatung, D12b).
 
 ---
 
@@ -268,9 +298,9 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 
 | Umgebung | Frontend | Backend | Datenbank | Auslöser |
 |---|---|---|---|---|
-| lokal / dev | {{…}} | {{…}} | {{Dev-DB, Agents schreiben}} | – |
-| stage | {{…}} | {{…}} | {{Stage-DB, Agents höchstens lesen}} | {{Merge dev → stage durch den Nutzer}} |
-| Produktion | {{…}} | {{…}} | {{Prod-DB, Agents höchstens lesen}} | {{Merge stage → master durch den Nutzer}} |
+| lokal / dev | `npm run dev` (electron-vite) | Electron-Main | `data-dev/` im Worktree, erfundene Daten, Agents schreiben | – |
+| stage | Installer aus `stage`, vom Nutzer gebaut (`npm run dist`) | – | Test-Datenordner des Nutzers (Kopie von Testdaten) | PR dev → stage durch den Nutzer |
+| Produktion | Installer aus `master`, Installation auf `D:` (optional GitHub Release) | – | externer Ordner auf `D:` mit echten Daten, kein Agent-Zugriff | PR stage → master durch den Nutzer |
 
 | Branch | Zweck | Wer schreibt darauf |
 |---|---|---|
@@ -279,13 +309,13 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 | `dev` | Integration, Default-Branch | ma-lead (`merge --no-ff`, `push`), ma-planner (nur Plan-Commits) |
 | `agent/AP-<nr>-c<n>` | ein Arbeitspaket | ma-coder (`commit`), nur lokal, wird nach dem Merge gelöscht |
 
-**Worktrees:** werden beim Start eines Coders automatisch im Ordner `{{PROJEKTNAME}}_worktree/` neben dem Projekt angelegt (ein Unterordner und ein Branch pro Coder, abgezweigt von `dev`). Der Lead entfernt sie nach dem Merge.
+**Worktrees:** werden beim Start eines Coders automatisch im Ordner `appManager_worktree/` neben dem Projekt angelegt (ein Unterordner und ein Branch pro Coder, abgezweigt von `dev`). Der Lead entfernt sie nach dem Merge.
 
-**Parallele Coder und lokale Ressourcen:** {{z. B. jede Worktree-Instanz nutzt eigenen Port / eigenes DB-Schema, Variablen in .env.example: PORT, DB_SCHEMA}}
+**Parallele Coder und lokale Ressourcen:** Jeder Worktree hat sein eigenes `data-dev/` (relativ zum Worktree). Vite-Dev-Server sucht bei belegtem Port automatisch den nächsten (`strictPort: false`). E2E-Tests nutzen je Lauf ein temporäres Datenverzeichnis über `APP_DATA_DIR`.
 
-**Env-Dateien:** `.env` füllt nur der Nutzer. Agents sehen `.env.example`. {{Welche Variablen braucht ein Worktree, und wie kommt er an sie, ohne dass ein Agent sie liest? z. B. Anwendung lädt ../../.env des Hauptcheckouts}}
+**Env-Dateien:** Die App braucht keine Secrets. `.env.example` dokumentiert nur `APP_DATA_DIR` (optional). Eine `.env` ist nicht nötig.
 
-**Deployment-Anleitung:** {{Verweis}}
+**Deployment-Anleitung:** `README.md` (Abschnitt „Installer bauen“), angelegt im Installer-Paket.
 
 ---
 
