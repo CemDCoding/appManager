@@ -15,7 +15,7 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/*.seed.ts', 'e2e/**'],
     coverage: {
       provider: 'v8',
-      include: ['src/core/**'],
+      include: ['src/core/**/*.ts'],
       thresholds: { 'src/core/**': { lines: 95 } }
     }
   }
