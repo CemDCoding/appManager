@@ -1,7 +1,7 @@
-import { ComingSoon, type ProjectTabProps } from '../ComingSoon'
+import type { ProjectTabProps } from '../ComingSoon'
+import { StatsView } from './StatsView'
 
-/** Platzhalter: Statistik eines Projekts (AP-22). */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/** Statistik eines Projekts: dieselben Abschnitte wie die Statistikseite (PE-16). */
 export function ProjectTab({ projectId }: ProjectTabProps) {
-  return <ComingSoon />
+  return <StatsView scope={projectId} />
 }
