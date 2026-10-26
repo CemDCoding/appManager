@@ -4,6 +4,7 @@ import type { OpenDialogOptions } from 'electron'
 import { readAppConfig, writeAppConfig } from './config/appConfig'
 import { chooseDataDir, isEnvOverride, resolveDataDir } from './config/dataDir'
 import { isTrustedSenderUrl, registerIpcHandlers } from './ipc/handlers'
+import { setupPdfExport } from './pdf'
 import {
   buildContentSecurityPolicy,
   hardenSession,
@@ -114,6 +115,13 @@ if (!app.requestSingleInstanceLock()) {
       restoreBackup: (name) => dataService.restoreBackup(name),
       openExternal: (url) => shell.openExternal(url),
       isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
+      log: consoleLogger
+    })
+    setupPdfExport({
+      ipcMain,
+      devServerUrl,
+      isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
+      parentWindow: () => mainWindow,
       log: consoleLogger
     })
     openMainWindow()
