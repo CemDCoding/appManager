@@ -1,9 +1,16 @@
 import { useLocation } from 'react-router-dom'
-import { Languages, Monitor, Moon, Sun, type LucideProps } from 'lucide-react'
+import { Coins, Languages, Monitor, Moon, Sun, type LucideProps } from 'lucide-react'
 import type { ComponentType } from 'react'
+import { Badge } from '@/components/ui/badge'
 import { Select } from '@/components/ui/select'
+import { useToast } from '@/components/ui/toast-context'
+import { ipcErrorText } from '@/hooks/errors'
+import { currencyOptions } from '@/hooks/rates'
+import { useRates } from '@/hooks/useRates'
 import { isLanguage, useI18n, useT, type AppKey } from '@/i18n'
+import { ipcErrorDict, uiDict } from '@/i18n/shared-keys'
 import { cn } from '@/lib/utils'
+import { useDisplayCurrency } from '@/state/DisplayCurrencyProvider'
 import { findRoute } from './routes'
 import { useTheme, type ThemePreference } from './theme'
 
@@ -17,7 +24,56 @@ const THEME_OPTIONS: readonly {
   { value: 'system', labelKey: 'common.themeSystem', icon: Monitor }
 ]
 
-/** Kopfzeile: Seitentitel, Anzeigewährung (Slot, AP-10), Sprache und Theme. */
+/**
+ * Wahl der Anzeigewährung (PE-13): EUR und alle Währungen mit Kurs. Die Wahl wird in den
+ * Einstellungen gespeichert und bleibt erhalten. Bei Nicht-EUR Hinweis „umgerechnet“ (PE-50).
+ */
+function DisplayCurrencySelect() {
+  const t = useT()
+  const tu = useT(uiDict)
+  const tErr = useT(ipcErrorDict)
+  const { toast } = useToast()
+  const { currency, converted, missingRate, setCurrency, saving } = useDisplayCurrency()
+  const { currencies } = useRates()
+  const options = currencyOptions(currencies, [currency])
+
+  return (
+    <div data-slot="display-currency" className="flex items-center gap-2">
+      <Coins aria-hidden="true" className="size-4 text-muted-foreground" />
+      <Select
+        aria-label={t('common.displayCurrency')}
+        title={t('common.displayCurrency')}
+        value={currency}
+        disabled={saving}
+        onValueChange={async (next) => {
+          const result = await setCurrency(next)
+          if (!result.ok) {
+            toast({ title: ipcErrorText(result.error, tErr) ?? '', variant: 'destructive' })
+          }
+        }}
+        className="h-8 w-24"
+      >
+        {options.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+      </Select>
+      {converted && (
+        <Badge
+          variant={missingRate ? 'destructive' : 'secondary'}
+          title={
+            missingRate ? tu('displayMissingRate', { currency }) : tu('convertedHint', { currency })
+          }
+        >
+          {missingRate ? tu('valueUnavailable') : tu('converted')}
+        </Badge>
+      )}
+    </div>
+  )
+}
+
+/** Kopfzeile: Seitentitel, Anzeigewährung, Sprache und Theme. */
 export function Header() {
   const t = useT()
   const { language, setLanguage } = useI18n()
@@ -31,8 +87,7 @@ export function Header() {
         {route ? t(`nav.${route.titleKey}`) : t('common.notFound')}
       </h1>
 
-      {/* Platz für die Anzeigewährungs-Wahl; Logik folgt in AP-10. */}
-      <div data-slot="display-currency" className="flex items-center" />
+      <DisplayCurrencySelect />
 
       <div className="flex items-center gap-2">
         <Languages aria-hidden="true" className="size-4 text-muted-foreground" />
