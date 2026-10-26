@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-26 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 30 Arbeitspaketen (~48,5 h Agent-Zeit).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 32 Arbeitspaketen (~50 h Agent-Zeit).
 
 ---
 
@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M2 W2 abgeschlossen: AP-17 (c1), AP-18 (c2), AP-19 (c3), AP-20 (c4, opus) in `dev` gemergt (HEAD 87297ee, gepusht; lint, typecheck, build grün, 549/549 Tests). Alle Reviews Runde 1 bestanden.
-- **Fertig:** AP-01–AP-21, AP-28–AP-31, M0-DEP, M1-DEP · **Bereit:** M2-DEP [Mensch], AP-22, AP-23, AP-24 (M3 W2) · **Offen:** AP-25–AP-27, M3-DEP bis M4-DEP
+- **Stand:** 2026-10-26 · M2 W2 abgeschlossen: AP-17 (c1), AP-18 (c2), AP-19 (c3), AP-20 (c4, opus) in `dev` gemergt (HEAD 87297ee; lint, typecheck, build grün, 549/549 Tests). Nachtrag: PE-53 Kostenlimit bestätigt (erst nach Stichtag entscheiden), AP-32 als Fix angelegt, Budget nur noch aus `.claude/ma-usage.json`.
+- **Fertig:** AP-01–AP-21, AP-28–AP-31, M0-DEP, M1-DEP · **Bereit:** M2-DEP [Mensch], AP-32, AP-22, AP-24 (M3 W2), AP-23 (M3 W2b, nach Merge von AP-32) · **Offen:** AP-25–AP-27, M3-DEP bis M4-DEP
 - **Unterbrochen oder laufend:** keine gemeldet. Branches `agent/AP-17`–`AP-20` und Worktrees aufräumen: Lead (§9.1 Schritt 7).
-- **Erkenntnisse:** Aufrufer von AP-20 (AP-22–AP-24) brauchen Ledger-Historie bis heute und Forecast für dasselbe `today`; `ledger.errors` und `forecast.errors` müssen sichtbar sein (in den Paketen vermerkt). Diagramme und neue Seiten sind nicht render-getestet (Sichtprüfung im M2-DEP). PE-53-Präzisierung (Kostenlimit) als Vorschlag in §16. Details §18
-- **Nächster Schritt:** Nutzer führt M2-DEP aus (Smoke-Test, dev → stage → master). Lead prüft Gate G2(M3) und startet M3 W2 (AP-22, AP-23, AP-24, parallel). M2-DEP blockiert nach PE-46 nicht.
-- **Offene Nutzerpunkte:** Zweiturteil (§16); PE-53-Bestätigung (§16); Budgetwerte (§7.2 nennt 30 % / 36 %, Lead-Auftrag 40 % / 48 %, §16); H-06 Merges M0/M1; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
+- **Erkenntnisse:** AP-20 entscheidet `costLimit` sofort, PE-53 verlangt die Entscheidung erst nach dem Stichtag; der Fix steht in AP-32 vor AP-23. Aufrufer von AP-20 (AP-22–AP-24) brauchen Ledger-Historie bis heute und Forecast für dasselbe `today`; `ledger.errors` und `forecast.errors` müssen sichtbar sein. Diagramme und neue Seiten sind nicht render-getestet (Sichtprüfung im M2-DEP). Details §18
+- **Nächster Schritt:** Nutzer führt M2-DEP aus (Smoke-Test, dev → stage → master). Lead startet M3 W2 (AP-32, AP-22, AP-24, parallel) und danach W2b (AP-23) nach dem Merge von AP-32. M2-DEP blockiert nach PE-46 nicht.
+- **Offene Nutzerpunkte:** Zweiturteil (§16); Annahmen in PE-53 bestätigen oder ändern (Kostenlimit ohne Stichtag, Stichtagsmonat, erwarteter Break-even); H-06 Merges M0/M1; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
 
 ### Rollen und Dokumente
 
@@ -326,7 +326,7 @@ flowchart TD
 ### 7.2 Parallelität, Budget, Modelle
 
 - **Höchstens gleichzeitig:** 5 Coder (PE-23).
-- **Budget (D11b):** Zielwert **30 %** des 5-Stunden-Limits, Obergrenze **36 %** (Zielwert × 1,2). Ab dem Zielwert startet der Wächter keine neuen Coder mehr, laufende Pakete werden bis zur Obergrenze fertig. Dann fragt der Lead den Nutzer. Ohne Antwort geht es nach dem Reset weiter (D11c).
+- **Budget (D11b):** Zielwert, Obergrenze und Teamverbrauch (in Prozent des 5-Stunden-Limits) stehen in `.claude/ma-usage.json` (Felder `zielwert`, `obergrenze`, `team`). Dieser Plan nennt keine Werte; maßgeblich ist immer die Datei. Die Obergrenze liegt beim 1,2-Fachen des Zielwerts. Ab dem Zielwert startet der Wächter keine neuen Coder mehr, laufende Pakete werden bis zur Obergrenze fertig. Dann fragt der Lead den Nutzer. Ohne Antwort geht es nach dem Reset weiter (D11c).
 - **Freigabe:** keine Freigabe pro Welle; der Lead arbeitet autonom über alle Meilensteine, bis der Nutzer „stopp“ sagt (PE-46). Er meldet sich bei jedem auf `dev` fertigen Meilenstein und in den Eskalationsfällen §7.3.
 - **Bei mehr Kandidaten als Plätzen:** zuerst kritischer Pfad (§11), dann Verträge, dann der Rest.
 
@@ -378,7 +378,7 @@ flowchart TD
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
 | `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version), AP-28 (`tsconfig.web.json`, `.env.example`) und AP-30 (`vitest.config.ts`, nur Coverage-Include) | M0 W1, M1 W1, M1 W4, M4 W1 |
-| `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`) und AP-31 (`aggregate/fixedCosts.ts`, nach Merge von AP-30) | M1 W1 (AP-28), M1 W4 (AP-31) |
+| `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`), AP-31 (`aggregate/fixedCosts.ts`, nach Merge von AP-30) und AP-32 (`goals/`, nach Merge von AP-20) | M1 W1 (AP-28), M1 W4 (AP-31), M3 W2 (AP-32) |
 | `electron-builder.yml` | AP-01, später AP-27 | M0 W1, M4 W1 |
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
@@ -390,6 +390,7 @@ flowchart TD
 | `src/renderer/features/bookings/**` | AP-14 (Formulare, Listen); AP-29 (Originalbetrag-Spalte, Kategorie-Filter, Hinweis Einnahmen) | M1 W2, M1 W4 |
 | `src/core/aggregate/fixedCosts.test.ts` und `src/core/aggregate/fixedCosts*.test.ts` (nur Tests) | AP-30 (fertig); AP-31 ergänzt nur Tests, bestehende unverändert, erst nach dem Merge von AP-30 | M1 W4 |
 | `src/core/aggregate/fixedCosts.ts` | AP-31 (Fallbacks entfernen, Verhalten gleich) | M1 W4 |
+| `src/core/goals/goals.ts`, `src/core/goals/goals*.test.ts`, Abschnitt „Ziele“ in `src/core/README.md` | AP-32 (Kostenlimit erst nach Stichtag); AP-20 hat den Ordner angelegt | M3 W2 |
 
 ---
 
@@ -486,7 +487,8 @@ flowchart TD
 | Welle | Pakete (parallel) |
 |---|---|
 | W1 | AP-20 (darf parallel zu M2 W2 laufen) |
-| W2 | AP-22, AP-23, AP-24 |
+| W2 | AP-32 (Fix Kostenlimit), AP-22, AP-24 (parallel) |
+| W2b | AP-23 (startet nach dem Merge von AP-32) |
 | W3 | M3-DEP [Mensch] |
 
 ##### M3-DEP – Deployment [Mensch]
@@ -551,9 +553,10 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19, AP-21 | H | – | Nutzer | bereit |
 | AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | c4 | fertig |
 | AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | – | bereit |
-| AP-23 | Startseite mit Zielen | M3 | UI | W2 | AP-20, AP-21 | M | sonnet | – | bereit |
+| AP-23 | Startseite mit Zielen | M3 | UI | W2b | AP-20, AP-21, AP-32 | M | sonnet | – | offen |
 | AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | bereit |
-| M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24 | H | – | Nutzer | offen |
+| AP-32 | Fix: Kostenlimit erst nach Stichtag entscheiden | M3 | CORE | W2 | AP-20 | S | opus | – | bereit |
+| M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24, AP-32 | H | – | Nutzer | offen |
 | AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | – | offen |
 | AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | – | offen |
 | AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | – | offen |
@@ -584,7 +587,8 @@ flowchart LR
     AP21["AP-21"] --> AP19
   end
   subgraph M3["M3 Auswertung"]
-    AP20["AP-20"] --> AP22["AP-22"] & AP23["AP-23"] & AP24["AP-24"]
+    AP20["AP-20"] --> AP22["AP-22"] & AP24["AP-24"] & AP32["AP-32"]
+    AP32 --> AP23["AP-23"]
   end
   AP21 --> AP22 & AP23 & AP24
   AP14 --> AP17
@@ -603,6 +607,8 @@ flowchart LR
 ```
 
 **Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
+
+**Nachtrag 2026-10-26 (Pflegeauftrag):** AP-32 (Fix Kostenlimit, Kern, M3 W2) hängt an AP-20 und ist Voraussetzung für AP-23. AP-23 startet daher in W2b, nach dem Merge von AP-32. AP-22 und AP-24 hängen nicht davon ab.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1308,17 +1314,17 @@ flowchart LR
 
 #### AP-23 – Startseite mit Zielen
 
-- **Meilenstein, Lane, Welle:** M3 · UI · W2
+- **Meilenstein, Lane, Welle:** M3 · UI · W2b (startet nach dem Merge von AP-32)
 - **Ziel:** Startseite zeigt Ziele mit Fortschritt und die Monatskennzahlen; Ziele sind verwaltbar.
-- **Pflichtlektüre:** F-12, PE-37, PE-53
-- **Abhängigkeiten:** AP-20, AP-21
-- **Parallel möglich mit:** AP-22, AP-24
+- **Pflichtlektüre:** F-12, PE-37, PE-53 (inkl. Klarstellung Kostenlimit), §12 AP-32
+- **Abhängigkeiten:** AP-20, AP-21, AP-32
+- **Parallel möglich mit:** AP-22, AP-24 (Eigentum disjunkt)
 - **Dateien (Eigentum):** `src/renderer/pages/home/**`, `src/renderer/features/goals/**`
 - **Nicht anfassen:** andere Seiten
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:** obere Zeile KPI-Karten (aus AP-15 übernehmen); Zielliste gruppiert nach Portfolio/Projekt mit `Progress`, Status-Badge, Stichtag; Dialog Ziel anlegen/bearbeiten (Art, Projekt oder Portfolio, Titel, Zielwert, ab, Stichtag); freie Ziele abhakbar; Sparkline Saldo letzte 6 Monate.
-- **Schnittstellen:** nutzt AP-20, AP-21. Ledger-Historie und Forecast wie in AP-22; `ledger.errors` und `forecast.errors` sichtbar anzeigen (§18 AP-20). Kostenlimit-Anzeige: `ratio` ist der verbrauchte Anteil des Limits (hoher Wert ist schlecht), sobald die PE-53-Präzisierung (§16) bestätigt ist.
-- **Akzeptanzkriterien:** Smoke-Test-Punkt M3 zu Zielen erfüllt; Status „verfehlt“ nach Stichtag.
+- **Schnittstellen:** nutzt AP-20, AP-21, AP-32. Ledger-Historie und Forecast wie in AP-22; `ledger.errors` und `forecast.errors` sichtbar anzeigen (§18 AP-20). Kostenlimit-Anzeige: Der Balken zeigt `ratio`, den verbrauchten Anteil des Limits, beschriftet als „verbraucht“ und nicht als Fortschritt; ein hoher Balken heißt hoher Verbrauch. Status vor dem Stichtag `offen`, danach `erreicht` oder `verfehlt` (PE-53, AP-32).
+- **Akzeptanzkriterien:** Smoke-Test-Punkt M3 zu Zielen erfüllt; Status „verfehlt“ nach Stichtag; Kostenlimit zeigt vor dem Stichtag „offen“.
 - **Tests:** Vitest für Formular→Entität
 - **Review-Schwerpunkte:** i18n, Klarheit der Darstellung
 - **Design-Review:** nein (PE-21)
@@ -1352,6 +1358,33 @@ flowchart LR
 - **Opus-Grund:** –
 - **Kürzbar bei Budgetnot:** nein (F-10 Pflicht)
 - **Commit-Typ:** `feat(AP-24): add pdf reports`
+
+#### AP-32 – Kostenlimit-Ziel erst nach dem Stichtag entscheiden
+
+- **Meilenstein, Lane, Welle:** M3 · CORE · W2
+- **Ziel:** Der Status eines Kostenlimit-Ziels (`costLimit`) wird erst nach dem Stichtag entschieden: vor dem Stichtag `open`, danach `achieved` (Ausgaben im Monat des Stichtags ≤ Zielwert) oder `missed`. Behebt die Abweichung in AP-20 (dort sofortige Entscheidung im laufenden Monat), PE-53 bestätigt am 2026-10-26.
+- **Pflichtlektüre:** PE-53 (inkl. Klarstellung), PE-30 (nur Break-even-Vergleich, unverändert), §12 AP-20, `src/core/goals/goals.ts`, `src/core/goals/goals.test.ts`, `src/core/README.md` (Abschnitt „Ziele“)
+- **Abhängigkeiten:** AP-20 (`fertig`, gemergt)
+- **Parallel möglich mit:** AP-22, AP-24 (Eigentumsmengen disjunkt)
+- **Dateien (Eigentum):** `src/core/goals/goals.ts`, `src/core/goals/goals*.test.ts`, `src/core/README.md` (nur Abschnitt „Ziele (PE-53)“)
+- **Nicht anfassen:** übrige `src/core/**`, übrige Teile von `src/core/README.md`, `src/shared/**` (Schema `goal.ts` bleibt, auch für ein Kostenlimit ohne Stichtag), `src/renderer/**`, `vitest.config.ts`, `package.json`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Nur der Zweig `costLimit` in `goalProgress` ändert sich. Status `open`, solange kein Stichtag gesetzt ist oder `today` nicht nach dem Stichtag liegt (gleiche Grenze wie bei `missed`: `today > dueDate`). Nach dem Stichtag `achieved`, wenn `value ≤ targetValue`, sonst `missed`.
+  2. Wert (Ausgaben im Monat von `ref`) und `ratio` (verbrauchter Anteil des Limits, abgerundet, höchstens 10 000) bleiben unverändert.
+  3. Doc-Kommentare in `goals.ts` (Zweig `costLimit` und Satz „Status otherwise“) und der Abschnitt „Ziele (PE-53)“ in `src/core/README.md` beschreiben die neue Regel (Doku-Pflicht).
+  4. `goals.test.ts`: die bestehenden costLimit-Tests an den neuen Status anpassen. Neue Fälle mit festen Daten: Stichtag = heute → `open`; vor dem Stichtag über dem Limit → `open` mit gedeckeltem `ratio`; nach dem Stichtag im Limit → `achieved`; nach dem Stichtag über dem Limit → `missed`; ohne Stichtag → `open`.
+  5. Keine `istanbul ignore`- oder `c8 ignore`-Kommentare, keine unerreichbaren Zweige, keine Tests, die einen Zweig künstlich erzwingen (R2: keine echten Daten).
+- **Schnittstellen:** keine Signaturänderung, `GoalStatus` bleibt. AP-23 zeigt den neuen Status an.
+- **Akzeptanzkriterien:** Ein Kostenlimit-Ziel hat vor dem Stichtag nie `achieved` oder `missed`; nach dem Stichtag entscheidet der Monat des Stichtags. `ratio` und Wert unverändert. Zeilenabdeckung `src/core/goals/goals.ts` 100 %, ohne Ignore-Kommentare. Zeilenabdeckung `src/core/**` ≥ 95 %. Bestehende Tests der übrigen Zielarten unverändert grün. `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:coverage` grün, ohne Warnung.
+- **Tests:** Vitest mit festen Daten; Randfälle Stichtag = heute, Stichtag im Vormonat, Ratio über 100 %, Ziel 0 €, ohne Stichtag.
+- **Review-Schwerpunkte:** Wortlaut PE-53 (keine vorzeitige Entscheidung, Grenze „Stichtag = heute“ bleibt `open`), Monatsbezug des Stichtags, unveränderte Werte und Ratio, keine Ignore-Kommentare.
+- **Design-Review:** nein
+- **Doku-Pflichten:** `src/core/README.md`, Abschnitt „Ziele (PE-53)“
+- **Aufwand:** S · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** Kern (Regel in §7.2: Kernlogik)
+- **Kürzbar bei Budgetnot:** nein (korrigiert die Umsetzung von AP-20 gegen den Wortlaut PE-53)
+- **Commit-Typ:** `fix(AP-32): decide cost-limit goals only after the due date`
 
 ### M4 – Release
 
@@ -1445,20 +1478,20 @@ flowchart LR
 
 ## 14. Budget und Kürzungen
 
-| Meilenstein | Pakete | Agent-Aufwand | Geschätzte 5-h-Fenster bei 30 % Team-Budget |
+| Meilenstein | Pakete | Agent-Aufwand | Geschätzte 5-h-Fenster bei Zielwert laut `.claude/ma-usage.json` |
 |---|---|---|---|
 | M0 | 8 (5 opus) | 13,25 h | 4–5 |
 | M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
-| M3 | 4 (1 opus) | 9 h | 2–3 |
+| M3 | 5 (2 opus) | 9,75 h | 2–3 |
 | M4 | 3 (1 opus) | 3,75 h | 1 |
-| **Gesamt** | **31** | **49,25 h** + Reviews | **12–15** |
+| **Gesamt** | **32** | **50 h** + Reviews | **12–15** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
-**Nachtrag 2026-10-26:** AP-29, AP-30 und AP-31 (je S, 0,75 h) sind in der M1-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
+**Nachtrag 2026-10-26:** AP-29, AP-30 und AP-31 (je S, 0,75 h) sind in der M1-Zeile enthalten. AP-32 (S, 0,75 h) ist in der M3-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
 
-**Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. 5 parallele Coder (PE-23) erreichen den Zielwert von 30 % schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
+**Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. Die Fensterzahlen wurden bei einem früheren Zielwert geschätzt; den aktuellen Wert liefert `.claude/ma-usage.json`. 5 parallele Coder (PE-23) erreichen den Zielwert schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
 | Stufe | Kürzung | Ersparnis | Betroffene Pakete |
 |---|---|---|---|
@@ -1547,7 +1580,7 @@ flowchart LR
 | PE-50 | Rechenreihenfolge: Buchung → EUR mit Snapshot-Kurs (auf Cent) → Aufteilung auf Projekte (Größter-Rest) → Aggregation in EUR (exakt). Anzeige in anderer Währung: jede angezeigte Zahl einzeln aus EUR umgerechnet; Hinweis „umgerechnet“ in der Anzeige | Summen in EUR exakt; Anzeige folgt PE-13 | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-51 | Kennzahl „Fixkosten pro Monat“ = monatliches Äquivalent aller am Stichtag aktiven wiederkehrenden Ausgaben (täglich × 365/12, wöchentlich × 52/12, monatlich × 1, jährlich / 12, auf Cent gerundet). Nur Kennzahl, ändert die Buchung „wie gezahlt“ (PE-29) nicht | aussagekräftiger Monatswert | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-52 | Nutzer-Kennzahlen: Kosten pro Nutzer = Ausgaben im Zeitraum / Nutzerzuwachs im Zeitraum; Einnahmen pro zahlendem Nutzer = Einnahmen im Zeitraum / zahlende Nutzer am letzten Stichtag; Kampagnenanteil = Kampagnen-Nutzer im Zeitraum / Nutzerzuwachs, in Basispunkten (darf über 100 % liegen, UI kappt nicht). Nutzerzuwachs = letzter Stand bis Zeitraumende minus jüngster Stichtag vor Zeitraumbeginn; gibt es keinen, minus erster Stichtag im Zeitraum. Portfolio = Summe der Projekte. Zuwachs ≤ 0 → Kosten pro Nutzer und Kampagnenanteil `null` (Anzeige „–“). Division durch 0 → „–“ | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25; Präzisierung (Zuwachs, Portfolio, Basispunkte) bestätigt vom Nutzer am 2026-10-26 (Chat) |
-| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei) | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
+| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei). **Klarstellung Kostenlimit:** keine vorzeitige Entscheidung. Vor dem Stichtag ist der Status `offen`; `ratio` ist der verbrauchte Anteil des Limits. Nach dem Stichtag `erreicht` oder `verfehlt`; maßgeblich sind die Ausgaben im Monat des Stichtags (angenommen vom Planner), ohne Stichtag bleibt der Status `offen` (angenommen vom Planner). **Klarstellung Break-even:** Der Vergleich erfolgt auf Monatsebene wie PE-30. Ein nur erwarteter Break-even (Prognose) gilt nicht als erreicht und bleibt im Stichtagsmonat `offen` (angenommen vom Planner; der Wortlaut „Break-even-Monat“ wird als erreichter Monat gelesen). | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25; Klarstellung Kostenlimit bestätigt vom Nutzer am 2026-10-26 (Chat); Annahmen zu Stichtagsmonat, Ziel ohne Stichtag und erwartetem Break-even offen zur Bestätigung (§0) |
 | PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-55 | `@vitest/coverage-v8` (MIT) freigegeben, Abdeckung wird gemessen (`npm run test:coverage`) | Abnahmekriterium ≥ 95 % | Nutzer am 2026-10-25 |
 | PE-56 | Dev-Modus: Datenpfad nur über `APP_DATA_DIR` oder `<repo>/data-dev`; die gespeicherte Wahl (`userData/config.json`) gilt nur in der paketierten App. Verfeinert die Umsetzung von PE-18, ändert PE-18 nicht. | Review-Befunde AP-02/05/06/07: Dev-Läufe dürfen nie auf einen gewählten echten Datenordner zeigen (R2, RI-6) | Lead-Auftrag „Wellenabschluss M0“ am 2026-10-25; Nutzer am 2026-10-26 bestätigt |
@@ -1557,6 +1590,7 @@ flowchart LR
 | PE-60 | Die Ausgabenkategorie „Werbung“ (`advertising`) ist im Ausgabenformular nicht wählbar; bestehende Buchungen zeigen sie weiter. Kampagnenkosten bleiben automatisch Werbung (PE-26). | Doppelerfassung vermeiden | Lead-Auftrag am 2026-10-26; Nutzer am 2026-10-26 bestätigt (Chat) |
 | PE-61 | Aufräumen M1 (AP-29) und Branch-Abdeckung `fixedCosts` ≥ 95 % mit Config-Fix (AP-30) als M1 W4 eingeplant. Damit sind die Vorschläge zu Aufräum-Paket, Coverage-Include und Abdeckung aus der Liste „Vorgeschlagene Änderungen“ umgesetzt. | Befunde der M1-Reviews, niedrig, kein Blocker | Lead-Auftrag am 2026-10-26 |
 | PE-62 | AP-30 mit Branch-Abdeckung `fixedCosts.ts` 89,47 % (17/19) gemergt, obwohl Review Runde 1 formal „nicht bestanden“ ist: die zwei `?? 0`-Fallbacks (Zeilen 80, 86) sind unerreichbar. Folgepaket AP-31 entfernt sie als reine Refaktorierung ohne Verhaltensänderung (Rechenregeln PE-51 bleiben). PE-55 (≥ 95 %) gilt weiter. | Abnahmeziel PE-55 ohne Ausnahmeregel, keine Coverage-Tricks | Nutzer am 2026-10-26 (Chat) |
+| PE-63 | Budgetwerte (Zielwert, Obergrenze, Teamverbrauch) stehen nur in `.claude/ma-usage.json` (Felder `zielwert`, `obergrenze`, `team`). §7.2 und §14 nennen keine festen Werte. | Nutzerwunsch: eine Quelle für die Werte | Nutzer am 2026-10-26 (Chat) |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1578,8 +1612,6 @@ flowchart LR
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
 | Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
-| PE-53 Präzisierung (Kostenlimit, Break-even) | Kostenlimit: Status `verfehlt` sofort bei Überschreitung im laufenden Monat, `erreicht` sofort bei Einhaltung im laufenden Monat (nicht erst am Stichtag). `ratio` = verbrauchter Anteil des Limits (hoher Wert ist schlecht). Ein nur erwarteter Break-even im Stichtagsmonat bleibt `offen`. Break-even-Ziel vergleicht auf Monatsebene (konsistent mit PE-30). PE-53 gilt bis zur Bestätigung unverändert. | Umsetzung in AP-20 (Coder c4) weicht vom Wortlaut „verfehlt (Stichtag vorbei)“ ab | Coder c4 (AP-20), Lead-Auftrag „Wellenabschluss“ |
-| Budgetwerte (§7.2, §14) | §7.2 nennt Zielwert 30 %, Obergrenze 36 %. Lead-Auftrag 2026-10-26 nennt Team 35 % von Zielwert 40 %, Obergrenze 48 %. Nutzer bestätigt, welche Werte gelten; danach §7.2 und §14 angleichen. Bis dahin unverändert. | Widerspruch zwischen Plan und Lead-Auftrag, nicht still angepasst | Planner, Wellenabschluss M2 W2 |
 
 ---
 
@@ -1598,7 +1630,8 @@ flowchart LR
 | F-09 Statistiken | AP-09, AP-15, AP-16, AP-20, AP-21, AP-22 |
 | F-10 PDF | AP-24 |
 | F-11 Mitarbeiterverwaltung | AP-16, AP-17 |
-| F-12 Ziele/Startseite | AP-20, AP-23 |
+| F-12 Ziele/Startseite | AP-20, AP-23, AP-32 |
+| PE-53 Ziele, Kostenlimit erst nach Stichtag | AP-20, AP-23, AP-32 |
 | F-13 Nutzerzahlen | AP-16, AP-19 |
 | F-14 Datensicherung | AP-07, AP-11, AP-25 |
 | PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
@@ -1670,3 +1703,7 @@ flowchart LR
 | 2026-10-26 | Erkenntnis AP-21: Import über `@/components/charts`. `BarChartMonthly` (`data`: {month, incomeCents, expenseCents}), `LineChartSeries` (`series`: {id, label, points}, `valueKind`, `xKind`), `DonutChart` (`data`: {key, label, cents}, `maxSlices` 8, Rest „Sonstige“), `Sparkline` (`values`, `label`). Pflicht-`title` bei Charts; Props `static` und `size={{width, height}}`. Geld in Cent plus `currency`, Umrechnung macht der Aufrufer. Farben aus `--primary`, `--destructive`, `--foreground` per `color-mix`; `CHART_COLORS` in `chart-logic.ts` ist die einzige Stelle für Farbänderungen. Keine `--chart-*`-Variablen und keine Erfolgsfarbe im Theme (Designer kann später ergänzen) | Vertrag für AP-19, AP-22–AP-24 | AP-21, AP-19, AP-22, AP-23, AP-24 | Planner |
 | 2026-10-26 | Befund niedrig (Aufräumpaket später): sr-only-Spaltenüberschrift in `LineChartSeries.tsx` (ca. Z. 66) heißt „Wert“ statt „Zeitpunkt“; Sparkline-Prop `color` nimmt beliebige Strings. Render-Komponenten sind nicht automatisiert getestet, Sichtprüfung steht im M2-DEP-Smoke-Test | Barrierearmut, Testabdeckung | AP-21, M2-DEP | Planner |
 | 2026-10-26 | PE-52 präzisiert und vom Nutzer bestätigt (Zuwachs, Portfolio, Basispunkte); Vorschlag aus „Vorgeschlagene Änderungen“ entfernt, offener Punkt im Lagebericht erledigt. Wellenstart M2 W2: AP-17, AP-18, AP-19 (sonnet) und AP-20 (opus) auf `in Arbeit`, Coder c1–c4 | Nutzer-Bestätigung im Chat, Lead-Auftrag | §16, §0, §10, AP-16, AP-17–AP-20 | Nutzer am 2026-10-26 |
+| 2026-10-26 | Pflegeauftrag (Nutzer im Chat): PE-53 Klarstellung Kostenlimit bestätigt (keine vorzeitige Entscheidung: vor dem Stichtag `offen`, `ratio` = verbrauchter Anteil; nach dem Stichtag `erreicht`/`verfehlt`). Annahmen des Planners in PE-53 (Stichtagsmonat, Ziel ohne Stichtag, erwarteter Break-even) zur Bestätigung offen. Vorschlag PE-53 aus „Vorgeschlagene Änderungen“ entfernt | Nutzerentscheidung; Umsetzung in AP-20 (sofortige Entscheidung) wird in AP-32 korrigiert | PE-53, AP-20, AP-32 | Nutzer am 2026-10-26 (Chat) |
+| 2026-10-26 | AP-32 angelegt (Fix Kostenlimit, CORE, S, opus/high, Opus-Grund Kern), M3 W2. AP-23 hängt von AP-32 ab und startet in W2b; AP-22 und AP-24 unverändert in W2. §8 (Eigentum `goals/`), §9, §10, §11, §12, §14 (M3 5 Pakete, Gesamt 32) und §17 angepasst | Nutzerentscheidung im Chat | AP-23, AP-32, §8–§14, §17 | Nutzer am 2026-10-26 (Chat) |
+| 2026-10-26 | Budget: §7.2 und §14 nennen keine festen Werte mehr; maßgeblich ist `.claude/ma-usage.json` (`zielwert`, `obergrenze`, `team`). Vorschlag „Budgetwerte“ aus §16 entfernt, Eintrag PE-63 | Nutzerwunsch | §7.2, §14, §16 | Nutzer am 2026-10-26 (Chat) |
+| 2026-10-26 | Lagebericht §0 ersetzt. Nächste Welle: M3 W2 = AP-32, AP-22, AP-24 (parallel), danach W2b = AP-23. Eigentum geprüft: AP-32 nur `core/goals`, AP-22 `pages|features/stats`, AP-24 `main/pdf`, `reports`, `print`, `main/index.ts` (keine Überschneidung) | Pflegeauftrag | §0, §8, §9 | Nutzer am 2026-10-26 (Chat) |
