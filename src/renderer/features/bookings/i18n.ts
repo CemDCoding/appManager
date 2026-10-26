@@ -9,6 +9,8 @@ export const bookingsDict = defineDictionary(
     category: 'Kategorie',
     date: 'Datum',
     dateAiCreditHint: 'Tag der Aufladung',
+    outsideActivePeriod:
+      'Das Datum liegt außerhalb des Aktivzeitraums des Projekts. Die Einnahme kann trotzdem gespeichert werden.',
     description: 'Beschreibung',
     descriptionTooLong: 'Die Beschreibung ist zu lang (höchstens {max} Zeichen).',
     person: 'Person',
@@ -40,7 +42,6 @@ export const bookingsDict = defineDictionary(
     columnDescription: 'Beschreibung',
     columnProjects: 'Projekte',
     columnProject: 'Projekt',
-    columnOriginal: 'Originalbetrag',
     columnDisplay: 'Betrag ({currency})',
     columnActions: 'Aktionen',
     recurringBadge: 'wiederkehrend',
@@ -71,6 +72,8 @@ export const bookingsDict = defineDictionary(
     category: 'Category',
     date: 'Date',
     dateAiCreditHint: 'Day of the top-up',
+    outsideActivePeriod:
+      'The date is outside the project’s active period. You can still save the income.',
     description: 'Description',
     descriptionTooLong: 'The description is too long (at most {max} characters).',
     person: 'Person',
@@ -102,7 +105,6 @@ export const bookingsDict = defineDictionary(
     columnDescription: 'Description',
     columnProjects: 'Projects',
     columnProject: 'Project',
-    columnOriginal: 'Original amount',
     columnDisplay: 'Amount ({currency})',
     columnActions: 'Actions',
     recurringBadge: 'recurring',

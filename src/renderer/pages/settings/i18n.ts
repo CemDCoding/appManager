@@ -17,7 +17,6 @@ export const settingsDict = defineDictionary(
       'Die aktuellen Daten werden durch das Backup „{name}“ ersetzt. Das lässt sich nicht rückgängig machen.',
     restored: 'Backup wiederhergestellt.',
     displayTitle: 'Anzeige',
-    displaySaved: 'Gespeichert.',
     ratesTitle: 'Kurse',
     ratesHint:
       'Kurse gelten als „1 Fremdwährung = k EUR“. Einträge bleiben erhalten und werden nicht gelöscht.',
@@ -62,7 +61,6 @@ export const settingsDict = defineDictionary(
       'The current data will be replaced by the backup "{name}". This cannot be undone.',
     restored: 'Backup restored.',
     displayTitle: 'Display',
-    displaySaved: 'Saved.',
     ratesTitle: 'Rates',
     ratesHint: 'Rates mean "1 foreign currency = k EUR". Entries are kept and never deleted.',
     rateCurrency: 'Currency',

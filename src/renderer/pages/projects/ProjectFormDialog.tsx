@@ -16,6 +16,7 @@ import { useToast } from '@/components/ui/toast-context'
 import { useEntityMutation } from '@/hooks'
 import { useT } from '@/i18n'
 import { projectPhaseDict } from '@/i18n/shared-keys'
+import { MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH } from '@shared/limits'
 import type { Project } from '@shared/schemas/project'
 import { PROJECT_PHASES, type ProjectPhase } from '@shared/lists'
 import { projectsDict, type ProjectsKey } from './i18n'
@@ -125,7 +126,7 @@ function ProjectFormBody({
         <Input
           id={`${id}-name`}
           value={form.name}
-          maxLength={200}
+          maxLength={MAX_NAME_LENGTH}
           required
           aria-invalid={show('name') ? true : undefined}
           aria-describedby={`${id}-name-msg`}
@@ -142,7 +143,7 @@ function ProjectFormBody({
           id={`${id}-desc`}
           className={`${fieldClassName} h-24 py-2`}
           value={form.description}
-          maxLength={2000}
+          maxLength={MAX_DESCRIPTION_LENGTH}
           aria-invalid={show('description') ? true : undefined}
           aria-describedby={`${id}-desc-msg`}
           onChange={(e) => patch({ description: e.target.value })}
@@ -225,7 +226,7 @@ function ProjectFormBody({
               <Input
                 aria-label={`${tp('linkLabel')} ${index + 1}`}
                 value={link.label}
-                maxLength={200}
+                maxLength={MAX_NAME_LENGTH}
                 placeholder={tp('linkLabel')}
                 onChange={(e) => setLink(index, { label: e.target.value })}
               />

@@ -7,6 +7,8 @@ import {
   LOCAL_OWNER,
   type Recurrence
 } from '@shared/schemas/common'
+import { isActive } from '@core/projects/activePeriod'
+import type { Project } from '@shared/schemas/project'
 import { ExpenseSchema, type Expense } from '@shared/schemas/expense'
 import { IncomeSchema, type Income } from '@shared/schemas/income'
 import {
@@ -152,6 +154,26 @@ function parseCommon(
     description,
     timing
   }
+}
+
+/** Kategorien, die im Ausgabenformular nicht neu wählbar sind (PE-60: Werbung kommt aus Kampagnen). */
+export const UNSELECTABLE_EXPENSE_CATEGORIES: readonly string[] = ['advertising']
+
+/** Filter für `CategorySelect`: gespeicherte Werte bleiben dort trotzdem sichtbar. */
+export function isSelectableExpenseCategory(key: string): boolean {
+  return !UNSELECTABLE_EXPENSE_CATEGORIES.includes(key)
+}
+
+/**
+ * Liegt `date` außerhalb des Aktivzeitraums des Projekts (PE-58, Q-09)? Nur ein Hinweis,
+ * kein Fehler. Ohne Projekt oder bei ungültigem Datum: `false`.
+ */
+export function isOutsideActivePeriod(
+  project: Pick<Project, 'startDate' | 'endDate'> | undefined,
+  date: string
+): boolean {
+  if (!project || !isValidDateString(date)) return false
+  return !isActive(project, date)
 }
 
 /** Stichtag für Aufteilungs-Vorschau: Buchungstag bzw. Start der Wiederholung. */

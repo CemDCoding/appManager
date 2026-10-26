@@ -56,7 +56,7 @@ export function buildOverview(
     expenseCents: g.expenseCents,
     balanceCents: g.balanceCents
   }))
-  // Aktive Projekte ohne Buchungen im Zeitraum bleiben sichtbar (mit 0).
+  // Alle übergebenen Projekte ohne Buchungen im Zeitraum bleiben sichtbar (mit 0).
   for (const [id, name] of names) {
     if (!rows.some((r) => r.projectId === id)) {
       rows.push({ projectId: id, name, incomeCents: 0, expenseCents: 0, balanceCents: 0 })
