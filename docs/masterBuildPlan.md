@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M2 W2 gestartet: AP-17, AP-18, AP-19 (sonnet, medium) und AP-20 (opus, high), Coder c1–c4 laufen
-- **Fertig:** AP-01–AP-16, AP-21, AP-28–AP-31, M0-DEP, M1-DEP · **In Arbeit:** AP-17–AP-20 · **Offen:** AP-22–AP-27, M2-DEP bis M4-DEP
-- **Unterbrochen oder laufend:** AP-17–AP-20 (Coder c1–c4). Ergebnisse noch nicht gemergt.
-- **Erkenntnisse:** API von `@core/metrics/metrics` steht (`userMetrics` mit sechs Parametern, §12 AP-16). PE-52-Präzisierung (Nutzerzuwachs) erledigt, vom Nutzer am 2026-10-26 bestätigt (§16, §18). Diagramm-Bausteine (AP-21) sind nicht automatisiert render-getestet, Sichtprüfung im M2-Smoke-Test. Details §18
-- **Nächster Schritt:** Lead prüft Review und Merge von AP-17–AP-20 in `dev`, danach Wellenabschluss M2 W2 durch den Planner
-- **Offene Nutzerpunkte:** Merges `dev` → `stage` → `master` für M0/M1 (H-06, Anleitung §9.2); Zweiturteil bestätigen (§16); H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
+- **Stand:** 2026-10-26 · M2 W2 abgeschlossen: AP-17 (c1), AP-18 (c2), AP-19 (c3), AP-20 (c4, opus) in `dev` gemergt (HEAD 87297ee, gepusht; lint, typecheck, build grün, 549/549 Tests). Alle Reviews Runde 1 bestanden.
+- **Fertig:** AP-01–AP-21, AP-28–AP-31, M0-DEP, M1-DEP · **Bereit:** M2-DEP [Mensch], AP-22, AP-23, AP-24 (M3 W2) · **Offen:** AP-25–AP-27, M3-DEP bis M4-DEP
+- **Unterbrochen oder laufend:** keine gemeldet. Branches `agent/AP-17`–`AP-20` und Worktrees aufräumen: Lead (§9.1 Schritt 7).
+- **Erkenntnisse:** Aufrufer von AP-20 (AP-22–AP-24) brauchen Ledger-Historie bis heute und Forecast für dasselbe `today`; `ledger.errors` und `forecast.errors` müssen sichtbar sein (in den Paketen vermerkt). Diagramme und neue Seiten sind nicht render-getestet (Sichtprüfung im M2-DEP). PE-53-Präzisierung (Kostenlimit) als Vorschlag in §16. Details §18
+- **Nächster Schritt:** Nutzer führt M2-DEP aus (Smoke-Test, dev → stage → master). Lead prüft Gate G2(M3) und startet M3 W2 (AP-22, AP-23, AP-24, parallel). M2-DEP blockiert nach PE-46 nicht.
+- **Offene Nutzerpunkte:** Zweiturteil (§16); PE-53-Bestätigung (§16); Budgetwerte (§7.2 nennt 30 % / 36 %, Lead-Auftrag 40 % / 48 %, §16); H-06 Merges M0/M1; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
 
 ### Rollen und Dokumente
 
@@ -545,14 +545,14 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-31 | fixedCosts: unerreichbare Fallbacks entfernen | M1 | CORE | W4 | AP-30 | S | sonnet | – | fertig |
 | AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | fertig |
 | AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | fertig |
-| AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | in Arbeit |
-| AP-18 | Werbekampagnen | M2 | UI | W2 | AP-16 | M | sonnet | – | in Arbeit |
-| AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | – | in Arbeit |
-| M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19, AP-21 | H | – | Nutzer | offen |
-| AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | – | in Arbeit |
-| AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
-| AP-23 | Startseite mit Zielen | M3 | UI | W2 | AP-20, AP-21 | M | sonnet | – | offen |
-| AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
+| AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | c1 | fertig |
+| AP-18 | Werbekampagnen | M2 | UI | W2 | AP-16 | M | sonnet | c2 | fertig |
+| AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | c3 | fertig |
+| M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19, AP-21 | H | – | Nutzer | bereit |
+| AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | c4 | fertig |
+| AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | – | bereit |
+| AP-23 | Startseite mit Zielen | M3 | UI | W2 | AP-20, AP-21 | M | sonnet | – | bereit |
+| AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | bereit |
 | M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24 | H | – | Nutzer | offen |
 | AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | – | offen |
 | AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | – | offen |
@@ -1295,7 +1295,7 @@ flowchart LR
 - **Nicht anfassen:** andere Seiten und Features
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:** Umschalter Portfolio/Projekt, `PeriodPicker`; Abschnitte: KPI-Karten, Monatsverlauf, Ausgaben nach Kategorie, Projekt-Ranking nach Saldo, Fixkosten/Monat je Projekt, Kampagnen-Ranking, Prognose 12 Monate, Break-even je Projekt; Tabellen unter den Diagrammen; `features/stats/ProjectTab.tsx` (Projektansicht derselben Abschnitte).
-- **Schnittstellen:** nutzt AP-09, AP-16, AP-20, AP-21.
+- **Schnittstellen:** nutzt AP-09, AP-16, AP-20, AP-21. Ledger-Historie ab frühestem Datum bis heute laden; `forecast` und `breakEven` mit demselben `today`. `ledger.errors` und `forecast.errors` sichtbar anzeigen (die Kern-Funktionen reichen sie nicht durch, §18 AP-20).
 - **Akzeptanzkriterien:** Zahlen identisch mit Kern-Ergebnissen für Seed-Daten; Zeitraumwechsel aktualisiert alles.
 - **Tests:** Vitest für Daten-Mapping Kern→Diagramm
 - **Review-Schwerpunkte:** keine Rechenlogik in UI, i18n, Leistung bei großen Datenmengen (memoization)
@@ -1317,7 +1317,7 @@ flowchart LR
 - **Nicht anfassen:** andere Seiten
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:** obere Zeile KPI-Karten (aus AP-15 übernehmen); Zielliste gruppiert nach Portfolio/Projekt mit `Progress`, Status-Badge, Stichtag; Dialog Ziel anlegen/bearbeiten (Art, Projekt oder Portfolio, Titel, Zielwert, ab, Stichtag); freie Ziele abhakbar; Sparkline Saldo letzte 6 Monate.
-- **Schnittstellen:** nutzt AP-20, AP-21.
+- **Schnittstellen:** nutzt AP-20, AP-21. Ledger-Historie und Forecast wie in AP-22; `ledger.errors` und `forecast.errors` sichtbar anzeigen (§18 AP-20). Kostenlimit-Anzeige: `ratio` ist der verbrauchte Anteil des Limits (hoher Wert ist schlecht), sobald die PE-53-Präzisierung (§16) bestätigt ist.
 - **Akzeptanzkriterien:** Smoke-Test-Punkt M3 zu Zielen erfüllt; Status „verfehlt“ nach Stichtag.
 - **Tests:** Vitest für Formular→Entität
 - **Review-Schwerpunkte:** i18n, Klarheit der Darstellung
@@ -1342,7 +1342,7 @@ flowchart LR
   1. Seite `/reports`: Bereich (Portfolio/Projekt), Zeitraum, Sprache, Anzeigewährung → „PDF erstellen“ (`pdf:export`).
   2. Main: verstecktes Fenster mit denselben Sicherheitsoptionen lädt `#/print?…`; wartet auf `pdf:ready` (Zeitlimit 30 s, dann Fehler); `printToPDF` (A4, Ränder, Hintergründe an); Speichern nur über nativen Speichern-Dialog; Fenster schließen.
   3. Seite `/print`: druckoptimiertes Layout, Diagramme mit `static`, Tabellen (Projektbericht: Einnahmen, Ausgaben nach Kategorie, Dienste, Personenzahlungen, Kampagnen; Portfolio: alle Projekte im Vergleich), Kopf mit Zeitraum und Erstelldatum, Fußzeile mit Seitenzahl; meldet `pdf:ready` nach dem Rendern.
-- **Schnittstellen:** setzt `pdf:export`, `pdf:ready` aus AP-02 um.
+- **Schnittstellen:** setzt `pdf:export`, `pdf:ready` aus AP-02 um. Zahlen aus AP-20 mit Ledger-Historie und Forecast wie in AP-22; `ledger.errors` und `forecast.errors` im Bericht sichtbar machen (§18 AP-20).
 - **Akzeptanzkriterien:** beide PDFs entstehen; Zahlen = App (Lead vergleicht Stichproben); keine Dateipfade aus dem Renderer.
 - **Tests:** Unit-Tests für Parameter-Validierung und Zeitlimit-Logik (mit Mocks)
 - **Review-Schwerpunkte:** Sicherheit des versteckten Fensters, Pfad nur über Dialog, i18n
@@ -1578,6 +1578,8 @@ flowchart LR
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
 | Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
+| PE-53 Präzisierung (Kostenlimit, Break-even) | Kostenlimit: Status `verfehlt` sofort bei Überschreitung im laufenden Monat, `erreicht` sofort bei Einhaltung im laufenden Monat (nicht erst am Stichtag). `ratio` = verbrauchter Anteil des Limits (hoher Wert ist schlecht). Ein nur erwarteter Break-even im Stichtagsmonat bleibt `offen`. Break-even-Ziel vergleicht auf Monatsebene (konsistent mit PE-30). PE-53 gilt bis zur Bestätigung unverändert. | Umsetzung in AP-20 (Coder c4) weicht vom Wortlaut „verfehlt (Stichtag vorbei)“ ab | Coder c4 (AP-20), Lead-Auftrag „Wellenabschluss“ |
+| Budgetwerte (§7.2, §14) | §7.2 nennt Zielwert 30 %, Obergrenze 36 %. Lead-Auftrag 2026-10-26 nennt Team 35 % von Zielwert 40 %, Obergrenze 48 %. Nutzer bestätigt, welche Werte gelten; danach §7.2 und §14 angleichen. Bis dahin unverändert. | Widerspruch zwischen Plan und Lead-Auftrag, nicht still angepasst | Planner, Wellenabschluss M2 W2 |
 
 ---
 
@@ -1620,6 +1622,12 @@ flowchart LR
 | Datum | Änderung | Grund | Betroffene Pakete | Freigabe |
 |---|---|---|---|---|
 | 2026-10-25 | Plan v1 im Interview erstellt (14 Runden), 27 Pakete in M0–M4 | Projektstart | alle | Nutzer |
+| 2026-10-26 | M2 W2 abgeschlossen: AP-17 (c1), AP-18 (c2), AP-19 (c3), AP-20 (c4) in `dev` gemergt (HEAD 87297ee). §10 auf `fertig`; M2-DEP auf `bereit`; AP-22–AP-24 auf `bereit` (Abhängigkeiten erfüllt) | Wellenabschluss (Lead-Auftrag); Reviews Runde 1 bestanden; lint, typecheck, build grün, 549/549 Tests. Diagramme (AP-21) und neue Seiten nicht render-getestet, Sichtprüfung im M2-DEP | AP-17–AP-20, AP-21, M2-DEP, AP-22–AP-24 | Lead-Merge |
+| 2026-10-26 | AP-17 Erkenntnisse: Routen `/people`, `/people/:id`. „Gesamt“ = 2000-01-01 bis heute, Standardzeitraum aktuelles Jahr. Notiz einzeilig. Helfer `personDetailPath` in `features/people/people-logic.ts`. Gelöschte Personen: Zahlungen bleiben, Anzeige „gelöschte Person“ (PE-35). Niedrig: ungenutzte i18n-Schlüssel `open`, `ledgerErrors`; direkter Import von `localToday` aus `features/bookings/booking-logic` statt Barrel | Review-Befunde, kein Blocker | AP-17 | Lead-Merge |
+| 2026-10-26 | AP-18 Erkenntnisse: `@/features/campaigns` exportiert `CampaignForm`, `CampaignTable`, `projectCampaignShares`, `campaignsDict`. Leere Zähler = 0. Kosten nur als Ledger-Eintrag (Kategorie `advertising`, PE-26). Nicht umrechenbare Kampagnen unter der Tabelle gelistet. Niedrig: `features/campaigns/ProjectTab.tsx` Z. 57–58 zeigt bei nicht umrechenbarer Kampagne nur „–“ ohne Erklärung | Review-Befunde, kein Blocker | AP-18 | Lead-Merge |
+| 2026-10-26 | AP-19 Erkenntnisse: `pages/metrics/index.tsx` von Platzhalter auf Projektwahl und `UserMetricsView` umgestellt. Stichtage bearbeitbar und löschbar. Doppelte Stichtage am selben Datum erlaubt (Diagramm zeigt doppelte X-Werte). Plattformfelder aus `project.platforms`. Niedrig: `campaigns` wird doppelt geladen. Cross-Imports `features/*` → `pages/projects/*` (`LedgerWarnings`, `useProjectLedger`, `todayIso`); Verschiebung nach `components/` ist ein Aufräum-Kandidat (kein Paket, nicht eingeplant) | Review-Befunde, kein Blocker | AP-19 | Lead-Merge |
+| 2026-10-26 | AP-20 Erkenntnisse: Signaturen `forecast(data, today, months = 12)`, `breakEven(ledger, forecast, projectId: string \| null)`, `goalProgress(goal, { ledger, forecast, userMetrics }, today)`. `forecast` für ein anderes `today` wirft `RangeError`; Bezugstag = min(heute, Stichtag). Prognose: nur wiederkehrende Posten mit Fälligkeit im Zeitraum (auch bei künftigem Start); 13 Buckets, wenn heute nicht Monatsletzter; Einnahmen ohne Aktivitätsprüfung (PE-58). `ratio` abgerundet (10 000 nur bei erfülltem Ziel). Aufrufer (AP-22–AP-24) brauchen Ledger-Historie ab frühestem Datum bis heute und Forecast für dasselbe `today`. `goalProgress` und `breakEven` reichen `ledger.errors`/`forecast.errors` nicht durch; AP-22–AP-24 zeigen sie an (Schnittstellen ergänzt). Abdeckung `src/core/`: 100 % Zeilen, 99,35 % Branches | Review-Befunde, kein Blocker | AP-20, AP-22–AP-24 | Lead-Merge |
+| 2026-10-26 | Vorschläge in §16 „Vorgeschlagene Änderungen“ eingetragen: PE-53-Präzisierung (Kostenlimit, Umsetzung AP-20) und Budgetwerte (§7.2 vs. Lead-Auftrag). Beides nicht übernommen, PE-53 und §7.2 unverändert | Nutzer muss freigeben | AP-20, AP-23, §7.2, §14 | offen: Nutzer |
 | 2026-10-25 | Annahmen bestätigt, Coverage-Abhängigkeit freigegeben (PE-55), Interview beendet („stop“) | Abschluss Interview | AP-01 | Nutzer |
 | 2026-10-25 | Wellenabschluss M0: AP-01–AP-08 auf `fertig` (in `dev` gemergt, 258 Tests, Seed und Build grün), Coder-Zuordnung eingetragen, Lagebericht aktualisiert; M0-DEP bleibt `offen` (Nutzer) | Pflege nach M0 (Lead) | AP-01–AP-08, M0-DEP | Lead-Auftrag |
 | 2026-10-25 | AP-28 „Vertragslücken schließen“ angelegt (M1 W1 parallel zu AP-09); AP-10 als W1b nach AP-28 vorgezogen (Abhängigkeit AP-28); §8, §9.2, §10, §11, §14, §17 angepasst | Review-Befunde AP-02/05/06/07: `IN_USE` nur als Präfix-Workaround, `window.api` nicht typisiert, `.env.example` ungenau, Endlosschleife bei Daten nahe 9999, `fromEur` ohne Prüfung von `eurCents` | AP-28, AP-09, AP-10 | Lead-Auftrag |
