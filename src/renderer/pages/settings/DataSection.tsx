@@ -9,6 +9,29 @@ import { ipcErrorDict } from '@/i18n/shared-keys'
 import { invalidateCollections, settingsStore } from '@/state/stores'
 import { settingsDict } from './i18n'
 
+const INTERNAL_ERROR: IpcError = { code: 'INTERNAL', message: '' }
+
+interface DataSnapshot {
+  dir: { ok: true; path: string | null } | { ok: false; error: IpcError }
+  backups: { ok: true; list: BackupInfo[] } | { ok: false; error: IpcError }
+}
+
+/** Lädt Datenordner und Backup-Liste; Ausnahmen werden zu einem INTERNAL-Fehler. */
+async function fetchData(): Promise<DataSnapshot> {
+  try {
+    const [d, b] = await Promise.all([window.api.dataDir.get(), window.api.backup.list()])
+    return {
+      dir: d.ok ? { ok: true, path: d.data.path } : { ok: false, error: d.error },
+      backups: b.ok ? { ok: true, list: b.data } : { ok: false, error: b.error }
+    }
+  } catch {
+    return {
+      dir: { ok: false, error: INTERNAL_ERROR },
+      backups: { ok: false, error: INTERNAL_ERROR }
+    }
+  }
+}
+
 /** Datenordner und Backups. Pfade kommen nur aus dem Main-Prozess, der Renderer sendet keine. */
 export function DataSection() {
   const ts = useT(settingsDict)
@@ -21,35 +44,24 @@ export function DataSection() {
   const [restoreName, setRestoreName] = useState<string | null>(null)
   const [restoreError, setRestoreError] = useState<string | null>(null)
 
-  const load = useCallback(async () => {
-    try {
-      const [d, b] = await Promise.all([window.api.dataDir.get(), window.api.backup.list()])
-      if (d.ok) setDir(d.data.path)
-      else setError(d.error)
-      if (b.ok) setBackups(b.data)
-      else setError(b.error)
-    } catch {
-      setError({ code: 'INTERNAL', message: '' })
-    }
+  const apply = useCallback((data: DataSnapshot) => {
+    if (data.dir.ok) setDir(data.dir.path)
+    else setError(data.dir.error)
+    if (data.backups.ok) setBackups(data.backups.list)
+    else setError(data.backups.error)
   }, [])
+
+  const load = useCallback(async () => apply(await fetchData()), [apply])
 
   useEffect(() => {
     let cancelled = false
-    Promise.all([window.api.dataDir.get(), window.api.backup.list()])
-      .then(([d, b]) => {
-        if (cancelled) return
-        if (d.ok) setDir(d.data.path)
-        else setError(d.error)
-        if (b.ok) setBackups(b.data)
-        else setError(b.error)
-      })
-      .catch(() => {
-        if (!cancelled) setError({ code: 'INTERNAL', message: '' })
-      })
+    void fetchData().then((data) => {
+      if (!cancelled) apply(data)
+    })
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [apply])
 
   const choose = async () => {
     setInfo(null)

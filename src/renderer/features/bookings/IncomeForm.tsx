@@ -16,7 +16,9 @@ import {
   emptyIncomeDraft,
   incomeDraftFrom,
   incomeDraftToInput,
+  isOutsideActivePeriod,
   localToday,
+  referenceDate,
   type IncomeDraft,
   type IncomeIssue
 } from './booking-logic'
@@ -59,6 +61,11 @@ export function IncomeForm({ income, projectId, onSaved, onCancel }: IncomeFormP
   const patch = useCallback((p: Partial<IncomeDraft>) => setDraft((d) => ({ ...d, ...p })), [])
   const setMoney = useCallback((money: MoneyDraft) => patch({ money }), [patch])
   const setRecurrence = useCallback((recurrence: RecurrenceDraft) => patch({ recurrence }), [patch])
+
+  const outsidePeriod = isOutsideActivePeriod(
+    projects.find((p) => p.id === draft.projectId),
+    referenceDate(draft)
+  )
 
   const submit = async (event: FormEvent) => {
     event.preventDefault()
@@ -116,6 +123,7 @@ export function IncomeForm({ income, projectId, onSaved, onCancel }: IncomeFormP
         recurrence={draft.recurrence}
         onRecurrenceChange={setRecurrence}
         currency={draft.money.currency}
+        dateNotice={outsidePeriod ? tb('outsideActivePeriod') : undefined}
         showDateError={submitted && issues.includes('invalidDate')}
       />
 
