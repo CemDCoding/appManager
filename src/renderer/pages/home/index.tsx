@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { DataTable, KpiCard, PeriodPicker, isValidPeriod, periodFor } from '@/components/data'
 import type { DataColumn } from '@/components/data'
 import { useCollection, useDisplayCurrency } from '@/hooks'
+import { GoalsSection } from '@/features/goals'
 import { useFormat, useT } from '@/i18n'
 import { homeDict } from './i18n'
 import { buildOverview, localIsoDate, type ProjectRow } from './overview'
@@ -120,6 +121,8 @@ export function HomePage() {
           {t('fixedCostErrors', { count: overview.fixedCostErrors.length })}
         </p>
       )}
+
+      <GoalsSection today={today} />
 
       <section className="grid gap-2">
         <h2 className="text-lg font-semibold">{t('projectsBySaldo')}</h2>
