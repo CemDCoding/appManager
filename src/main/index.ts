@@ -13,6 +13,7 @@ import {
 } from './security'
 import { StorageError, consoleLogger } from './storage/errors'
 import { DataService } from './storage/service'
+import { setupTransfer } from './transfer'
 import { createMainWindow } from './window'
 
 // Dev-Server nur, wenn die App nicht paketiert ist und die URL lokal ist.
@@ -120,6 +121,14 @@ if (!app.requestSingleInstanceLock()) {
     setupPdfExport({
       ipcMain,
       devServerUrl,
+      isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
+      parentWindow: () => mainWindow,
+      log: consoleLogger
+    })
+    setupTransfer({
+      ipcMain,
+      store: () => dataService.store,
+      appVersion: app.getVersion(),
       isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
       parentWindow: () => mainWindow,
       log: consoleLogger
