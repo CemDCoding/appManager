@@ -2,6 +2,7 @@ appId: de.cemdogan.appmanager
 productName: appManager
 directories:
   output: release
+  buildResources: build
 files:
   - out/**
   - package.json
@@ -11,4 +12,10 @@ win:
       arch: x64
 nsis:
   oneClick: false
+  perMachine: false
   allowToChangeInstallationDirectory: true
+  createStartMenuShortcut: true
+  createDesktopShortcut: false
+  # Uninstall never touches the data folder (it lives outside the install folder).
+  deleteAppDataOnUninstall: false
+  include: build/installer.nsh
