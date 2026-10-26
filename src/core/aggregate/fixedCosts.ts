@@ -58,7 +58,7 @@ export function monthlyFixedCosts(
   date: string
 ): MonthlyFixedCosts {
   if (!isValidDateString(date)) throw new RangeError(`Invalid date: ${date}`)
-  const perProject = new Map<string, number>(projects.map((p) => [p.id, 0]))
+  const allocated: { projectId: string; cents: number }[] = []
   let totalCents = 0
   let unallocatedCents = 0
   const errors: FixedCostsError[] = []
@@ -77,16 +77,20 @@ export function monthlyFixedCosts(
     totalCents = safe(totalCents + monthly)
     for (const part of splitOnto(monthly, activeShares(e.allocation, projects, date))) {
       if (part.projectId === null) unallocatedCents = safe(unallocatedCents + part.cents)
-      else perProject.set(part.projectId, safe((perProject.get(part.projectId) ?? 0) + part.cents))
+      else allocated.push({ projectId: part.projectId, cents: part.cents })
     }
   }
 
   return {
     totalCents,
-    byProject: projects.map((p) => ({ projectId: p.id, cents: perProject.get(p.id) ?? 0 })),
+    byProject: projects.map((p) => ({ projectId: p.id, cents: sumFor(allocated, p.id) })),
     unallocatedCents,
     errors
   }
+}
+
+function sumFor(parts: readonly { projectId: string; cents: number }[], id: string): number {
+  return parts.reduce((sum, a) => (a.projectId === id ? safe(sum + a.cents) : sum), 0)
 }
 
 function safe(n: number): number {
