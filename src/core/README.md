@@ -14,6 +14,8 @@ Reiner TypeScript-Kern ohne Electron, React, Dateien, Uhr oder Zufall. „Heute�
 | `aggregate/fixedCosts.ts`  | `monthlyFixedCosts` – Kennzahl „Fixkosten pro Monat“ (PE-51)                                                                   |
 | `aggregate/display.ts`     | `toDisplay` – EUR-Cent in Anzeigewährung (PE-13, PE-50)                                                                        |
 | `metrics/metrics.ts`       | `personSummary`, `campaignKpis`, `campaignUsersByProject`, `campaignRanking`, `userMetrics` – Kennzahlen (PE-36, PE-49, PE-52) |
+| `forecast/forecast.ts`     | `forecast` – 12-Monats-Prognose, `breakEven` – Break-even je Projekt/Portfolio (PE-29, PE-30)                                  |
+| `goals/goals.ts`           | `goalProgress` – Zielfortschritt aller Zielarten (PE-53)                                                                       |
 
 ## Rechenreihenfolge je Buchung (PE-50)
 
@@ -62,3 +64,27 @@ Alles Ganzzahl (BigInt, wo Produkte den sicheren Bereich verlassen können), Run
 - `campaignUsersByProject(campaign, projects)` → Nutzer wie die Kosten verteilt (aktive Projekte am Startdatum, Größter-Rest auf ganze Nutzer, PE-49); ohne aktives Projekt ein Teil mit `projectId: null`.
 - `campaignRanking(campaigns, by)` → `{ items, errors }`; `costPerUser`: günstigste zuerst, ohne Wert zuletzt; `rating`: meiste Sterne zuerst; stabil bei Gleichstand. Nicht umrechenbare Kampagnen stehen in `errors`.
 - `userMetrics(snapshots, ledger, campaigns, projectId | undefined, range, projects)` nach PE-52. Letzter Stand = je Projekt der jüngste Stichtag ≤ `range.to` (Portfolio: Summe). Zuwachs = Gesamtnutzer letzter Stand − Stand davor (jüngster Stichtag vor `range.from`, sonst erster Stichtag im Zeitraum; kann negativ sein). Kosten pro Nutzer = Ausgaben (inkl. Kampagnen) / Zuwachs; Einnahmen pro zahlendem Nutzer = Einnahmen / zahlende Nutzer am letzten Stand; Kampagnenanteil = Kampagnen-Nutzer (Start im Zeitraum, je Projekt dessen Anteil) / Zuwachs in Basispunkten. Zuwachs ≤ 0 oder fehlende Daten → `null`. `projects` wird nur zur Verteilung der Kampagnen-Nutzer auf ein Projekt gebraucht.
+
+## Prognose (PE-30)
+
+`forecast({ projects, expenses, incomes }, today, months = 12)`: alle **wiederkehrenden** Ausgaben und Einnahmen von morgen (`today` + 1) bis zum Monatsletzten des Monats `months` nach dem heutigen Monat. Einmalige Buchungen und Kampagnen gehören nicht dazu. Gebucht wird wie in `buildLedger` („wie gezahlt“, PE-29): voller Betrag am Fälligkeitstag mit dem dann gültigen Preis, Snapshot-Kurs, Aufteilung auf die am Fälligkeitstag aktiven Projekte (PE-50); Einnahmen ohne Aktivitätsprüfung (PE-58). Ergebnis `{ today, from, to, months, errors }`; `months` enthält jeden Monat (auch leere) mit `incomeCents`, `expenseCents`, `balanceCents` und `byProject` (Projektliste-Reihenfolge, `null` = unzugeordnet zuletzt). `months` 1–120, sonst `RangeError`.
+
+- heute 26.10.2026 → 27.10.2026 bis 31.10.2027 (Rest Oktober + 12 volle Monate); heute 31.10.2026 → genau 12 Monate November bis Oktober.
+- Jahresabo 120,00 € mit Fälligkeit 15.03. → nur im März 2027 120,00 €.
+- Projekt endet in der Prognose → ab dem Folgetag erhalten nur noch die übrigen aktiven Projekte Anteile (ohne aktives Projekt: `null`).
+
+`breakEven(ledgerHistory, forecast, projectId)`: erster Monat, in dem die kumulierten Einnahmen ≥ kumulierten Ausgaben sind, ab dem ersten Monat mit einer Buchung (Ausgaben entstehen nie vor dem Projektstart). Historie zählt nur bis `forecast.today` (keine Doppelzählung), danach die Prognose. Ergebnis `{ reachedAt: 'YYYY-MM' }` (Historie allein reicht), `{ expectedAt: 'YYYY-MM' }` (erst mit Prognose) oder `'notInSight'` (auch ohne Buchungen). `projectId: null` = Portfolio inkl. unzugeordneter Einträge. Exakte Ganzzahlrechnung (BigInt).
+
+## Ziele (PE-53)
+
+`goalProgress(goal, { ledger, forecast, userMetrics }, today)` → `{ value, target, ratio, status }`. `ratio` in Basispunkten 0–10 000, **abgerundet** (10 000 nur wenn erfüllt). Bezugstag `ref = min(today, dueDate)`: nach dem Stichtag bleibt der Stand am Stichtag. `forecast` muss für dasselbe `today` erstellt sein (sonst `RangeError`). `projectId: null` = Portfolio.
+
+| Art         | `value`                                         | `target`               | erreicht, wenn                                     |
+| ----------- | ----------------------------------------------- | ---------------------- | -------------------------------------------------- |
+| `revenue`   | Einnahmen von `fromDate` (inkl.) bis `ref`      | `targetValue` (Cent)   | value ≥ target                                     |
+| `breakEven` | kumulierte Einnahmen bis `ref`                  | kumulierte Ausgaben    | Break-even erreicht (`reachedAt`) ≤ Stichtagsmonat |
+| `users`     | letzter `usersTotal` ≤ `ref` (Portfolio: Summe) | `targetValue` (Nutzer) | value ≥ target                                     |
+| `costLimit` | Ausgaben im Monat von `ref`, 1. bis `ref`       | `targetValue` (Cent)   | value ≤ target, sonst sofort `missed`              |
+| `free`      | 1 wenn `done`, sonst 0                          | 1                      | `done`                                             |
+
+Status sonst `missed`, wenn heute nach dem Stichtag liegt, andernfalls `open` (am Stichtag selbst noch `open`; ohne Stichtag nie `missed`). Ziel ohne Daten: `value` 0. Zielwert 0: `revenue`/`users` erreicht (Ratio 10 000); `costLimit` Ratio 0 ohne Kosten, sonst 10 000. Erwarteter Break-even (`expectedAt`) zählt nicht als erreicht.
