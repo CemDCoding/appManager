@@ -1,7 +1,7 @@
-import { ComingSoon, type ProjectTabProps } from '../ComingSoon'
+import type { ProjectTabProps } from '../ComingSoon'
+import { UserMetricsView } from './UserMetricsView'
 
-/** Platzhalter: Nutzerzahlen eines Projekts (AP-19). */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/** Reiter „Nutzerzahlen“ eines Projekts (AP-19). */
 export function ProjectTab({ projectId }: ProjectTabProps) {
-  return <ComingSoon />
+  return <UserMetricsView projectId={projectId} />
 }
