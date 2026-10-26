@@ -174,34 +174,53 @@ describe('goalProgress – costLimit', () => {
   ]
   const data = dataOf({ expenses })
 
-  it('counts expenses of the current month up to today; within the limit = achieved', () => {
+  it('without due date the goal stays open; value and ratio are computed', () => {
     expect(goalProgress(goal('costLimit', { targetValue: 8_000 }), data, TODAY)).toEqual({
       value: 4_000,
       target: 8_000,
       ratio: 5_000,
-      status: 'achieved'
+      status: 'open'
     })
   })
 
-  it('above the limit = missed, ratio capped', () => {
-    expect(
-      goalProgress(goal('costLimit', { projectId: null, targetValue: 4_000 }), data, TODAY)
-    ).toEqual({ value: 5_000, target: 4_000, ratio: 10_000, status: 'missed' })
+  it('before the due date over the limit = open, ratio capped', () => {
+    const g = goal('costLimit', { projectId: null, targetValue: 4_000, dueDate: '2026-10-31' })
+    expect(goalProgress(g, data, TODAY)).toEqual({
+      value: 5_000,
+      target: 4_000,
+      ratio: 10_000,
+      status: 'open'
+    })
   })
 
-  it('after the due date the month of the due date counts', () => {
+  it('due date = today is still open', () => {
+    const g = goal('costLimit', { targetValue: 8_000, dueDate: TODAY })
+    expect(goalProgress(g, data, TODAY)).toMatchObject({ value: 4_000, status: 'open' })
+  })
+
+  it('after the due date the month of the due date decides: within the limit = achieved', () => {
     const g = goal('costLimit', { targetValue: 100_000, dueDate: '2026-09-30' })
     expect(goalProgress(g, data, TODAY)).toMatchObject({ value: 99_999, status: 'achieved' })
   })
 
-  it('limit 0: no costs = achieved with ratio 0, any cost = missed with ratio 10 000', () => {
-    expect(goalProgress(goal('costLimit', { targetValue: 0 }), EMPTY, TODAY)).toEqual({
+  it('after the due date above the limit = missed', () => {
+    const g = goal('costLimit', { targetValue: 99_998, dueDate: '2026-09-30' })
+    expect(goalProgress(g, data, TODAY)).toMatchObject({
+      value: 99_999,
+      ratio: 10_000,
+      status: 'missed'
+    })
+  })
+
+  it('limit 0 after the due date: no costs = achieved with ratio 0, any cost = missed with ratio 10 000', () => {
+    const due = { targetValue: 0, dueDate: '2026-10-25' }
+    expect(goalProgress(goal('costLimit', due), EMPTY, TODAY)).toEqual({
       value: 0,
       target: 0,
       ratio: 0,
       status: 'achieved'
     })
-    expect(goalProgress(goal('costLimit', { targetValue: 0 }), data, TODAY)).toMatchObject({
+    expect(goalProgress(goal('costLimit', due), data, TODAY)).toMatchObject({
       ratio: 10_000,
       status: 'missed'
     })
