@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-26 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 28 Arbeitspaketen (~47 h Agent-Zeit).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 30 Arbeitspaketen (~48,5 h Agent-Zeit).
 
 ---
 
@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M1 W1 und W1b (AP-09, AP-10, AP-28) und W2 (AP-11–AP-15) in `dev` gemergt, Review Runde 1 bestanden; 440/440 Tests (38 Dateien), lint/typecheck/build grün, `dev` gepusht
-- **Fertig:** AP-01–AP-15, AP-28 · **Offen:** M0-DEP und M1-DEP [Mensch]; M2 W1: AP-16 (opus, M) und AP-21 (sonnet, M) `bereit`, AP-17–AP-19 und M2-DEP offen
+- **Stand:** 2026-10-26 · M0-DEP und M1-DEP [Mensch] vom Nutzer bestanden (Smoke-Tests abgehakt); Plan um AP-29 und AP-30 (M1 W4) erweitert
+- **Fertig:** AP-01–AP-15, AP-28, M0-DEP, M1-DEP · **Bereit:** AP-16, AP-21 (M2 W1), AP-29, AP-30 (M1 W4) · **Offen:** AP-17–AP-20, AP-22–AP-27, M2-DEP bis M4-DEP
 - **Unterbrochen oder laufend:** nichts. Kein Coder läuft.
-- **Erkenntnisse:** `.gitignore`/`.prettierignore` nur verankert (`/data/`, `/data-dev/`); Coder dürfen sie nicht ändern, Befund im Merge-Check → Merge von Hand. Bausteine und Hooks aus AP-10 liegen in `dev`. `ExpenseForm` (AP-14) ist Vertrag für AP-17. Details §18
-- **Nächster Schritt:** M1-DEP [Mensch] (Smoke-Test §9.2, Seed-Szenario-Abgleich). Lead-Handtest Kernfluss mit Seed-Daten (§9.2). Danach M2 W1 starten: AP-16 und AP-21
-- **Offene Nutzerpunkte:** M0-DEP (H-03, Test-Datenordner); PE-56 bestätigen; Radix-Abweichung AP-04 (§16); Vitest-Konfiguration und Branch-Abdeckung AP-09 (§16); Werbung im Ausgabenformular (§16); Q-09 Einnahmen ohne Aktivitätsprüfung
+- **Erkenntnisse:** Merges `dev` → `stage` → `master` für M0/M1 noch nicht erfolgt (H-06 teilweise). Nutzer-Entscheidungen: PE-56, PE-57 (Radix-Abweichung AP-04), PE-58 (Q-09 Einnahmen). Originalbetrag-Spalte und Werbung-Kategorie im Ausgabenformular werden in AP-29 bereinigt (PE-59, PE-60). `fixedCosts` liegt in `src/core/aggregate/`; Abdeckung in AP-30. Details §18
+- **Nächster Schritt:** Lead startet AP-29 und AP-30 parallel (M1 W4), danach Merge und M2 W1 (AP-16, AP-21). H-05 Designer-Gespräch ist fällig (blockiert nur Design-Pakete)
+- **Offene Nutzerpunkte:** Merges `dev` → `stage` → `master` für M0/M1 (H-06, Anleitung §9.2); Zweiturteil bestätigen (§16); Bestätigung „Werbung nicht wählbar“ (PE-60, angenommen); Seed-Szenario-Abgleich (AP-12, AP-15), falls nicht im Smoke-Test geprüft; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
 
 ### Rollen und Dokumente
 
@@ -76,7 +76,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
 | 12 | Arbeitspakete | fertig (M0–M4) | – | G2 ✔ (M0–M4) |
-| 13 | Menschliche Schritte | fertig | – (H-01, H-07 erledigt) | G2 ✔ |
+| 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-06 teilweise) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
 | 16 | Planungsentscheidungen und offene Fragen | laufend | – | laufend |
@@ -377,7 +377,7 @@ flowchart TD
 
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
-| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version) und AP-28 (`tsconfig.web.json`, `.env.example`) | M0 W1, M1 W1, M4 W1 |
+| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version), AP-28 (`tsconfig.web.json`, `.env.example`) und AP-30 (`vitest.config.ts`, nur Coverage-Include) | M0 W1, M1 W1, M1 W4, M4 W1 |
 | `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`) | M1 W1 (AP-28) |
 | `electron-builder.yml` | AP-01, später AP-27 | M0 W1, M4 W1 |
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
@@ -387,6 +387,8 @@ flowchart TD
 | `src/renderer/app/routes.tsx`, `src/renderer/app/Layout.tsx` | AP-04 | M0 W2 |
 | `src/renderer/components/ui/**` (shadcn) | AP-04 legt Grundsatz an; AP-10 ergänzt | M0 W2, M1 W1b |
 | `src/renderer/styles/globals.css` (Design-Variablen) | AP-01 → AP-04; später Design-Pakete | – |
+| `src/renderer/features/bookings/**` | AP-14 (Formulare, Listen); AP-29 (Originalbetrag-Spalte, Kategorie-Filter, Hinweis Einnahmen) | M1 W2, M1 W4 |
+| `src/core/aggregate/fixedCosts.test.ts` und `src/core/aggregate/fixedCosts*.test.ts` (nur Tests) | AP-30 | M1 W4 |
 
 ---
 
@@ -431,11 +433,11 @@ flowchart TD
 ##### M0-DEP – Deployment [Mensch]
 
 - **Smoke-Test:**
-  - [ ] Installer lässt Zielordner auf `D:` wählen und installiert
-  - [ ] App startet, Seitenleiste zeigt alle Bereiche, Hell/Dunkel umschaltbar
-  - [ ] Beim Start entsteht im Datenordner ein Backup (`backups/`)
-  - [ ] Ungültige JSON-Datei im Testordner → App meldet Fehler, überschreibt nicht
-  - [ ] Kein Netzwerkzugriff (z. B. offline starten, alles funktioniert)
+  - [x] Installer lässt Zielordner auf `D:` wählen und installiert
+  - [x] App startet, Seitenleiste zeigt alle Bereiche, Hell/Dunkel umschaltbar
+  - [x] Beim Start entsteht im Datenordner ein Backup (`backups/`)
+  - [x] Ungültige JSON-Datei im Testordner → App meldet Fehler, überschreibt nicht
+  - [x] Kein Netzwerkzugriff (z. B. offline starten, alles funktioniert)
 
 #### M1 – Prototyp
 
@@ -444,26 +446,27 @@ flowchart TD
 | W1 | AP-09, AP-28 |
 | W1b | AP-10 (vorgezogen, startet nach AP-28, weil es die `window.api`-Typen braucht) |
 | W2 | AP-11, AP-12, AP-13, AP-14, AP-15 |
-| W3 | M1-DEP [Mensch], danach H-05 Designer-Gespräch |
+| W3 | M1-DEP [Mensch] (erledigt 2026-10-26), danach H-05 Designer-Gespräch |
+| W4 | AP-29, AP-30 (Aufräumen M1 und Branch-Abdeckung; nach M1-DEP, vor M2 W1) |
 
 **Integration:** nach W2 mit Seed-Daten Kernfluss von Hand: Projekt anlegen → Dienst mit Kosten → Ausgabe auf „alle“ → Einnahme → Übersicht prüfen.
 
 ##### M1-DEP – Deployment [Mensch]
 
 - **Smoke-Test:**
-  - [ ] Projekt mit Phase, Plattformen, Links anlegen, bearbeiten, archivieren
-  - [ ] Kurs „1 USD = x EUR“ eintragen; USD-Ausgabe übernimmt den Kurs
-  - [ ] 100 € Lizenz auf 3 Projekte → 33,34 / 33,33 / 33,33
-  - [ ] Monatsabo am 31. → im Februar am Monatsletzten fällig
-  - [ ] Dienst auf 2 Projekte geteilt, in beiden Projektseiten sichtbar
-  - [ ] Anzeigewährung auf USD → alle Beträge umgerechnet
-  - [ ] Übersicht: Einnahmen − Ausgaben = Saldo stimmt
+  - [x] Projekt mit Phase, Plattformen, Links anlegen, bearbeiten, archivieren
+  - [x] Kurs „1 USD = x EUR“ eintragen; USD-Ausgabe übernimmt den Kurs
+  - [x] 100 € Lizenz auf 3 Projekte → 33,34 / 33,33 / 33,33
+  - [x] Monatsabo am 31. → im Februar am Monatsletzten fällig
+  - [x] Dienst auf 2 Projekte geteilt, in beiden Projektseiten sichtbar
+  - [x] Anzeigewährung auf USD → alle Beträge umgerechnet
+  - [x] Übersicht: Einnahmen − Ausgaben = Saldo stimmt
 
 #### M2 – Menschen & Marketing
 
 | Welle | Pakete (parallel) |
 |---|---|
-| W1 | AP-16, AP-21 (beide dürfen vorgezogen parallel zu M1 W2 laufen, wenn Plätze frei sind) |
+| W1 | AP-16, AP-21 (nach dem Merge von AP-29 und AP-30, M1 W4) |
 | W2 | AP-17, AP-18, AP-19 |
 | W3 | M2-DEP [Mensch] |
 
@@ -525,7 +528,7 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-06 | Kern: Wiederholung, Aktivzeitraum | M0 | CORE | W3 | AP-02 | M | opus | c2 | fertig |
 | AP-07 | Speicher, Backups, IPC, Preload | M0 | MAIN | W3 | AP-02, AP-03 | L | opus | c3 | fertig |
 | AP-08 | Seed-Testdaten | M0 | OPS | W3 | AP-02 | S | sonnet | c4 | fertig |
-| M0-DEP | Deployment M0 | M0 | HUM | W4 | AP-01–AP-08 | H | – | Nutzer | offen |
+| M0-DEP | Deployment M0 | M0 | HUM | W4 | AP-01–AP-08 | H | – | Nutzer | fertig |
 | AP-09 | Kern: Buchungs-Engine und Aggregation | M1 | CORE | W1 | AP-05, AP-06 | L | opus | – | fertig |
 | AP-28 | Vertragslücken schließen | M1 | MAIN+SH+CORE+OPS | W1 | AP-02, AP-07 | S | sonnet | – | fertig |
 | AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1b | AP-04, AP-07, AP-28 | L | sonnet | c1 | fertig |
@@ -534,9 +537,11 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-13 | Dienste | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | c3 | fertig |
 | AP-14 | Ausgaben und Einnahmen | M1 | UI | W2 | AP-09, AP-10 | L | sonnet | c4 | fertig |
 | AP-15 | Einfache Übersicht (Startseite v1) | M1 | UI | W2 | AP-09, AP-10 | S | sonnet | c5 | fertig |
-| M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15, AP-28 | H | – | Nutzer | offen |
-| AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | offen |
-| AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | offen |
+| M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15, AP-28 | H | – | Nutzer | fertig |
+| AP-29 | Aufräumen M1 (Originalbetrag, Werbung, Q-09-Hinweis, Texte) | M1 | UI | W4 | AP-11–AP-15 | S | sonnet | – | bereit |
+| AP-30 | Branch-Abdeckung fixedCosts ≥ 95 %, Coverage-Include | M1 | CORE+OPS | W4 | AP-09 | S | sonnet | – | bereit |
+| AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | bereit |
+| AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | bereit |
 | AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | offen |
 | AP-18 | Werbekampagnen | M2 | UI | W2 | AP-16 | M | sonnet | – | offen |
 | AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | – | offen |
@@ -568,6 +573,8 @@ flowchart LR
     AP10["AP-10"]
     AP09 & AP10 --> AP12["AP-12"] & AP13["AP-13"] & AP14["AP-14"] & AP15["AP-15"]
     AP10 --> AP11["AP-11"]
+    AP11 & AP12 & AP13 & AP14 & AP15 --> AP29["AP-29"]
+    AP09 --> AP30["AP-30"]
   end
   subgraph M2["M2 Menschen & Marketing"]
     AP16["AP-16"] --> AP17["AP-17"] & AP18["AP-18"] & AP19["AP-19"]
@@ -591,6 +598,8 @@ flowchart LR
   AP07 & AP11 --> AP25
   AP24 --> AP25 & AP26 & AP27
 ```
+
+**Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1045,6 +1054,60 @@ flowchart LR
 - **Kürzbar bei Budgetnot:** ja (wird in AP-23 ersetzt; dann zeigt M1 nur Projektseiten)
 - **Commit-Typ:** `feat(AP-15): add simple overview`
 
+#### AP-29 – Aufräumen M1
+
+- **Meilenstein, Lane, Welle:** M1 · UI · W4
+- **Ziel:** Nutzerwünsche und Befunde aus den M1-Reviews bereinigen: Originalbetrag-Spalte entfällt, Werbung im Ausgabenformular nicht wählbar, Hinweis bei Einnahmen außerhalb des Aktivzeitraums, ehrlichere Texte, ungenutzte Schlüssel weg, Längen aus `@shared/limits`, doppelte Ladelogik zusammengeführt.
+- **Pflichtlektüre:** PE-05, PE-26, PE-47, PE-50, PE-54, PE-58, PE-59, PE-60, §18 (Erkenntnisse AP-13, AP-14)
+- **Abhängigkeiten:** AP-11, AP-12, AP-13, AP-14, AP-15 (alle `fertig`)
+- **Parallel möglich mit:** AP-30
+- **Dateien (Eigentum):** `src/renderer/features/bookings/**` (u. a. `BookingTable.tsx`, `list-logic.ts` + Test, `ExpenseForm.tsx`, `IncomeForm.tsx`, `BookingFields.tsx`, `i18n.ts`), `src/renderer/pages/expenses/**`, `src/renderer/pages/incomes/**`, `src/renderer/pages/services/**`, `src/renderer/pages/home/**`, `src/renderer/pages/settings/**`, `src/renderer/pages/projects/ProjectFormDialog.tsx` (+ Test, falls vorhanden)
+- **Nicht anfassen:** `src/shared/**` (u. a. `lists.ts`: `advertising` bleibt in der Liste, Kern und Ledger nutzen sie), `src/core/**`, `src/main/**`, `src/preload/**`, `src/renderer/components/**`, `src/renderer/i18n/shared-keys.ts`, übrige `src/renderer/pages/projects/**` (die Detailseite mit dem Tooltip „Original“ bleibt unverändert, PE-59), `package.json`, `vitest.config.ts`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. **Originalbetrag entfällt (a, PE-59):** Spalte `original` in `BookingTable.tsx` (Kopf `columnOriginal`, Sortierung, Zelle) und die Schlüssel in `features/bookings/i18n.ts` entfernen. `list-logic.ts` behält das Feld `original` im Datensatz, nur die Anzeige entfällt. Formulare zeigen den Originalbetrag weiter. Tests anpassen.
+  2. **Werbung nicht wählbar (b, PE-60):** im Ausgabenformular (`ExpenseForm.tsx` bzw. `BookingFields.tsx`) die Kategorie `advertising` aus den wählbaren Optionen nehmen. Bestehende Buchungen mit dieser Kategorie zeigen Kategorie und Liste weiter korrekt an (Anzeige-Label bleibt). `src/shared/lists.ts` bleibt unverändert, der Filter sitzt nur im Renderer.
+  3. **Hinweis Einnahmen (c, PE-58, Q-09):** `IncomeForm.tsx`: Liegt das gewählte Buchungsdatum außerhalb des Aktivzeitraums des gewählten Projekts (Regel aus `@core/projects/activePeriod`), erscheint ein Hinweistext am Datumsfeld. Speichern bleibt möglich, keine Blockade. Text über i18n (de/en).
+  4. **Texte (d):** `deleteKeep` in `pages/services/i18n.ts` (de und en) so formulieren, dass klar ist: der Dienst wird gelöscht, die Kosten bleiben (z. B. „Kosten behalten (Dienst wurde gelöscht, Ausgaben bleiben ohne Dienst-Verknüpfung)“). Ungenutzte Schlüssel entfernen: home `title`, `loadFailed` (`pages/home/i18n.ts`), services `unknownService`, `loadError` (`pages/services/i18n.ts`), settings `displaySaved` (`pages/settings/i18n.ts`). Vor dem Entfernen jeden Schlüssel suchen. Wird einer doch genutzt, bleibt er, und der Fund geht an den Lead. `loadError` in `pages/settings/RatesSection.tsx` ist eine lokale Variable, kein Schlüssel.
+  5. **Kommentar (d):** Kommentar in `pages/home/overview.ts` an den tatsächlichen Code angleichen, ohne Verhaltensänderung.
+  6. **Längen (d):** in `pages/projects/ProjectFormDialog.tsx` hartkodierte Längen durch die Konstanten aus `@shared/limits` ersetzen. Die Werte bleiben gleich, sonst ist es ein Befund.
+  7. **Ladelogik (d):** in `pages/settings/DataSection.tsx` die doppelte Ladelogik zu einer Funktion oder einem Hook zusammenführen, Verhalten gleich.
+- **Schnittstellen:** keine neuen. Nutzt die Props von `ExpenseForm` und `IncomeForm` (AP-14). AP-17 nutzt `ExpenseForm`; die Kategorieauswahl ändert sich, der Vertrag bleibt.
+- **Akzeptanzkriterien:** Ausgaben- und Einnahmenlisten zeigen keine Originalbetrag-Spalte, Formulare zeigen den Originalbetrag weiter. `advertising` ist im Ausgabenformular nicht wählbar, Bestandsbuchungen mit dieser Kategorie werden angezeigt. Einnahme außerhalb des Aktivzeitraums zeigt den Hinweis, Speichern gelingt. Die in d) genannten Schlüssel sind entfernt (Suche belegt es). `ProjectFormDialog` nutzt `@shared/limits`. `npm run lint`, `npm run typecheck`, `npm test` grün; de/en haben gleiche Schlüssel.
+- **Tests:** Vitest für die Listen-Logik ohne Originalspalte (`list-logic`), die Kategorieauswahl ohne `advertising` und die Prüfung des Aktivzeitraums (reine Hilfsfunktionen). Rendering-Tests nicht nötig.
+- **Review-Schwerpunkte:** keine Rechenlogik in der UI, i18n vollständig (de/en), keine Verhaltensänderung außer den genannten Punkten, ehrlicher Löschtext.
+- **Design-Review:** nein (PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** S · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (Nutzerwunsch, Abschluss M1)
+- **Commit-Typ:** `chore(AP-29): tidy up M1 lists and texts`
+
+#### AP-30 – Branch-Abdeckung fixedCosts und Coverage-Konfiguration
+
+- **Meilenstein, Lane, Welle:** M1 · CORE+OPS · W4
+- **Ziel:** Verzweigungsabdeckung der monatlichen Fixkosten auf mindestens 95 % bringen und die Coverage-Warnung „Failed to parse src/core/README.md“ beheben.
+- **Pflichtlektüre:** PE-24, PE-51, PE-55, §18 (Befund AP-09, Erkenntnis M1 zu `monthlyFixedCosts`), `src/core/README.md`, `src/core/aggregate/fixedCosts.ts`
+- **Abhängigkeiten:** AP-01, AP-09 (beide `fertig`)
+- **Parallel möglich mit:** AP-29
+- **Dateien (Eigentum):** `src/core/aggregate/fixedCosts.test.ts` und neue Testdateien `src/core/aggregate/fixedCosts*.test.ts`, `vitest.config.ts` (nur der Eintrag `coverage.include`)
+- **Nicht anfassen:** Quelldateien in `src/core/**` (auch `fixedCosts.ts`), übrige Tests, `src/core/README.md`, `package.json`, `src/renderer/**`, übrige Konfigurationen
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `vitest.config.ts`: `coverage.include` von `src/core/**` auf `src/core/**/*.ts` einschränken. Der Test-Include bleibt unverändert. Ergebnis: keine Warnung „Failed to parse“.
+  2. Tests in `fixedCosts.test.ts` (oder einer Zusatzdatei im selben Ordner) ergänzen, bis die Branch-Abdeckung von `src/core/aggregate/fixedCosts.ts` mindestens 95 % erreicht. Abzudecken sind u. a. Tagesfrequenz, Wochenfrequenz, Jahresfrequenz, Schaltjahr (Februar), Enddatum vor und nach dem Stichtag, Preisänderung, nicht aktives Projekt, Fehlerwerte.
+  3. Deckt ein Test ein echtes Rechenproblem auf, ändert der Coder den Code nicht. Er meldet den Fund an den Lead.
+- **Schnittstellen:** keine.
+- **Akzeptanzkriterien:** `npm run test:coverage` ohne Warnung zu `src/core/README.md`. Branch-Abdeckung von `fixedCosts.ts` mindestens 95 %. Zeilenabdeckung `src/core/**` bleibt bei der Schwelle von 95 %. `npm run lint`, `npm run typecheck`, `npm test` grün.
+- **Tests:** Vitest-Fälle wie unter 2.
+- **Review-Schwerpunkte:** nur Tests und Config; keine Änderung an Rechenregeln (PE-51, Rundungsabweichung höchstens 1 Cent wie dokumentiert); keine echten Daten in Testfällen (R2).
+- **Design-Review:** nein
+- **Doku-Pflichten:** keine
+- **Aufwand:** S · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (Abnahmeziel PE-55)
+- **Commit-Typ:** `test(AP-30): cover fixedCosts branches and limit coverage to ts`
+
 ### M2 – Menschen & Marketing
 
 #### AP-16 – Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen
@@ -1344,10 +1407,10 @@ flowchart LR
 | H-01 | `LICENSE` anlegen: Text von PolyForm Noncommercial 1.0.0 (polyformproject.org) einfügen, Zeile `Required Notice: Copyright Cem Dogan (https://github.com/CemDCoding/appManager)` ergänzen, auf `dev` committen | vor dem ersten Push durch den Lead (PE-45) | erster Push, AP-27, G3 | ☑ |
 | H-07 | `idee.txt` löschen (PE-44) | sofort | – | ☑ |
 | H-02 | GitHub-Repo `CemDCoding/appManager` anlegen und als `origin` eintragen | sofort | Push durch Lead | ☑ |
-| H-03 | Test-Datenordner für stage anlegen (Kopie von `data-dev/` nach `npm run seed`) | M0-DEP | Smoke-Tests | ☐ |
+| H-03 | Test-Datenordner für stage anlegen (Kopie von `data-dev/` nach `npm run seed`) | M0-DEP | Smoke-Tests | ☑ |
 | H-04 | Echten Datenordner auf `D:` anlegen (außerhalb des Projekts) und in der App wählen | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
 | H-05 | Designer-Gespräch nach M1: `start-agent.ps1 -Project "D:\Private Projekte\appManager" -Role designer`; danach beauftragt der Lead den Planner mit „Design übernehmen“ | nach M1-DEP | Design-Pakete (folgen) | ☐ |
-| H-06 | Smoke-Tests M0–M4 laut §9 und Merges `dev` → `stage` → `master` | je Meilenstein | nächster Meilenstein | ☐ |
+| H-06 | Smoke-Tests M0–M4 laut §9 und Merges `dev` → `stage` → `master` | je Meilenstein | nächster Meilenstein | ☐ teilweise: Smoke-Tests M0 und M1 bestanden (2026-10-26); Merges `dev` → `stage` → `master` für M0/M1 noch offen (Anleitung §9.2, PE-42). Auf GitHub steht `stage` auf dem dev-Stand 205f5c3 |
 
 ---
 
@@ -1356,13 +1419,15 @@ flowchart LR
 | Meilenstein | Pakete | Agent-Aufwand | Geschätzte 5-h-Fenster bei 30 % Team-Budget |
 |---|---|---|---|
 | M0 | 8 (5 opus) | 13,25 h | 4–5 |
-| M1 | 8 (1 opus) | 13,5 h | 3–4 |
+| M1 | 10 (1 opus) | 15 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 4 (1 opus) | 9 h | 2–3 |
 | M4 | 3 (1 opus) | 3,75 h | 1 |
-| **Gesamt** | **28** | **47 h** + Reviews | **12–15** |
+| **Gesamt** | **30** | **48,5 h** + Reviews | **12–15** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
+
+**Nachtrag 2026-10-26:** AP-29 und AP-30 (je S, 0,75 h) sind in der M1-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. 5 parallele Coder (PE-23) erreichen den Zielwert von 30 % schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1456,7 +1521,12 @@ flowchart LR
 | PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei) | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-55 | `@vitest/coverage-v8` (MIT) freigegeben, Abdeckung wird gemessen (`npm run test:coverage`) | Abnahmekriterium ≥ 95 % | Nutzer am 2026-10-25 |
-| PE-56 | Dev-Modus: Datenpfad nur über `APP_DATA_DIR` oder `<repo>/data-dev`; die gespeicherte Wahl (`userData/config.json`) gilt nur in der paketierten App. Verfeinert die Umsetzung von PE-18, ändert PE-18 nicht. | Review-Befunde AP-02/05/06/07: Dev-Läufe dürfen nie auf einen gewählten echten Datenordner zeigen (R2, RI-6) | Lead-Auftrag „Wellenabschluss M0“ am 2026-10-25; Nutzer-Bestätigung offen |
+| PE-56 | Dev-Modus: Datenpfad nur über `APP_DATA_DIR` oder `<repo>/data-dev`; die gespeicherte Wahl (`userData/config.json`) gilt nur in der paketierten App. Verfeinert die Umsetzung von PE-18, ändert PE-18 nicht. | Review-Befunde AP-02/05/06/07: Dev-Läufe dürfen nie auf einen gewählten echten Datenordner zeigen (R2, RI-6) | Lead-Auftrag „Wellenabschluss M0“ am 2026-10-25; Nutzer am 2026-10-26 bestätigt |
+| PE-57 | Abweichung von PE-21: AP-04 baut Dialog, Select, Tabs u. a. nativ, ohne weitere Radix-Pakete (`package.json` nur `@radix-ui/react-slot`). Gilt für alle UI-Pakete. Fokusfalle und Tastaturbedienung der Dialoge bleiben Review-Punkte. | keine neuen Abhängigkeiten; Barrierefreiheit wird im Review geprüft | Nutzer am 2026-10-26 (bestätigt; Vorschlag Planner aus M0) |
+| PE-58 | Einnahmen werden ohne Aktivitätsprüfung gebucht (die Einnahme gehört zum gewählten Projekt). Liegt das Buchungsdatum außerhalb des Aktivzeitraums des Projekts, zeigt die UI einen Hinweis; keine Blockade. Gilt für `IncomeForm` (AP-29 c). Die Aufteilung von Ausgaben bleibt nach PE-50. | Q-09 | Nutzer am 2026-10-26 |
+| PE-59 | Die Spalte „Originalbetrag“ entfällt in den Ausgaben- und Einnahmenlisten. Der Originalbetrag bleibt im Datensatz und im Formular. Die Projektdetailseite bleibt unverändert. | Übersichtlichkeit der Listen | Nutzer am 2026-10-26 (Wunsch, über Lead) |
+| PE-60 | Die Ausgabenkategorie „Werbung“ (`advertising`) ist im Ausgabenformular nicht wählbar; bestehende Buchungen zeigen sie weiter. Kampagnenkosten bleiben automatisch Werbung (PE-26). | Doppelerfassung vermeiden | (angenommen) Lead-Auftrag am 2026-10-26; Nutzer-Bestätigung offen |
+| PE-61 | Aufräumen M1 (AP-29) und Branch-Abdeckung `fixedCosts` ≥ 95 % mit Config-Fix (AP-30) als M1 W4 eingeplant. Damit sind die Vorschläge zu Aufräum-Paket, Coverage-Include und Abdeckung aus der Liste „Vorgeschlagene Änderungen“ umgesetzt. | Befunde der M1-Reviews, niedrig, kein Blocker | Lead-Auftrag am 2026-10-26 |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1471,18 +1541,13 @@ flowchart LR
 | Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
 | Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | geklärt → PE-55 |
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
-| Q-09 | Einnahmen werden ohne Aktivitätsprüfung gebucht; PE-50 gilt nur für die Aufteilung von Ausgaben. Ist das gewollt? | W | §4, PE-08, PE-50 | ja, Einnahme gehört zum gewählten Projekt; bei Buchung außerhalb des Aktivzeitraums Hinweis anzeigen | offen |
+| Q-09 | Einnahmen werden ohne Aktivitätsprüfung gebucht; PE-50 gilt nur für die Aufteilung von Ausgaben. Ist das gewollt? | W | §4, PE-08, PE-50 | ja, Einnahme gehört zum gewählten Projekt; bei Buchung außerhalb des Aktivzeitraums Hinweis anzeigen | geklärt → PE-58 (Nutzer am 2026-10-26) |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
-| PE-56 | Dev-Datenpfad bestätigen (siehe PE-56) | Datenschutz-nahe Regel, nur Nutzer kann freigeben | Planner, Lead-Auftrag M0 |
-| PE-21, AP-04 | AP-04 baut Dialog, Select, Tabs u. a. nativ ohne Radix-Pakete (`package.json` nur `@radix-ui/react-slot`). PE-21 nennt shadcn/ui. Vorschlag: Abweichung bestätigen; oder Radix-Pakete nachziehen (neue Abhängigkeiten, Freigabe nötig). Fokusfalle und Tastaturbedienung der Dialoge prüfen. | Abweichung von PE-21; Barrierefreiheit | Planner, Befund aus M0 |
-| AP-09, `vitest.config.ts` | Coverage-Include `src/core/**` lässt Vitest `src/core/README.md` als Testdatei parsen (Warnung „Failed to parse“). Vorschlag: Include auf `src/core/**/*.ts` einschränken. Nach AP-01 ist keinem Paket erlaubt, `vitest.config.ts` zu ändern (§8). Lead entscheidet: kleines Paket mit diesem Eigentum in W1b/W2 oder Nachpaket. | Befund AP-09-Review | Planner, Befund AP-09 |
-| PE-55, AP-09 | Branch-Abdeckung `fixedCosts` liegt bei 89 %, unter dem Abnahmeziel ≥ 95 % (PE-55, PE-24). Vorschlag: Nachbesserungstests als kleines Paket (sonnet, S) vor AP-16 (Rechenkern M2). | Abnahmeziel Rechenkern | Planner, Befund AP-09 |
-| AP-14, AP-18 (PE-26) | Die Ausgabenkategorie `advertising` („Werbung“) ist im Ausgabenformular wählbar. Kampagnenkosten zählen aber schon automatisch als Werbung, daher droht Doppelerfassung (M2-DEP prüft genau das). Vorschlag: Kategorie im Formular ausblenden oder einen Hinweis zeigen. Umsetzung in AP-18 oder in einem kleinen Folgepaket (sonnet, S). | Befund AP-14-Review, niedrig | Planner, Befund AP-14 |
-| Aufräum-Paket (neu, sonnet, S) | Ungenutzte i18n-Schlüssel (home: `title`, `loadFailed`; services: `unknownService`, `loadError`; settings: `displaySaved`); hartkodierte Längen in AP-12 statt `@shared/limits`; doppelte Ladelogik in `DataSection.tsx`; Kommentar in `pages/home/overview.ts` passt nicht zum Code; Text `deleteKeep` in AP-13 ehrlicher („Dienst wurde gelöscht“). Vorschlag: vor M2 W2 einplanen, Lead entscheidet. | Befunde M1 W2, niedrig, kein Blocker | Planner, Befunde AP-10–AP-15 |
+| AP-14, AP-18 (PE-26) → AP-29 (b) | Die Ausgabenkategorie `advertising` („Werbung“) ist im Ausgabenformular wählbar. Kampagnenkosten zählen automatisch als Werbung, daher droht Doppelerfassung (M2-DEP prüft das). Vorschlag angenommen (PE-60) und als AP-29 (b) beauftragt. Nutzer-Bestätigung offen. | Befund AP-14-Review, niedrig | Planner, Befund AP-14 |
 | Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
 
 ---
@@ -1493,8 +1558,8 @@ flowchart LR
 |---|---|
 | F-01 Projekte | AP-02, AP-07, AP-12, AP-28 (Fehlercode `IN_USE`) |
 | F-02 Dienste | AP-13, AP-12 (Projekt-Tab) |
-| F-03 Ausgaben | AP-05, AP-06, AP-09, AP-10, AP-14 |
-| F-04 Einnahmen | AP-09, AP-14 |
+| F-03 Ausgaben | AP-05, AP-06, AP-09, AP-10, AP-14, AP-29 |
+| F-04 Einnahmen | AP-09, AP-14, AP-29 (Hinweis Aktivzeitraum, PE-58) |
 | F-05 Personenzahlungen | AP-14, AP-17 |
 | F-06 KI-Abos/-Guthaben | AP-14 |
 | F-07 Kampagnen | AP-16, AP-18 |
@@ -1506,7 +1571,9 @@ flowchart LR
 | F-13 Nutzerzahlen | AP-16, AP-19 |
 | F-14 Datensicherung | AP-07, AP-11, AP-25 |
 | PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
-| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28 |
+| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28, AP-30 |
+| PE-26 Werbung ohne Doppelerfassung | AP-14, AP-18, AP-29 |
+| PE-55 Abdeckung ≥ 95 % (Rechenkern) | AP-01, AP-30 |
 | §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24 |
 | §5 ZIP-Import | AP-25 |
 | R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
@@ -1550,3 +1617,8 @@ flowchart LR
 | 2026-10-26 | Erkenntnis AP-11: Sprache und Theme laufen über die Provider (`settings:set` kennt dafür kein Feld); eigene Listenschlüssel `custom-<slug>`; `restoreBackup` lädt den Store im Main selbst neu | Vertrag Einstellungen und Backup | AP-11, AP-25 | Planner |
 | 2026-10-26 | Erkenntnis M1 (Coder-Vorgaben): Lint-Regel `react-hooks/set-state-in-effect` verbietet setState im Effect, auch über `useCallback`; Laden im Effect mit `.then` und Abbruch-Flag. `Result<T,E>` verlangt `E extends string`. `IpcResult` hat `data`, nicht `value` | Vorgaben für UI-Pakete | alle UI-Pakete | Planner |
 | 2026-10-26 | Offen: Seed-Szenario-Abgleich (AP-15, Dienst-Anteile AP-12) ist nur per Unit-Tests geprüft, nicht gegen echte Seed-Daten. Gehört in den Handtest M1-DEP | Prüflücke | AP-12, AP-15, M1-DEP | Planner |
+| 2026-10-26 | Smoke-Tests bestanden (Nutzer): M0-DEP und M1-DEP auf `fertig`, Punkte in §9.2 abgehakt; H-03 ☑; H-06 teilweise (M0/M1 getestet, Merges `dev` → `stage` → `master` offen); Lagebericht aktualisiert | Nutzer-Auftrag | M0-DEP, M1-DEP, H-03, H-06 | Nutzer am 2026-10-26 |
+| 2026-10-26 | Nutzer-Entscheidungen: PE-56 bestätigt; PE-57 (Radix-Abweichung AP-04, native Bausteine); PE-58 (Q-09: Einnahmen ohne Aktivitätsprüfung, Hinweis außerhalb des Aktivzeitraums). Zweiturteil bleibt unbestätigt (§16). Vorgeschlagene Änderungen aufgelöst oder als Pakete übernommen | Nutzer-Entscheidung im Chat | AP-04, AP-07, AP-14, AP-29 | Nutzer am 2026-10-26 |
+| 2026-10-26 | AP-29 „Aufräumen M1“ und AP-30 „Branch-Abdeckung fixedCosts“ angelegt (M1 W4, nach M1-DEP, vor M2 W1). Zwei Pakete, damit das Dateieigentum disjunkt bleibt: AP-29 UI (`src/renderer/**`), AP-30 Kern-Tests und `vitest.config.ts`. Die Tests für `fixedCosts` liegen in `src/core/aggregate/`, nicht in `src/core/ledger/`. AP-14 Umsetzung 4 (Spalte Originalbetrag) ist durch AP-29 (a) überholt. PE-59, PE-60, PE-61 | Lead-Auftrag „Aufräumen M1“ | AP-14, AP-29, AP-30, §8, §9.2, §10, §11, §14, §17 | Lead-Auftrag; Nutzer-Bestätigung Werbung-Kategorie offen (PE-60) |
+| 2026-10-26 | AP-16 und AP-21 von `offen` auf `bereit` gesetzt (Abhängigkeiten AP-09 bzw. AP-10 erfüllt; die Tabelle widersprach dem Lagebericht) | Konsistenz | AP-16, AP-21 | Planner |
+| 2026-10-26 | Erkenntnis M1: `advertising` steht in `src/shared/lists.ts` (Vertragsdatei, SH-Eigentum). AP-29 (b) filtert deshalb nur im Renderer, nicht in der Liste. Bestandsbuchungen und die Ledger-Logik bleiben unverändert | Eigentumsgrenze | AP-29 | Planner |
