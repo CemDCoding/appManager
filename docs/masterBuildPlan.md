@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M2 W2 abgeschlossen: AP-17 (c1), AP-18 (c2), AP-19 (c3), AP-20 (c4, opus) in `dev` gemergt (HEAD 87297ee; lint, typecheck, build grün, 549/549 Tests). Nachtrag: PE-53 Kostenlimit bestätigt (erst nach Stichtag entscheiden), AP-32 als Fix angelegt, Budget nur noch aus `.claude/ma-usage.json`.
-- **Fertig:** AP-01–AP-21, AP-28–AP-31, M0-DEP, M1-DEP · **Bereit:** M2-DEP [Mensch], AP-32, AP-22, AP-24 (M3 W2), AP-23 (M3 W2b, nach Merge von AP-32) · **Offen:** AP-25–AP-27, M3-DEP bis M4-DEP
-- **Unterbrochen oder laufend:** keine gemeldet. Branches `agent/AP-17`–`AP-20` und Worktrees aufräumen: Lead (§9.1 Schritt 7).
-- **Erkenntnisse:** AP-20 entscheidet `costLimit` sofort, PE-53 verlangt die Entscheidung erst nach dem Stichtag; der Fix steht in AP-32 vor AP-23. Aufrufer von AP-20 (AP-22–AP-24) brauchen Ledger-Historie bis heute und Forecast für dasselbe `today`; `ledger.errors` und `forecast.errors` müssen sichtbar sein. Diagramme und neue Seiten sind nicht render-getestet (Sichtprüfung im M2-DEP). Details §18
-- **Nächster Schritt:** Nutzer führt M2-DEP aus (Smoke-Test, dev → stage → master). Lead startet M3 W2 (AP-32, AP-22, AP-24, parallel) und danach W2b (AP-23) nach dem Merge von AP-32. M2-DEP blockiert nach PE-46 nicht.
-- **Offene Nutzerpunkte:** Zweiturteil (§16); Annahmen in PE-53 bestätigen oder ändern (Kostenlimit ohne Stichtag, Stichtagsmonat, erwarteter Break-even); H-06 Merges M0/M1; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
+- **Stand:** 2026-10-26 · M3 W2 und W2b abgeschlossen: AP-32 (c1), AP-22 (c2), AP-24 (c3), AP-23 (c4) in `dev` gemergt (HEAD 436bc67, gepusht; lint, typecheck, build grün, 664/664 Tests). Alle Reviews Runde 1 bestanden. M3 vollständig. Budget nur in `.claude/ma-usage.json`.
+- **Fertig:** AP-01–AP-24, AP-28–AP-32, M0-DEP, M1-DEP · **Bereit:** M2-DEP [Mensch], M3-DEP [Mensch], AP-25, AP-26, AP-27 (M4 W1) · **Offen:** M4-DEP
+- **Unterbrochen oder laufend:** keine gemeldet. Branches `agent/AP-22`, `AP-23`, `AP-24`, `AP-32` und Worktrees aufräumen: Lead (§9.1 Schritt 7).
+- **Erkenntnisse:** AP-32 entscheidet `costLimit` erst nach dem Stichtag (PE-53). Statistik und Startseite nutzen Ledger-Historie und Forecast mit demselben `today`. PDF nur mit Mock-Tests geprüft: „beide PDFs entstehen“ und „Zahlen = App“ sind Teil des M3-DEP-Smoke-Tests. Diagramme und neue Seiten sind nicht render-getestet. Details §18.
+- **Nächster Schritt:** Nutzer führt M2-DEP und M3-DEP aus (Smoke-Tests, dev → stage → master). Lead startet M4 W1 (AP-25, AP-26, AP-27) parallel nach PE-46. AP-26 testet den PDF-Export; Fehler im M3-DEP-Smoke-Test als mögliche AP-24-Befunde prüfen. Aufräumpaket AP-33 nur als Vorschlag (§16).
+- **Offene Nutzerpunkte:** Zweiturteil (§16); Annahmen in PE-53 bestätigen oder ändern (Kostenlimit ohne Stichtag, Stichtagsmonat, erwarteter Break-even); AP-24-Befunde zu Zeitlimit, Zeitraum-Obergrenze und Validierung (§16); AP-33-Vorschlag (§16); H-06 Merges M0–M3; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4-DEP)
 
 ### Rollen und Dokumente
 
@@ -495,9 +495,12 @@ flowchart TD
 
 - **Smoke-Test:**
   - [ ] Statistik: Zeitraumfilter, Verlauf, Kategorien, Ranking, Fixkosten, Kampagnen-Ranking
+  - [ ] Statistik-Zahlen stichprobenartig gegen die Seed-Daten geprüft (bisher nur mit erfundenen Daten gegen den Kern)
+  - [ ] Statistik-Diagramme in Hell und Dunkel lesbar (Sichtprüfung, nicht automatisiert)
   - [ ] Prognose 12 Monate und Break-even plausibel
   - [ ] Startseite: messbares Ziel zeigt Fortschritt, freies Ziel abhakbar
-  - [ ] PDF Portfolio und PDF Projekt erzeugt; Zahlen = App
+  - [ ] Kostenlimit zeigt den Balken als „verbraucht“; Status vor dem Stichtag „offen“, danach „erreicht“ oder „verfehlt“
+  - [ ] PDF Portfolio und PDF Projekt erzeugt; Zahlen = App; Kopf, Fußzeile und Diagramme wie in §12 AP-24
 
 #### M4 – Release
 
@@ -552,14 +555,14 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | c3 | fertig |
 | M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19, AP-21 | H | – | Nutzer | bereit |
 | AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | c4 | fertig |
-| AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | – | bereit |
-| AP-23 | Startseite mit Zielen | M3 | UI | W2b | AP-20, AP-21, AP-32 | M | sonnet | – | offen |
-| AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | bereit |
-| AP-32 | Fix: Kostenlimit erst nach Stichtag entscheiden | M3 | CORE | W2 | AP-20 | S | opus | – | bereit |
-| M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24, AP-32 | H | – | Nutzer | offen |
-| AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | – | offen |
-| AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | – | offen |
-| AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | – | offen |
+| AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | c2 | fertig |
+| AP-23 | Startseite mit Zielen | M3 | UI | W2b | AP-20, AP-21, AP-32 | M | sonnet | c4 | fertig |
+| AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | c3 | fertig |
+| AP-32 | Fix: Kostenlimit erst nach Stichtag entscheiden | M3 | CORE | W2 | AP-20 | S | opus | c1 | fertig |
+| M3-DEP | Deployment M3 | M3 | HUM | W3 | AP-20, AP-22–AP-24, AP-32 | H | – | Nutzer | bereit |
+| AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | – | bereit |
+| AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | – | bereit |
+| AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | – | bereit |
 | M4-DEP | Release und Abnahme | M4 | HUM | W2 | AP-25–AP-27 | H | – | Nutzer | offen |
 
 ---
@@ -1612,6 +1615,8 @@ flowchart LR
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
 | Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
+| Aufräumpaket AP-33 (M2/M3-Befunde, Prio niedrig) | Neues Paket, nicht eingeplant, nicht gestartet. Vorschlag: Start nach M3-DEP, vor M4-DEP, oder nach M4-DEP. Inhalt: `LineChartSeries.tsx` sr-only-Spalte „Zeitpunkt“; Sparkline-Prop `color` begrenzen; ungenutzte i18n-Schlüssel in `features/people` (`open`, `ledgerErrors`) und `features/goals` (`usedLabel`, `done`, `delete`, `saveFailed`) entfernen; `campaigns` in AP-19 nur einmal laden; `features/campaigns/ProjectTab.tsx` Z. 57–58 erklären statt „–“; `StatsView.tsx`: `today` nicht mehr einmalig per `useMemo([])`, Ledger-Fehler der Projektansicht nur für das Projekt; Spaltenarrays memoisieren; Cross-Imports `features/*` → `pages/projects/*` (`LedgerWarnings`, `useProjectLedger`, `todayIso`) nach `components/` verschieben; Kommentar „pdf follow in AP-24“ in `src/main/ipc/handlers.ts` entfernen (Eigentum prüfen: `src/main/ipc/**` gehört AP-07); Doku-Absatz „Status sonst missed…“ in `src/core/README.md` klarer fassen. Eigentum je Datei vor dem Start prüfen. | Befunde aus AP-17–AP-24, kein Blocker | Planner, Lead-Auftrag |
+| AP-24 Befunde zu Zeitlimit, Zeitraum und Validierung (Nutzer-Entscheidung) | Vorschlag: (a) Zeitlimit für `printToPDF` und Speichern-Dialog, danach Fehler und Fenster schließen; (b) `period` mit Zusatzfeldern ablehnen statt stillschweigend strippen; (c) Obergrenze für den Zeitraum im Bericht; (d) optional ein Kanal `pdf:failed` für sofortige Fehlermeldung statt 30 s Wartezeit. (d) ist eine Vertragsänderung in AP-02 (`src/shared/**`), nur mit Freigabe. | Review-Befunde AP-24 (niedrig, kein Blocker). Sicherheit und Verträge liegen beim Nutzer (§7.3) | Planner, Lead-Auftrag |
 
 ---
 
@@ -1707,3 +1712,9 @@ flowchart LR
 | 2026-10-26 | AP-32 angelegt (Fix Kostenlimit, CORE, S, opus/high, Opus-Grund Kern), M3 W2. AP-23 hängt von AP-32 ab und startet in W2b; AP-22 und AP-24 unverändert in W2. §8 (Eigentum `goals/`), §9, §10, §11, §12, §14 (M3 5 Pakete, Gesamt 32) und §17 angepasst | Nutzerentscheidung im Chat | AP-23, AP-32, §8–§14, §17 | Nutzer am 2026-10-26 (Chat) |
 | 2026-10-26 | Budget: §7.2 und §14 nennen keine festen Werte mehr; maßgeblich ist `.claude/ma-usage.json` (`zielwert`, `obergrenze`, `team`). Vorschlag „Budgetwerte“ aus §16 entfernt, Eintrag PE-63 | Nutzerwunsch | §7.2, §14, §16 | Nutzer am 2026-10-26 (Chat) |
 | 2026-10-26 | Lagebericht §0 ersetzt. Nächste Welle: M3 W2 = AP-32, AP-22, AP-24 (parallel), danach W2b = AP-23. Eigentum geprüft: AP-32 nur `core/goals`, AP-22 `pages|features/stats`, AP-24 `main/pdf`, `reports`, `print`, `main/index.ts` (keine Überschneidung) | Pflegeauftrag | §0, §8, §9 | Nutzer am 2026-10-26 (Chat) |
+| 2026-10-26 | Wellenabschluss M3 W2 und W2b: AP-32 (c1), AP-22 (c2), AP-24 (c3), AP-23 (c4) in `dev` gemergt (HEAD 436bc67, gepusht); §10 auf `fertig`. M3 vollständig: M3-DEP auf `bereit`. AP-25, AP-26, AP-27 (M4 W1) auf `bereit` (Abhängigkeiten erfüllt, Eigentum disjunkt: `main/transfer` + `features/transfer` + `main/index.ts` (Registrierung); `e2e/**` + `playwright.config.ts`; `electron-builder.yml`, `build/**`, `package.json`, `README.md`). M3-DEP-Smoke-Test in §9.2 um Statistik-Zahlen gegen Seed, Diagramme, Kostenlimit-Anzeige und PDF-Kopf ergänzt. Lagebericht aktualisiert. Reviews Runde 1 bestanden; AP-24 Sicherheits-Review auf opus ohne hohe oder mittlere Befunde; lint, typecheck, build grün, 664/664 Tests | Lead-Auftrag „Wellenabschluss M3 W2“; M4 W1 darf nach PE-46 parallel zu den offenen DEP-Schritten laufen | AP-22, AP-23, AP-24, AP-32, AP-25, AP-26, AP-27, M3-DEP | Lead-Auftrag |
+| 2026-10-26 | Erkenntnis AP-32: `costLimit` bleibt `open`, solange `today` ≤ `dueDate` (Grenze „Stichtag = heute“ bleibt `open`); danach `achieved` oder `missed` nach dem Monat des Stichtags; ohne Stichtag `open`. `goals.ts` 100 % Zeilenabdeckung ohne Ignore-Kommentare. Niedrig: Absatz unter der Tabelle in `src/core/README.md` („Status sonst missed…“) steht nach dem costLimit-Satz und ist missverständlich (Aufräumpaket AP-33) | PE-53, Review-Befunde, kein Blocker | AP-32, AP-23 | Lead-Merge |
+| 2026-10-26 | Erkenntnis AP-22: Logik in `features/stats/stats-logic.ts` (`buildPeriodStats`, `buildOutlook`, `breakEvenRows`, `forecastRows`, `chartMoney`); `StatsView({scope, toolbar})` ist für Portfolio und Projekt wiederverwendbar. `useProjectLedger` eignet sich nicht für Portfolio und Projekt zugleich. Prognose und Break-even hängen nur von `today` ab, nicht vom Zeitraum. Prüflücke: Zahlen nur mit erfundenen Daten gegen den Kern geprüft, nicht gegen die Seed-Daten; das Akzeptanzkriterium „Zahlen identisch für Seed-Daten“ ist daher nur teilweise belegt (Smoke-Test M3-DEP). Niedrig: `today` einmalig per `useMemo([])` (Mitternachts-Sitzung veraltet, `StatsView.tsx` Z. 77); `LedgerWarnings` in der Projektansicht zeigt Fehler des gesamten Ledgers (`StatsView.tsx` Z. 280); Spaltenarrays ohne useMemo; NaN-Verhalten von `convert` in Diagrammen nicht belegt; keine Render-Tests | Review-Befunde, kein Blocker | AP-22, AP-24, AP-33 (Vorschlag) | Lead-Merge |
+| 2026-10-26 | Erkenntnis AP-23: `buildGoalView(data, today)` in `@/features/goals` liefert Gruppen, Ledger, Forecast und Saldo-Reihe. Sparkline zeigt den Monatssaldo (nicht kumuliert). Zielwerte werden nur in EUR eingegeben, die Anzeige folgt der Anzeigewährung; Hinweis im Label sinnvoll (AP-33). Niedrig: ungenutzte i18n-Schlüssel `usedLabel`, `done`, `delete`, `saveFailed`; Einnahmenziel mit 0 gilt sofort als erreicht (schema-konform) | Review-Befunde, kein Blocker | AP-23, AP-33 (Vorschlag) | Lead-Merge |
+| 2026-10-26 | Erkenntnis AP-24: Druckroute `#/print?scope&projectId&from&to&lang&currency`; `report-model.ts` (`buildReportModel`) bündelt Ledger-Historie, Forecast und Break-even mit demselben `today`. Berichtssprache über einen verschachtelten I18nContext.Provider; Druckfenster ohne `dark`-Klasse. `setupPdfExport` in `index.ts` registriert `src/main/pdf/ipc.ts`; ein Export gleichzeitig (CONFLICT); `pdf:ready` nur vom Druckfenster (`sender.id`). **Nicht geprüft: Es wurde kein echtes PDF erzeugt und die App nicht gestartet, nur Mock-Tests. „Beide PDFs entstehen“ und „Zahlen = App“ bleiben im M3-DEP-Smoke-Test.** Befunde (niedrig, §16): Bei Ladefehler oder fehlendem Projekt kommt erst nach 30 s eine allgemeine INTERNAL-Meldung; `printToPDF` und Speichern-Dialog ohne eigenes Zeitlimit (hängt `printToPDF`, bleibt der Export bis Neustart gesperrt); `period` mit Zusatzfeldern wird gestrippt statt abgelehnt; Zeitraum ohne Obergrenze; Kampagnentabelle zeigt im Projektbericht Gesamtkosten (Hinweis im Bericht); `src/main/ipc/handlers.ts` enthält noch den Kommentar „pdf follow in AP-24“ (fremde Datei) | Review-Befunde, Sicherheitsreview ohne hohe oder mittlere Befunde | AP-24, M3-DEP, §16 | Lead-Merge |
+| 2026-10-26 | Aufräum-Sammlung aus M2 und M3 als Vorschlag AP-33 in §16 eingetragen (Prio niedrig). Nicht gestartet; Start und Zeitpunkt entscheidet der Nutzer. Die Befunde aus M2 (`LineChartSeries.tsx` sr-only-Spalte, Sparkline-Prop `color`, `campaigns` doppelt geladen, Cross-Imports) und M3 sind dort enthalten. AP-24-Befunde zu Zeitlimit, Zeitraum und Validierung als eigener Vorschlag in §16 (Nutzer-Entscheidung) | Befunde aus §18, Lead-Auftrag | AP-33 (Vorschlag), AP-24 | Nutzer offen |
