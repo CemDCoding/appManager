@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · Wellenabschluss M1 W4: AP-29 und AP-30 in `dev` gemergt (lint, typecheck, build, 447/447 Tests grün); Plan um Folgepaket AP-31 erweitert
-- **Fertig:** AP-01–AP-15, AP-28–AP-30, M0-DEP, M1-DEP · **Bereit:** AP-16, AP-21 (M2 W1), AP-31 (M1 W4, Folgepaket zu AP-30) · **Offen:** AP-17–AP-20, AP-22–AP-27, M2-DEP bis M4-DEP
+- **Stand:** 2026-10-26 · Wellenabschluss M2 W1: AP-16, AP-21, AP-31 in `dev` gemergt (Review Runde 1 bestanden; lint, typecheck, build grün, 481/481 Tests; HEAD efcd562, gepusht)
+- **Fertig:** AP-01–AP-16, AP-21, AP-28–AP-31, M0-DEP, M1-DEP · **Bereit:** AP-17, AP-18, AP-19 (M2 W2), AP-20 (M3 W1, parallel erlaubt) · **Offen:** AP-22–AP-27, M2-DEP bis M4-DEP
 - **Unterbrochen oder laufend:** nichts. Kein Coder läuft.
-- **Erkenntnisse:** AP-30 hat Review Runde 1 formal nicht bestanden (Branch-Abdeckung `fixedCosts.ts` 89,47 %, zwei unerreichbare `?? 0`-Fallbacks). Nutzer entschied: mergen, AP-31 entfernt die Fallbacks (PE-62). Werbung-Kategorie im Ausgabenformular ist ausgeblendet (PE-60 bestätigt). Merges `dev` → `stage` → `master` für M0/M1 noch nicht erfolgt (H-06 teilweise). Details §18
-- **Nächster Schritt:** Lead startet AP-31 (sonnet, medium). AP-31 darf parallel zu AP-16 und AP-21 laufen, weil die Eigentumsmengen disjunkt sind. Danach Merge und M2 W1 (AP-16, AP-21). H-05 Designer-Gespräch ist fällig (blockiert nur Design-Pakete)
-- **Offene Nutzerpunkte:** Merges `dev` → `stage` → `master` für M0/M1 (H-06, Anleitung §9.2); Zweiturteil bestätigen (§16); Seed-Szenario-Abgleich (AP-12, AP-15), falls nicht im Smoke-Test geprüft; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
+- **Erkenntnisse:** API von `@core/metrics/metrics` steht (Signatur `userMetrics` mit sechs Parametern, §12 AP-16). Zuwachs-Regel ist eine Präzisierung von PE-52 und braucht die Bestätigung des Nutzers (§16). Diagramm-Bausteine (AP-21) sind nicht automatisiert render-getestet, Sichtprüfung im M2-Smoke-Test. Details §18
+- **Nächster Schritt:** Lead startet M2 W2 (AP-17, AP-18, AP-19, je sonnet, medium; Eigentum disjunkt). AP-20 (opus, high) darf parallel laufen. Vorher prüft er das Dateieigentum erneut auf `dev`
+- **Offene Nutzerpunkte:** Merges `dev` → `stage` → `master` für M0/M1 (H-06, Anleitung §9.2); Zweiturteil bestätigen (§16); PE-52-Präzisierung bestätigen (§16); H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
 
 ### Rollen und Dokumente
 
@@ -479,6 +479,7 @@ flowchart TD
   - [ ] Kampagne mit Kosten, Klicks, Nutzern, Sternen → CPC, Kosten/Nutzer, CTR stimmen
   - [ ] Kampagnenkosten erscheinen als Ausgabe „Werbung“ (keine Doppelerfassung)
   - [ ] Nutzerstand je Projekt eintragen, Verlauf sichtbar
+  - [ ] Diagramme (Balken, Linie, Donut, Sparkline) in Hell und Dunkel lesbar, Beträge im Tooltip (Sichtprüfung für AP-21, nicht automatisiert getestet)
 
 #### M3 – Auswertung
 
@@ -541,14 +542,14 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15, AP-28 | H | – | Nutzer | fertig |
 | AP-29 | Aufräumen M1 (Originalbetrag, Werbung, Q-09-Hinweis, Texte) | M1 | UI | W4 | AP-11–AP-15 | S | sonnet | c1 | fertig |
 | AP-30 | Branch-Abdeckung fixedCosts ≥ 95 %, Coverage-Include | M1 | CORE+OPS | W4 | AP-09 | S | sonnet | c2 | fertig (Vermerk §12) |
-| AP-31 | fixedCosts: unerreichbare Fallbacks entfernen | M1 | CORE | W4 | AP-30 | S | sonnet | – | bereit |
-| AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | bereit |
-| AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | bereit |
-| AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | offen |
-| AP-18 | Werbekampagnen | M2 | UI | W2 | AP-16 | M | sonnet | – | offen |
-| AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | – | offen |
+| AP-31 | fixedCosts: unerreichbare Fallbacks entfernen | M1 | CORE | W4 | AP-30 | S | sonnet | – | fertig |
+| AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | fertig |
+| AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | fertig |
+| AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | bereit |
+| AP-18 | Werbekampagnen | M2 | UI | W2 | AP-16 | M | sonnet | – | bereit |
+| AP-19 | Nutzerzahlen | M2 | UI | W2 | AP-16, AP-21 | M | sonnet | – | bereit |
 | M2-DEP | Deployment M2 | M2 | HUM | W3 | AP-16–AP-19, AP-21 | H | – | Nutzer | offen |
-| AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | – | offen |
+| AP-20 | Kern: Prognose, Break-even, Zielfortschritt | M3 | CORE | W1 | AP-16 | L | opus | – | bereit |
 | AP-22 | Statistikseite | M3 | UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
 | AP-23 | Startseite mit Zielen | M3 | UI | W2 | AP-20, AP-21 | M | sonnet | – | offen |
 | AP-24 | PDF-Bericht | M3 | MAIN+UI | W2 | AP-20, AP-21 | L | sonnet | – | offen |
@@ -1151,7 +1152,7 @@ flowchart LR
 - **Umsetzung:**
   1. `personSummary(ledger, personId, range)` → gesamt, je Projekt, je Monat.
   2. `campaignKpis(campaign)` → CPC, Kosten pro Nutzer (EUR-Cents, gerundet half-up), CTR (Basispunkte); Division durch 0 → `null`. `campaignUsersByProject` (Größter-Rest auf ganze Nutzer, PE-49).
-  3. `userMetrics(snapshots, ledger, campaigns, projectId?, range)` nach PE-52: letzter Stand, Zuwachs, Kosten pro Nutzer, Einnahmen pro zahlendem Nutzer, Kampagnenanteil.
+  3. `userMetrics(snapshots, ledger, campaigns, projectId | undefined, range, projects)` nach PE-52: letzter Stand, Zuwachs, Kosten pro Nutzer, Einnahmen pro zahlendem Nutzer, Kampagnenanteil. Der sechste Parameter `projects: LedgerProject[]` ist nötig, damit Kampagnenkosten auf Projekte verteilt werden können (PE-49); für das Portfolio `[]`. Details §18.
   4. `campaignRanking(campaigns, by: 'costPerUser'|'rating')`.
 - **Schnittstellen:** für AP-17, AP-18, AP-19, AP-20, AP-22.
 - **Akzeptanzkriterien:** Referenzfälle: 100 € / 400 Klicks = 0,25 € CPC; 0 Klicks → „–“; Person mit 100 € auf 2 Projekte → je 50 €.
@@ -1245,7 +1246,7 @@ flowchart LR
 - **Nicht anfassen:** andere Seiten und Features
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:** Projektwahl; Tabelle der Stichtage (gesamt, aktiv, zahlend, optional je Plattform); „+ Stichtag“; Liniendiagramm (`LineChartSeries`); KPI-Karten nach PE-52 für gewählten Zeitraum; `features/metrics/ProjectTab.tsx`.
-- **Schnittstellen:** nutzt AP-16, AP-21; erfüllt `ProjectTab`-Vertrag.
+- **Schnittstellen:** nutzt AP-16 (`userMetrics` mit sechs Parametern, siehe AP-16), AP-21; erfüllt `ProjectTab`-Vertrag. Fehler aus `ledger.errors` sichtbar anzeigen (§18, M1-Regel).
 - **Akzeptanzkriterien:** Smoke-Test-Punkt M2 zu Nutzerständen erfüllt; Division durch 0 zeigt „–“.
 - **Tests:** Vitest für Validierung (aktiv ≤ gesamt, zahlend ≤ gesamt)
 - **Review-Schwerpunkte:** Validierung, i18n
@@ -1577,6 +1578,7 @@ flowchart LR
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
 | Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
+| PE-52 präzisieren (Nutzerzuwachs) | Vorschlag, bereits in AP-16 umgesetzt: Zuwachs = letzter Stand ≤ Zeitraumende minus jüngster Stichtag vor Zeitraumbeginn, sonst erster Stand im Zeitraum; Portfolio = Summe der Projekte; bei Zuwachs ≤ 0 sind Kosten pro Nutzer und Kampagnenanteil `null`; Kampagnenanteil darf über 100 % liegen (UI kappt nicht). Bestätigen oder ändern. | PE-52 nennt „Nutzerzuwachs im Zeitraum“, ohne feste Regel | Lead-Auftrag „Wellenabschluss M2 W1“ |
 
 ---
 
@@ -1653,3 +1655,10 @@ flowchart LR
 | 2026-10-26 | Wellenabschluss M1 W4: AP-29 auf `fertig` (in `dev` gemergt, Review Runde 1 bestanden); AP-30 auf `fertig` (in `dev` gemergt) mit Vermerk, Review Runde 1 formal „nicht bestanden“ (Branch `fixedCosts.ts` 89,47 %, 17/19; Fallbacks Zeilen 80, 86 unerreichbar); Integration grün (lint, typecheck, build, 447/447 Tests); Lagebericht aktualisiert | Lead-Auftrag „Wellenabschluss M1 W4“ | AP-29, AP-30, §0, §10, §12 | Lead-Auftrag |
 | 2026-10-26 | Nutzer-Entscheidung: AP-30 mergen, Folgepaket entfernt die Fallbacks. PE-62 eingetragen; AP-31 „fixedCosts: unerreichbare Fallbacks entfernen“ angelegt (M1 W4, Lane CORE, Aufwand S, sonnet, Abhängigkeit AP-30; Eigentum `aggregate/fixedCosts.ts` und `fixedCosts*.test.ts`; parallel zu AP-16/AP-21 erlaubt). §8, §9.2, §10, §11, §12, §14, §17 angepasst | Nutzer-Entscheidung im Chat | AP-31, AP-30, AP-16, AP-21 | Nutzer am 2026-10-26 |
 | 2026-10-26 | PE-60 (Werbung im Ausgabenformular nicht wählbar) vom Nutzer bestätigt; Vorschlag aus „Vorgeschlagene Änderungen“ entfernt, offener Punkt im Lagebericht entfernt | Nutzer-Bestätigung im Chat | AP-29, §16 | Nutzer am 2026-10-26 |
+| 2026-10-26 | Wellenabschluss M2 W1: AP-16, AP-21, AP-31 auf `fertig` (in `dev` gemergt, Review Runde 1 bestanden; lint, typecheck, build grün, 481/481 Tests; HEAD efcd562, gepusht); AP-17, AP-18, AP-19, AP-20 auf `bereit` (Abhängigkeiten erfüllt); AP-19 Schnittstellen um `userMetrics` ergänzt; M2-DEP um einen Sichtprüfpunkt für Diagramme ergänzt; Lagebericht aktualisiert | Lead-Auftrag „Wellenabschluss M2 W1“ | AP-16, AP-19, AP-21, AP-31, AP-17–AP-20, M2-DEP | Lead-Auftrag |
+| 2026-10-26 | Erkenntnis AP-31: `?? 0`-Fallbacks in `fixedCosts.ts` durch ein Ergebnis-Array `allocated` und die Hilfsfunktion `sumFor` ersetzt; Verhalten unverändert, Branch-Abdeckung gesamt 100 %. Optional offen: kein ausdrücklicher Test für doppelte Projekt-IDs und die Reihenfolge von `byProject` | Refaktorierung ohne Verhaltensänderung (PE-62) | AP-31 | Planner |
+| 2026-10-26 | Erkenntnis AP-16: API in `@core/metrics/metrics`: `personSummary` → `{totalCents, byProject, byMonth}` (Projekte aufsteigend, `null` zuletzt); `campaignKpis` → `Result<{costEurCents, cpcCents, costPerUserCents, ctrBasisPoints}, CurrencyError>`, Division durch 0 → `null`; `campaignRanking` → `{items, errors}`. `userMetrics(snapshots, ledger, campaigns, projectId | undefined, range, projects)` hat einen sechsten Parameter `projects: LedgerProject[]` (Abweichung von §12 AP-16 Umsetzung 3, fachlich nötig für PE-49; Portfolio: `[]`) | Vertrag für AP-17–AP-20, AP-22 | AP-16, AP-17, AP-18, AP-19, AP-20, AP-22 | Planner |
+| 2026-10-26 | Erkenntnis AP-16 (Zuwachs, Vorschlag §16): Zuwachs = letzter Stand ≤ Zeitraumende minus jüngster Stichtag vor Zeitraumbeginn, sonst erster Stand im Zeitraum; Portfolio = Summe der Projekte; bei Zuwachs ≤ 0 sind Kosten pro Nutzer und Kampagnenanteil `null`; Kampagnenanteil in Basispunkten, kann über 10 000 liegen (UI kappt nicht). Kampagnen zählen nach Startdatum (PE-49) | Präzisierung von PE-52, noch nicht bestätigt | AP-16, AP-18, AP-19 | Lead-Auftrag; Nutzer-Bestätigung offen (§16) |
+| 2026-10-26 | Erkenntnis AP-16: `userMetrics` ignoriert `ledger.errors`. AP-19 und AP-20 müssen Fehler sichtbar machen (M1-Regel). Branch-Abdeckung `metrics.ts` 96 %, Zeilen 100 % | Vertrag für UI-Pakete | AP-16, AP-19, AP-20 | Planner |
+| 2026-10-26 | Erkenntnis AP-21: Import über `@/components/charts`. `BarChartMonthly` (`data`: {month, incomeCents, expenseCents}), `LineChartSeries` (`series`: {id, label, points}, `valueKind`, `xKind`), `DonutChart` (`data`: {key, label, cents}, `maxSlices` 8, Rest „Sonstige“), `Sparkline` (`values`, `label`). Pflicht-`title` bei Charts; Props `static` und `size={{width, height}}`. Geld in Cent plus `currency`, Umrechnung macht der Aufrufer. Farben aus `--primary`, `--destructive`, `--foreground` per `color-mix`; `CHART_COLORS` in `chart-logic.ts` ist die einzige Stelle für Farbänderungen. Keine `--chart-*`-Variablen und keine Erfolgsfarbe im Theme (Designer kann später ergänzen) | Vertrag für AP-19, AP-22–AP-24 | AP-21, AP-19, AP-22, AP-23, AP-24 | Planner |
+| 2026-10-26 | Befund niedrig (Aufräumpaket später): sr-only-Spaltenüberschrift in `LineChartSeries.tsx` (ca. Z. 66) heißt „Wert“ statt „Zeitpunkt“; Sparkline-Prop `color` nimmt beliebige Strings. Render-Komponenten sind nicht automatisiert getestet, Sichtprüfung steht im M2-DEP-Smoke-Test | Barrierearmut, Testabdeckung | AP-21, M2-DEP | Planner |
