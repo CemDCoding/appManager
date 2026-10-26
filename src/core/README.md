@@ -79,12 +79,12 @@ Alles Ganzzahl (BigInt, wo Produkte den sicheren Bereich verlassen können), Run
 
 `goalProgress(goal, { ledger, forecast, userMetrics }, today)` → `{ value, target, ratio, status }`. `ratio` in Basispunkten 0–10 000, **abgerundet** (10 000 nur wenn erfüllt). Bezugstag `ref = min(today, dueDate)`: nach dem Stichtag bleibt der Stand am Stichtag. `forecast` muss für dasselbe `today` erstellt sein (sonst `RangeError`). `projectId: null` = Portfolio.
 
-| Art         | `value`                                         | `target`               | erreicht, wenn                                     |
-| ----------- | ----------------------------------------------- | ---------------------- | -------------------------------------------------- |
-| `revenue`   | Einnahmen von `fromDate` (inkl.) bis `ref`      | `targetValue` (Cent)   | value ≥ target                                     |
-| `breakEven` | kumulierte Einnahmen bis `ref`                  | kumulierte Ausgaben    | Break-even erreicht (`reachedAt`) ≤ Stichtagsmonat |
-| `users`     | letzter `usersTotal` ≤ `ref` (Portfolio: Summe) | `targetValue` (Nutzer) | value ≥ target                                     |
-| `costLimit` | Ausgaben im Monat von `ref`, 1. bis `ref`       | `targetValue` (Cent)   | value ≤ target, sonst sofort `missed`              |
-| `free`      | 1 wenn `done`, sonst 0                          | 1                      | `done`                                             |
+| Art         | `value`                                         | `target`               | erreicht, wenn                                         |
+| ----------- | ----------------------------------------------- | ---------------------- | ------------------------------------------------------ |
+| `revenue`   | Einnahmen von `fromDate` (inkl.) bis `ref`      | `targetValue` (Cent)   | value ≥ target                                         |
+| `breakEven` | kumulierte Einnahmen bis `ref`                  | kumulierte Ausgaben    | Break-even erreicht (`reachedAt`) ≤ Stichtagsmonat     |
+| `users`     | letzter `usersTotal` ≤ `ref` (Portfolio: Summe) | `targetValue` (Nutzer) | value ≥ target                                         |
+| `costLimit` | Ausgaben im Monat von `ref`, 1. bis `ref`       | `targetValue` (Cent)   | erst nach dem Stichtag: value ≤ target, sonst `missed` |
+| `free`      | 1 wenn `done`, sonst 0                          | 1                      | `done`                                                 |
 
-Status sonst `missed`, wenn heute nach dem Stichtag liegt, andernfalls `open` (am Stichtag selbst noch `open`; ohne Stichtag nie `missed`). Ziel ohne Daten: `value` 0. Zielwert 0: `revenue`/`users` erreicht (Ratio 10 000); `costLimit` Ratio 0 ohne Kosten, sonst 10 000. Erwarteter Break-even (`expectedAt`) zählt nicht als erreicht.
+`costLimit` ist bis einschließlich Stichtag (und ohne Stichtag immer) `open`; erst wenn heute nach dem Stichtag liegt, entscheidet der Stichtagsmonat (`achieved` oder `missed`). Status sonst `missed`, wenn heute nach dem Stichtag liegt, andernfalls `open` (am Stichtag selbst noch `open`; ohne Stichtag nie `missed`). Ziel ohne Daten: `value` 0. Zielwert 0: `revenue`/`users` erreicht (Ratio 10 000); `costLimit` Ratio 0 ohne Kosten, sonst 10 000. Erwarteter Break-even (`expectedAt`) zählt nicht als erreicht.

@@ -74,10 +74,11 @@ function latestUsers(
  *   when the break-even month (PE-30, already reached) is <= the month of `dueDate`.
  * - users: latest `usersTotal` at or before `ref` (portfolio: sum over projects); achieved
  *   when value >= target.
- * - costLimit: expenses in the month of `ref` from its 1st to `ref`; within the limit =
- *   achieved, above = missed (cannot be undone this month). Ratio = share of the limit used.
+ * - costLimit: expenses in the month of `ref` from its 1st to `ref`. Decided only after the
+ *   due date (today > dueDate): within the limit = achieved, above = missed; before that, or
+ *   without a due date, always open. Ratio = share of the limit used.
  * - free: achieved when `done`.
- * Status otherwise: `missed` when today > dueDate, else `open` (no due date: never missed).
+ * Status otherwise (not costLimit): `missed` when today > dueDate, else `open` (no due date: never missed).
  * A goal without data has value 0. Throws RangeError for an invalid `today` or a forecast
  * made for another day.
  */
@@ -115,7 +116,8 @@ export function goalProgress(goal: Goal, data: GoalData, today: string): GoalPro
         data.ledger.entries,
         (e) => ofGoal(e) && e.kind === 'expense' && e.date.startsWith(month)
       )
-      const status = value <= target ? 'achieved' : 'missed'
+      const status: GoalStatus =
+        pending === 'missed' ? (value <= target ? 'achieved' : 'missed') : 'open'
       return { value, target, ratio: ratioOf(value, target, value > 0 ? FULL_RATIO : 0), status }
     }
     case 'breakEven': {
