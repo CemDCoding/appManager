@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M0-DEP und M1-DEP [Mensch] vom Nutzer bestanden (Smoke-Tests abgehakt); Plan um AP-29 und AP-30 (M1 W4) erweitert
-- **Fertig:** AP-01–AP-15, AP-28, M0-DEP, M1-DEP · **Bereit:** AP-16, AP-21 (M2 W1), AP-29, AP-30 (M1 W4) · **Offen:** AP-17–AP-20, AP-22–AP-27, M2-DEP bis M4-DEP
+- **Stand:** 2026-10-26 · Wellenabschluss M1 W4: AP-29 und AP-30 in `dev` gemergt (lint, typecheck, build, 447/447 Tests grün); Plan um Folgepaket AP-31 erweitert
+- **Fertig:** AP-01–AP-15, AP-28–AP-30, M0-DEP, M1-DEP · **Bereit:** AP-16, AP-21 (M2 W1), AP-31 (M1 W4, Folgepaket zu AP-30) · **Offen:** AP-17–AP-20, AP-22–AP-27, M2-DEP bis M4-DEP
 - **Unterbrochen oder laufend:** nichts. Kein Coder läuft.
-- **Erkenntnisse:** Merges `dev` → `stage` → `master` für M0/M1 noch nicht erfolgt (H-06 teilweise). Nutzer-Entscheidungen: PE-56, PE-57 (Radix-Abweichung AP-04), PE-58 (Q-09 Einnahmen). Originalbetrag-Spalte und Werbung-Kategorie im Ausgabenformular werden in AP-29 bereinigt (PE-59, PE-60). `fixedCosts` liegt in `src/core/aggregate/`; Abdeckung in AP-30. Details §18
-- **Nächster Schritt:** Lead startet AP-29 und AP-30 parallel (M1 W4), danach Merge und M2 W1 (AP-16, AP-21). H-05 Designer-Gespräch ist fällig (blockiert nur Design-Pakete)
-- **Offene Nutzerpunkte:** Merges `dev` → `stage` → `master` für M0/M1 (H-06, Anleitung §9.2); Zweiturteil bestätigen (§16); Bestätigung „Werbung nicht wählbar“ (PE-60, angenommen); Seed-Szenario-Abgleich (AP-12, AP-15), falls nicht im Smoke-Test geprüft; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
+- **Erkenntnisse:** AP-30 hat Review Runde 1 formal nicht bestanden (Branch-Abdeckung `fixedCosts.ts` 89,47 %, zwei unerreichbare `?? 0`-Fallbacks). Nutzer entschied: mergen, AP-31 entfernt die Fallbacks (PE-62). Werbung-Kategorie im Ausgabenformular ist ausgeblendet (PE-60 bestätigt). Merges `dev` → `stage` → `master` für M0/M1 noch nicht erfolgt (H-06 teilweise). Details §18
+- **Nächster Schritt:** Lead startet AP-31 (sonnet, medium). AP-31 darf parallel zu AP-16 und AP-21 laufen, weil die Eigentumsmengen disjunkt sind. Danach Merge und M2 W1 (AP-16, AP-21). H-05 Designer-Gespräch ist fällig (blockiert nur Design-Pakete)
+- **Offene Nutzerpunkte:** Merges `dev` → `stage` → `master` für M0/M1 (H-06, Anleitung §9.2); Zweiturteil bestätigen (§16); Seed-Szenario-Abgleich (AP-12, AP-15), falls nicht im Smoke-Test geprüft; H-05 Designer-Gespräch; H-04 echter Datenordner (vor M4)
 
 ### Rollen und Dokumente
 
@@ -378,7 +378,7 @@ flowchart TD
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
 | `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version), AP-28 (`tsconfig.web.json`, `.env.example`) und AP-30 (`vitest.config.ts`, nur Coverage-Include) | M0 W1, M1 W1, M1 W4, M4 W1 |
-| `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`) | M1 W1 (AP-28) |
+| `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`) und AP-31 (`aggregate/fixedCosts.ts`, nach Merge von AP-30) | M1 W1 (AP-28), M1 W4 (AP-31) |
 | `electron-builder.yml` | AP-01, später AP-27 | M0 W1, M4 W1 |
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
@@ -388,7 +388,8 @@ flowchart TD
 | `src/renderer/components/ui/**` (shadcn) | AP-04 legt Grundsatz an; AP-10 ergänzt | M0 W2, M1 W1b |
 | `src/renderer/styles/globals.css` (Design-Variablen) | AP-01 → AP-04; später Design-Pakete | – |
 | `src/renderer/features/bookings/**` | AP-14 (Formulare, Listen); AP-29 (Originalbetrag-Spalte, Kategorie-Filter, Hinweis Einnahmen) | M1 W2, M1 W4 |
-| `src/core/aggregate/fixedCosts.test.ts` und `src/core/aggregate/fixedCosts*.test.ts` (nur Tests) | AP-30 | M1 W4 |
+| `src/core/aggregate/fixedCosts.test.ts` und `src/core/aggregate/fixedCosts*.test.ts` (nur Tests) | AP-30 (fertig); AP-31 ergänzt nur Tests, bestehende unverändert, erst nach dem Merge von AP-30 | M1 W4 |
+| `src/core/aggregate/fixedCosts.ts` | AP-31 (Fallbacks entfernen, Verhalten gleich) | M1 W4 |
 
 ---
 
@@ -447,7 +448,7 @@ flowchart TD
 | W1b | AP-10 (vorgezogen, startet nach AP-28, weil es die `window.api`-Typen braucht) |
 | W2 | AP-11, AP-12, AP-13, AP-14, AP-15 |
 | W3 | M1-DEP [Mensch] (erledigt 2026-10-26), danach H-05 Designer-Gespräch |
-| W4 | AP-29, AP-30 (Aufräumen M1 und Branch-Abdeckung; nach M1-DEP, vor M2 W1) |
+| W4 | AP-29, AP-30 (fertig; Aufräumen M1 und Branch-Abdeckung), AP-31 (Folgepaket zu AP-30, startet nach dessen Merge; nach M1-DEP, vor M2 W1) |
 
 **Integration:** nach W2 mit Seed-Daten Kernfluss von Hand: Projekt anlegen → Dienst mit Kosten → Ausgabe auf „alle“ → Einnahme → Übersicht prüfen.
 
@@ -466,7 +467,7 @@ flowchart TD
 
 | Welle | Pakete (parallel) |
 |---|---|
-| W1 | AP-16, AP-21 (nach dem Merge von AP-29 und AP-30, M1 W4) |
+| W1 | AP-16, AP-21 (nach dem Merge von AP-29 und AP-30, M1 W4); AP-31 darf parallel laufen (Eigentum disjunkt) |
 | W2 | AP-17, AP-18, AP-19 |
 | W3 | M2-DEP [Mensch] |
 
@@ -538,8 +539,9 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-14 | Ausgaben und Einnahmen | M1 | UI | W2 | AP-09, AP-10 | L | sonnet | c4 | fertig |
 | AP-15 | Einfache Übersicht (Startseite v1) | M1 | UI | W2 | AP-09, AP-10 | S | sonnet | c5 | fertig |
 | M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15, AP-28 | H | – | Nutzer | fertig |
-| AP-29 | Aufräumen M1 (Originalbetrag, Werbung, Q-09-Hinweis, Texte) | M1 | UI | W4 | AP-11–AP-15 | S | sonnet | – | bereit |
-| AP-30 | Branch-Abdeckung fixedCosts ≥ 95 %, Coverage-Include | M1 | CORE+OPS | W4 | AP-09 | S | sonnet | – | bereit |
+| AP-29 | Aufräumen M1 (Originalbetrag, Werbung, Q-09-Hinweis, Texte) | M1 | UI | W4 | AP-11–AP-15 | S | sonnet | c1 | fertig |
+| AP-30 | Branch-Abdeckung fixedCosts ≥ 95 %, Coverage-Include | M1 | CORE+OPS | W4 | AP-09 | S | sonnet | c2 | fertig (Vermerk §12) |
+| AP-31 | fixedCosts: unerreichbare Fallbacks entfernen | M1 | CORE | W4 | AP-30 | S | sonnet | – | bereit |
 | AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | bereit |
 | AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | bereit |
 | AP-17 | Mitarbeiterverwaltung | M2 | UI | W2 | AP-14, AP-16 | M | sonnet | – | offen |
@@ -574,7 +576,7 @@ flowchart LR
     AP09 & AP10 --> AP12["AP-12"] & AP13["AP-13"] & AP14["AP-14"] & AP15["AP-15"]
     AP10 --> AP11["AP-11"]
     AP11 & AP12 & AP13 & AP14 & AP15 --> AP29["AP-29"]
-    AP09 --> AP30["AP-30"]
+    AP09 --> AP30["AP-30"] --> AP31["AP-31"]
   end
   subgraph M2["M2 Menschen & Marketing"]
     AP16["AP-16"] --> AP17["AP-17"] & AP18["AP-18"] & AP19["AP-19"]
@@ -599,7 +601,7 @@ flowchart LR
   AP24 --> AP25 & AP26 & AP27
 ```
 
-**Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel.
+**Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1107,6 +1109,32 @@ flowchart LR
 - **Opus-Grund:** –
 - **Kürzbar bei Budgetnot:** nein (Abnahmeziel PE-55)
 - **Commit-Typ:** `test(AP-30): cover fixedCosts branches and limit coverage to ts`
+- **Ergebnis (Wellenabschluss M1 W4, 2026-10-26):** Review Runde 1 formal „nicht bestanden“ wegen Branch-Abdeckung `fixedCosts.ts` 89,47 % (17/19). Die zwei `?? 0`-Fallbacks in Zeile 80 und 86 sind unerreichbar. Nutzer entschied: mergen, Folgepaket AP-31 entfernt die Fallbacks (PE-62). Coverage-Include ist behoben, Kern gesamt Branch 99,3 %.
+
+#### AP-31 – fixedCosts: unerreichbare Fallbacks entfernen
+
+- **Meilenstein, Lane, Welle:** M1 · CORE · W4
+- **Ziel:** Die beiden `?? 0`-Fallbacks in `monthlyFixedCosts` entfernen, die nie greifen können, damit die Branch-Abdeckung von `fixedCosts.ts` die Schwelle aus PE-55 erreicht. Reine Refaktorierung ohne Verhaltensänderung.
+- **Pflichtlektüre:** PE-24, PE-51, PE-55, PE-62, §18 (Befund AP-30), `src/core/aggregate/fixedCosts.ts`, `src/core/README.md` (nur lesen)
+- **Abhängigkeiten:** AP-30 (`fertig`, gemergt)
+- **Parallel möglich mit:** AP-16, AP-21 (Eigentumsmengen disjunkt)
+- **Dateien (Eigentum):** `src/core/aggregate/fixedCosts.ts`, `src/core/aggregate/fixedCosts*.test.ts` (bestehende Tests bleiben unverändert; neue Tests nur zur Verhaltensgleichheit)
+- **Nicht anfassen:** übrige `src/core/**` (auch `aggregate/aggregate.ts`, `ledger/**`), `src/core/README.md`, `vitest.config.ts`, `package.json`, `src/renderer/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Zeile 80 (`perProject.get(part.projectId) ?? 0`) und Zeile 86 (`perProject.get(p.id) ?? 0`) so umbauen, dass kein Zweig übrig bleibt, den kein Test erreichen kann. Zulässig sind z. B. eine Hilfsfunktion, die Summen je Projekt über eine Map oder einen Index aufbaut und nur vorhandene Einträge liest, oder ein Ergebnis-Array, das direkt aus `projects` entsteht. Der Coder wählt den Weg und begründet ihn im Commit-Body.
+  2. Verhalten bleibt exakt gleich: Summen, `byProject` in Eingabereihenfolge, `unallocatedCents`, `errors`, `safe()`-Grenze und Rundung (PE-51, Abweichung höchstens 1 Cent) bleiben unverändert. `FACTOR` und `monthlyEquivalent` werden nicht angefasst. Doppelte Projekt-IDs in `projects` liefern heute denselben Wert zweimal; das bleibt so.
+  3. Unzulässig: `/* istanbul ignore */`, `/* c8 ignore */`, Nicht-Null-Assertion `!`, wenn `no-non-null-assertion` greift, Lockern der Schwelle, Tests, die einen Fallback künstlich erzwingen.
+- **Schnittstellen:** keine. Öffentliche Signatur von `monthlyFixedCosts` und Typ `MonthlyFixedCosts` bleiben gleich (Nutzer laut §18: AP-10, AP-12–AP-15, AP-16, AP-20).
+- **Akzeptanzkriterien:** Branch-Abdeckung `src/core/aggregate/fixedCosts.ts` mindestens 95 % (Ziel 100 %). `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:coverage` grün, ohne Warnung. Alle bestehenden Tests in `fixedCosts.test.ts` unverändert grün. Keine Verhaltensänderung.
+- **Tests:** bestehende Tests unverändert; zusätzlich nur, falls nötig, Verhaltenstests (z. B. doppelte Projekt-IDs), keine Tests, die Fallbacks erzwingen (R2: keine echten Daten).
+- **Review-Schwerpunkte:** reine Refaktorierung. Rechenergebnisse müssen identisch sein. Der Diff beschränkt sich auf Zeilen 77–90 und eine Hilfsfunktion. Keine Änderung an Rechenregeln oder an `safe()`.
+- **Design-Review:** nein
+- **Doku-Pflichten:** keine (`src/core/README.md` gehört nicht zu diesem Paket)
+- **Aufwand:** S · **Modell:** sonnet · **Effort:** medium
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (schließt den Befund aus AP-30 ab, PE-55)
+- **Commit-Typ:** `refactor(AP-31): drop unreachable fallbacks in fixedCosts`
 
 ### M2 – Menschen & Marketing
 
@@ -1419,15 +1447,15 @@ flowchart LR
 | Meilenstein | Pakete | Agent-Aufwand | Geschätzte 5-h-Fenster bei 30 % Team-Budget |
 |---|---|---|---|
 | M0 | 8 (5 opus) | 13,25 h | 4–5 |
-| M1 | 10 (1 opus) | 15 h | 3–4 |
+| M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 4 (1 opus) | 9 h | 2–3 |
 | M4 | 3 (1 opus) | 3,75 h | 1 |
-| **Gesamt** | **30** | **48,5 h** + Reviews | **12–15** |
+| **Gesamt** | **31** | **49,25 h** + Reviews | **12–15** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
-**Nachtrag 2026-10-26:** AP-29 und AP-30 (je S, 0,75 h) sind in der M1-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
+**Nachtrag 2026-10-26:** AP-29, AP-30 und AP-31 (je S, 0,75 h) sind in der M1-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. 5 parallele Coder (PE-23) erreichen den Zielwert von 30 % schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1525,8 +1553,9 @@ flowchart LR
 | PE-57 | Abweichung von PE-21: AP-04 baut Dialog, Select, Tabs u. a. nativ, ohne weitere Radix-Pakete (`package.json` nur `@radix-ui/react-slot`). Gilt für alle UI-Pakete. Fokusfalle und Tastaturbedienung der Dialoge bleiben Review-Punkte. | keine neuen Abhängigkeiten; Barrierefreiheit wird im Review geprüft | Nutzer am 2026-10-26 (bestätigt; Vorschlag Planner aus M0) |
 | PE-58 | Einnahmen werden ohne Aktivitätsprüfung gebucht (die Einnahme gehört zum gewählten Projekt). Liegt das Buchungsdatum außerhalb des Aktivzeitraums des Projekts, zeigt die UI einen Hinweis; keine Blockade. Gilt für `IncomeForm` (AP-29 c). Die Aufteilung von Ausgaben bleibt nach PE-50. | Q-09 | Nutzer am 2026-10-26 |
 | PE-59 | Die Spalte „Originalbetrag“ entfällt in den Ausgaben- und Einnahmenlisten. Der Originalbetrag bleibt im Datensatz und im Formular. Die Projektdetailseite bleibt unverändert. | Übersichtlichkeit der Listen | Nutzer am 2026-10-26 (Wunsch, über Lead) |
-| PE-60 | Die Ausgabenkategorie „Werbung“ (`advertising`) ist im Ausgabenformular nicht wählbar; bestehende Buchungen zeigen sie weiter. Kampagnenkosten bleiben automatisch Werbung (PE-26). | Doppelerfassung vermeiden | (angenommen) Lead-Auftrag am 2026-10-26; Nutzer-Bestätigung offen |
+| PE-60 | Die Ausgabenkategorie „Werbung“ (`advertising`) ist im Ausgabenformular nicht wählbar; bestehende Buchungen zeigen sie weiter. Kampagnenkosten bleiben automatisch Werbung (PE-26). | Doppelerfassung vermeiden | Lead-Auftrag am 2026-10-26; Nutzer am 2026-10-26 bestätigt (Chat) |
 | PE-61 | Aufräumen M1 (AP-29) und Branch-Abdeckung `fixedCosts` ≥ 95 % mit Config-Fix (AP-30) als M1 W4 eingeplant. Damit sind die Vorschläge zu Aufräum-Paket, Coverage-Include und Abdeckung aus der Liste „Vorgeschlagene Änderungen“ umgesetzt. | Befunde der M1-Reviews, niedrig, kein Blocker | Lead-Auftrag am 2026-10-26 |
+| PE-62 | AP-30 mit Branch-Abdeckung `fixedCosts.ts` 89,47 % (17/19) gemergt, obwohl Review Runde 1 formal „nicht bestanden“ ist: die zwei `?? 0`-Fallbacks (Zeilen 80, 86) sind unerreichbar. Folgepaket AP-31 entfernt sie als reine Refaktorierung ohne Verhaltensänderung (Rechenregeln PE-51 bleiben). PE-55 (≥ 95 %) gilt weiter. | Abnahmeziel PE-55 ohne Ausnahmeregel, keine Coverage-Tricks | Nutzer am 2026-10-26 (Chat) |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1547,7 +1576,6 @@ flowchart LR
 
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
-| AP-14, AP-18 (PE-26) → AP-29 (b) | Die Ausgabenkategorie `advertising` („Werbung“) ist im Ausgabenformular wählbar. Kampagnenkosten zählen automatisch als Werbung, daher droht Doppelerfassung (M2-DEP prüft das). Vorschlag angenommen (PE-60) und als AP-29 (b) beauftragt. Nutzer-Bestätigung offen. | Befund AP-14-Review, niedrig | Planner, Befund AP-14 |
 | Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
 
 ---
@@ -1571,9 +1599,9 @@ flowchart LR
 | F-13 Nutzerzahlen | AP-16, AP-19 |
 | F-14 Datensicherung | AP-07, AP-11, AP-25 |
 | PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
-| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28, AP-30 |
+| PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28, AP-30, AP-31 |
 | PE-26 Werbung ohne Doppelerfassung | AP-14, AP-18, AP-29 |
-| PE-55 Abdeckung ≥ 95 % (Rechenkern) | AP-01, AP-30 |
+| PE-55 Abdeckung ≥ 95 % (Rechenkern) | AP-01, AP-30, AP-31 |
 | §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24 |
 | §5 ZIP-Import | AP-25 |
 | R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
@@ -1622,3 +1650,6 @@ flowchart LR
 | 2026-10-26 | AP-29 „Aufräumen M1“ und AP-30 „Branch-Abdeckung fixedCosts“ angelegt (M1 W4, nach M1-DEP, vor M2 W1). Zwei Pakete, damit das Dateieigentum disjunkt bleibt: AP-29 UI (`src/renderer/**`), AP-30 Kern-Tests und `vitest.config.ts`. Die Tests für `fixedCosts` liegen in `src/core/aggregate/`, nicht in `src/core/ledger/`. AP-14 Umsetzung 4 (Spalte Originalbetrag) ist durch AP-29 (a) überholt. PE-59, PE-60, PE-61 | Lead-Auftrag „Aufräumen M1“ | AP-14, AP-29, AP-30, §8, §9.2, §10, §11, §14, §17 | Lead-Auftrag; Nutzer-Bestätigung Werbung-Kategorie offen (PE-60) |
 | 2026-10-26 | AP-16 und AP-21 von `offen` auf `bereit` gesetzt (Abhängigkeiten AP-09 bzw. AP-10 erfüllt; die Tabelle widersprach dem Lagebericht) | Konsistenz | AP-16, AP-21 | Planner |
 | 2026-10-26 | Erkenntnis M1: `advertising` steht in `src/shared/lists.ts` (Vertragsdatei, SH-Eigentum). AP-29 (b) filtert deshalb nur im Renderer, nicht in der Liste. Bestandsbuchungen und die Ledger-Logik bleiben unverändert | Eigentumsgrenze | AP-29 | Planner |
+| 2026-10-26 | Wellenabschluss M1 W4: AP-29 auf `fertig` (in `dev` gemergt, Review Runde 1 bestanden); AP-30 auf `fertig` (in `dev` gemergt) mit Vermerk, Review Runde 1 formal „nicht bestanden“ (Branch `fixedCosts.ts` 89,47 %, 17/19; Fallbacks Zeilen 80, 86 unerreichbar); Integration grün (lint, typecheck, build, 447/447 Tests); Lagebericht aktualisiert | Lead-Auftrag „Wellenabschluss M1 W4“ | AP-29, AP-30, §0, §10, §12 | Lead-Auftrag |
+| 2026-10-26 | Nutzer-Entscheidung: AP-30 mergen, Folgepaket entfernt die Fallbacks. PE-62 eingetragen; AP-31 „fixedCosts: unerreichbare Fallbacks entfernen“ angelegt (M1 W4, Lane CORE, Aufwand S, sonnet, Abhängigkeit AP-30; Eigentum `aggregate/fixedCosts.ts` und `fixedCosts*.test.ts`; parallel zu AP-16/AP-21 erlaubt). §8, §9.2, §10, §11, §12, §14, §17 angepasst | Nutzer-Entscheidung im Chat | AP-31, AP-30, AP-16, AP-21 | Nutzer am 2026-10-26 |
+| 2026-10-26 | PE-60 (Werbung im Ausgabenformular nicht wählbar) vom Nutzer bestätigt; Vorschlag aus „Vorgeschlagene Änderungen“ entfernt, offener Punkt im Lagebericht entfernt | Nutzer-Bestätigung im Chat | AP-29, §16 | Nutzer am 2026-10-26 |
