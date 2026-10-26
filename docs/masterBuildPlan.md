@@ -9,7 +9,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 
 # Master-Build-Plan appManager
 
-**Stand:** 2026-10-25 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
+**Stand:** 2026-10-26 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
 Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 28 Arbeitspaketen (~47 h Agent-Zeit).
@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M0 fertig, M0-DEP offen (Nutzer) · M1 W1 fertig (AP-09, AP-28 in `dev`, 316/316 Tests, lint/typecheck/build grün)
-- **Fertig:** AP-01–AP-09, AP-28 (in `dev` gemergt) · **Offen:** M0-DEP [Mensch]; M1: AP-10 `bereit` (W1b), AP-11–AP-15 in W2, M1-DEP [Mensch]
-- **Unterbrochen oder laufend:** nichts. Kein Coder läuft. W1b wartet auf den Nutzer (Pause, kein Start mehr).
-- **Erkenntnisse:** UI muss `ledger.errors` und `MonthlyFixedCosts.errors` anzeigen (API in §18); Dev-Datenpfad nur `APP_DATA_DIR` oder `data-dev/` (PE-56); AP-04 ohne Radix (Vorschlag §16); Details §18
-- **Nächster Schritt:** W1b AP-10 (sonnet, L) starten, sobald der Nutzer den Start freigibt; danach W2 (AP-11–AP-15)
-- **Offene Nutzerpunkte:** `LICENSE` (H-01) fehlt, daher kein Push; `idee.txt` löschen (H-07); M0-DEP (H-03, Test-Datenordner); PE-56 bestätigen; Radix-Abweichung AP-04 entscheiden; Vitest-Konfiguration und Branch-Abdeckung AP-09 (§16)
+- **Stand:** 2026-10-26 · M1 W1 und W1b (AP-09, AP-10, AP-28) und W2 (AP-11–AP-15) in `dev` gemergt, Review Runde 1 bestanden; 440/440 Tests (38 Dateien), lint/typecheck/build grün, `dev` gepusht
+- **Fertig:** AP-01–AP-15, AP-28 · **Offen:** M0-DEP und M1-DEP [Mensch]; M2 W1: AP-16 (opus, M) und AP-21 (sonnet, M) `bereit`, AP-17–AP-19 und M2-DEP offen
+- **Unterbrochen oder laufend:** nichts. Kein Coder läuft.
+- **Erkenntnisse:** `.gitignore`/`.prettierignore` nur verankert (`/data/`, `/data-dev/`); Coder dürfen sie nicht ändern, Befund im Merge-Check → Merge von Hand. Bausteine und Hooks aus AP-10 liegen in `dev`. `ExpenseForm` (AP-14) ist Vertrag für AP-17. Details §18
+- **Nächster Schritt:** M1-DEP [Mensch] (Smoke-Test §9.2, Seed-Szenario-Abgleich). Lead-Handtest Kernfluss mit Seed-Daten (§9.2). Danach M2 W1 starten: AP-16 und AP-21
+- **Offene Nutzerpunkte:** M0-DEP (H-03, Test-Datenordner); PE-56 bestätigen; Radix-Abweichung AP-04 (§16); Vitest-Konfiguration und Branch-Abdeckung AP-09 (§16); Werbung im Ausgabenformular (§16); Q-09 Einnahmen ohne Aktivitätsprüfung
 
 ### Rollen und Dokumente
 
@@ -76,7 +76,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
 | 12 | Arbeitspakete | fertig (M0–M4) | – | G2 ✔ (M0–M4) |
-| 13 | Menschliche Schritte | fertig | H-01, H-07 offen | G2 ✔ |
+| 13 | Menschliche Schritte | fertig | – (H-01, H-07 erledigt) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
 | 16 | Planungsentscheidungen und offene Fragen | laufend | – | laufend |
@@ -528,12 +528,12 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | M0-DEP | Deployment M0 | M0 | HUM | W4 | AP-01–AP-08 | H | – | Nutzer | offen |
 | AP-09 | Kern: Buchungs-Engine und Aggregation | M1 | CORE | W1 | AP-05, AP-06 | L | opus | – | fertig |
 | AP-28 | Vertragslücken schließen | M1 | MAIN+SH+CORE+OPS | W1 | AP-02, AP-07 | S | sonnet | – | fertig |
-| AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1b | AP-04, AP-07, AP-28 | L | sonnet | – | bereit |
-| AP-11 | Einstellungen, Kurse, Kategorien | M1 | UI | W2 | AP-10 | M | sonnet | – | offen |
-| AP-12 | Projekte (Liste, Detail) | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | – | offen |
-| AP-13 | Dienste | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | – | offen |
-| AP-14 | Ausgaben und Einnahmen | M1 | UI | W2 | AP-09, AP-10 | L | sonnet | – | offen |
-| AP-15 | Einfache Übersicht (Startseite v1) | M1 | UI | W2 | AP-09, AP-10 | S | sonnet | – | offen |
+| AP-10 | UI-Baukasten und Daten-Hooks | M1 | UI | W1b | AP-04, AP-07, AP-28 | L | sonnet | c1 | fertig |
+| AP-11 | Einstellungen, Kurse, Kategorien | M1 | UI | W2 | AP-10 | M | sonnet | c1 | fertig |
+| AP-12 | Projekte (Liste, Detail) | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | c2 | fertig |
+| AP-13 | Dienste | M1 | UI | W2 | AP-09, AP-10 | M | sonnet | c3 | fertig |
+| AP-14 | Ausgaben und Einnahmen | M1 | UI | W2 | AP-09, AP-10 | L | sonnet | c4 | fertig |
+| AP-15 | Einfache Übersicht (Startseite v1) | M1 | UI | W2 | AP-09, AP-10 | S | sonnet | c5 | fertig |
 | M1-DEP | Deployment M1 | M1 | HUM | W3 | AP-09–AP-15, AP-28 | H | – | Nutzer | offen |
 | AP-16 | Kern: Personen-, Kampagnen-, Nutzer-Kennzahlen | M2 | CORE | W1 | AP-09 | M | opus | – | offen |
 | AP-21 | Diagramm-Bausteine | M2 | UI | W1 | AP-10 | M | sonnet | – | offen |
@@ -1341,8 +1341,8 @@ flowchart LR
 
 | ID | Schritt | Ab wann nötig | Blockiert | Erledigt |
 |---|---|---|---|---|
-| H-01 | `LICENSE` anlegen: Text von PolyForm Noncommercial 1.0.0 (polyformproject.org) einfügen, Zeile `Required Notice: Copyright Cem Dogan (https://github.com/CemDCoding/appManager)` ergänzen, auf `dev` committen | vor dem ersten Push durch den Lead (PE-45) | erster Push, AP-27, G3 | ☐ |
-| H-07 | `idee.txt` löschen (PE-44) | sofort | – | ☐ |
+| H-01 | `LICENSE` anlegen: Text von PolyForm Noncommercial 1.0.0 (polyformproject.org) einfügen, Zeile `Required Notice: Copyright Cem Dogan (https://github.com/CemDCoding/appManager)` ergänzen, auf `dev` committen | vor dem ersten Push durch den Lead (PE-45) | erster Push, AP-27, G3 | ☑ |
+| H-07 | `idee.txt` löschen (PE-44) | sofort | – | ☑ |
 | H-02 | GitHub-Repo `CemDCoding/appManager` anlegen und als `origin` eintragen | sofort | Push durch Lead | ☑ |
 | H-03 | Test-Datenordner für stage anlegen (Kopie von `data-dev/` nach `npm run seed`) | M0-DEP | Smoke-Tests | ☐ |
 | H-04 | Echten Datenordner auf `D:` anlegen (außerhalb des Projekts) und in der App wählen | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
@@ -1471,6 +1471,7 @@ flowchart LR
 | Q-06 | Design ohne Designer-Interview: wie? | W | §3, UI-Pakete | Grundsätze im Plan | geklärt → PE-21 |
 | Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | geklärt → PE-55 |
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
+| Q-09 | Einnahmen werden ohne Aktivitätsprüfung gebucht; PE-50 gilt nur für die Aufteilung von Ausgaben. Ist das gewollt? | W | §4, PE-08, PE-50 | ja, Einnahme gehört zum gewählten Projekt; bei Buchung außerhalb des Aktivzeitraums Hinweis anzeigen | offen |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
@@ -1480,6 +1481,9 @@ flowchart LR
 | PE-21, AP-04 | AP-04 baut Dialog, Select, Tabs u. a. nativ ohne Radix-Pakete (`package.json` nur `@radix-ui/react-slot`). PE-21 nennt shadcn/ui. Vorschlag: Abweichung bestätigen; oder Radix-Pakete nachziehen (neue Abhängigkeiten, Freigabe nötig). Fokusfalle und Tastaturbedienung der Dialoge prüfen. | Abweichung von PE-21; Barrierefreiheit | Planner, Befund aus M0 |
 | AP-09, `vitest.config.ts` | Coverage-Include `src/core/**` lässt Vitest `src/core/README.md` als Testdatei parsen (Warnung „Failed to parse“). Vorschlag: Include auf `src/core/**/*.ts` einschränken. Nach AP-01 ist keinem Paket erlaubt, `vitest.config.ts` zu ändern (§8). Lead entscheidet: kleines Paket mit diesem Eigentum in W1b/W2 oder Nachpaket. | Befund AP-09-Review | Planner, Befund AP-09 |
 | PE-55, AP-09 | Branch-Abdeckung `fixedCosts` liegt bei 89 %, unter dem Abnahmeziel ≥ 95 % (PE-55, PE-24). Vorschlag: Nachbesserungstests als kleines Paket (sonnet, S) vor AP-16 (Rechenkern M2). | Abnahmeziel Rechenkern | Planner, Befund AP-09 |
+| AP-14, AP-18 (PE-26) | Die Ausgabenkategorie `advertising` („Werbung“) ist im Ausgabenformular wählbar. Kampagnenkosten zählen aber schon automatisch als Werbung, daher droht Doppelerfassung (M2-DEP prüft genau das). Vorschlag: Kategorie im Formular ausblenden oder einen Hinweis zeigen. Umsetzung in AP-18 oder in einem kleinen Folgepaket (sonnet, S). | Befund AP-14-Review, niedrig | Planner, Befund AP-14 |
+| Aufräum-Paket (neu, sonnet, S) | Ungenutzte i18n-Schlüssel (home: `title`, `loadFailed`; services: `unknownService`, `loadError`; settings: `displaySaved`); hartkodierte Längen in AP-12 statt `@shared/limits`; doppelte Ladelogik in `DataSection.tsx`; Kommentar in `pages/home/overview.ts` passt nicht zum Code; Text `deleteKeep` in AP-13 ehrlicher („Dienst wurde gelöscht“). Vorschlag: vor M2 W2 einplanen, Lead entscheidet. | Befunde M1 W2, niedrig, kein Blocker | Planner, Befunde AP-10–AP-15 |
+| Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
 
 ---
 
@@ -1536,3 +1540,13 @@ flowchart LR
 | 2026-10-26 | Erkenntnis M1: PE-50 (Aktivitätsregel) gilt auch im Modus `selected`. Einnahmen werden ohne Aktivitätsprüfung gebucht (bitte prüfen, ob gewollt). `monthlyFixedCosts` rundet doppelt; Abweichung höchstens 1 Cent gegenüber PE-51 | Rechenregeln PE-50/PE-51 | AP-09, AP-15, AP-16, AP-20 | Planner |
 | 2026-10-26 | Erkenntnis AP-28: `IN_USE` in `IPC_ERROR_CODES`; `tsconfig.web.json` bindet `preload/index.d.ts` ein (wirkt erst, wenn AP-10 `window.api` nutzt; die Typprobe allein beweist den include-Eintrag nicht); Recurrence-Schleife stoppt nahe Jahr 9999; `fromEur` liefert `invalidAmount` bei ungültigem `eurCents` | Vertragslücken aus M0-Review | AP-10, AP-07, AP-09 | Planner |
 | 2026-10-26 | Befund niedrig: Vitest-Coverage warnt „Failed to parse src/core/README.md“ (`vitest.config.ts`, Include `src/core/**`); Branch-Abdeckung `fixedCosts` 89 %. Vorschläge in §16 „Vorgeschlagene Änderungen“ | Qualität Rechenkern | AP-09 | Planner |
+| 2026-10-26 | Wellenabschluss M1 W2: AP-10–AP-15 auf `fertig` (in `dev` gemergt, Review Runde 1 bestanden, 440/440 Tests in 38 Dateien, lint/typecheck/build grün, `dev` gepusht); H-01 (LICENSE) und H-07 (`idee.txt`) erledigt; Coder-Zuordnung eingetragen; Lagebericht aktualisiert | Lead-Auftrag „Wellenabschluss M1 W2“ | AP-10–AP-15, H-01, H-07 | Lead-Auftrag |
+| 2026-10-26 | Erkenntnis M1: `.gitignore`/`.prettierignore` ignorierten jeden Ordner namens `data` (z. B. `components/data`); jetzt verankert: `/data/`, `/data-dev/` bzw. `/data`, `/data-dev` (dev-Commit b13f14d). Coder dürfen `.gitignore` nicht ändern; der Wächter erlaubt das nur dem Lead; `lead-merge check` meldet es als verboten, dann Merge von Hand | Blockierte Commits, Wächter-Regel | alle Coder, Lead | Nutzer (b13f14d) |
+| 2026-10-26 | Erkenntnis AP-10: Bausteine in `dev`: `components/forms` (MoneyInput, AllocationEditor, RecurrenceEditor, ProjectPicker, CategorySelect, DateInput, StarRating, ConfirmDialog), `components/data` (DataTable, KpiCard, PeriodPicker), Hooks (`useCollection`, `useEntityMutation`, `useSettings`, `useRates`, `useDisplayCurrency`), Stores unter `state/`. `DisplayCurrencyProvider` ist optional. Formulare arbeiten mit Text-Entwürfen (`parseMoneyDraft`, `validateAllocationDraft`, `validateRecurrenceDraft`); ist `allocation` null, sperrt Speichern. Allocation-Vorschau filtert im Modus „ausgewählt“ inaktive Projekte nicht (wie `resolveProjects`); das Ledger wendet PE-50 an | Wiederverwendung in M2/M3 | AP-12–AP-24 | Planner |
+| 2026-10-26 | Erkenntnis AP-14: `ExpenseForm` aus `@/features/bookings` (Props `expense?`, `category?`, `personId?`, `serviceId?`, `kind?`, `onSaved?`, `onCancel?`); Vorbelegung nur beim Mount, bei Änderung per `key` neu mounten. Dienstkategorien: hosting, database, domain, storageCdn, softwareLicense, aiSubscription, aiCredit. Listen zeigen nur manuelle Buchungen (PE-26). Befund niedrig: `advertising` wählbar (§16) | Vertrag für AP-17 (Person vorbelegen) | AP-14, AP-17 | Planner |
+| 2026-10-26 | Erkenntnis AP-12: `ProjectTab({ projectId })` (Vertrag `ProjectTabProps` in `features/ComingSoon.tsx`); Tabs: Personen → `features/people`, Kampagnen → `features/campaigns`, Nutzer → `features/metrics`, Statistik → `features/stats`. Wiederverwendbar: `pages/projects/LedgerWarnings.tsx`, `useProjectLedger.ts` | Vertrag für M2/M3-Tabs | AP-12, AP-17–AP-19, AP-22 | Planner |
+| 2026-10-26 | Erkenntnis AP-13: `Service.purpose` ist Freitext; gespeichert werden die Schlüssel frontend/backend/database/hosting/storage/domain/other. Zweck → Kategorie: frontend/backend/hosting → hosting, database → database, storage → storageCdn, domain → domain, other → other. „Kosten behalten“ beim Löschen lässt hängende `serviceId` stehen; AP-12 und AP-14 müssen das tolerieren. Text `deleteKeep` ehrlicher (§16) | Datenkonsistenz | AP-12, AP-13, AP-14 | Planner |
+| 2026-10-26 | Erkenntnis AP-15: Fixkosten-Stichtag = heute, begrenzt auf den Zeitraum; Tabelle ohne „umgerechnet“-Badge (nur KPI-Karten); archivierte Projekte erscheinen mit 0 | Anzeigeregeln | AP-15, AP-22 | Planner |
+| 2026-10-26 | Erkenntnis AP-11: Sprache und Theme laufen über die Provider (`settings:set` kennt dafür kein Feld); eigene Listenschlüssel `custom-<slug>`; `restoreBackup` lädt den Store im Main selbst neu | Vertrag Einstellungen und Backup | AP-11, AP-25 | Planner |
+| 2026-10-26 | Erkenntnis M1 (Coder-Vorgaben): Lint-Regel `react-hooks/set-state-in-effect` verbietet setState im Effect, auch über `useCallback`; Laden im Effect mit `.then` und Abbruch-Flag. `Result<T,E>` verlangt `E extends string`. `IpcResult` hat `data`, nicht `value` | Vorgaben für UI-Pakete | alle UI-Pakete | Planner |
+| 2026-10-26 | Offen: Seed-Szenario-Abgleich (AP-15, Dienst-Anteile AP-12) ist nur per Unit-Tests geprüft, nicht gegen echte Seed-Daten. Gehört in den Handtest M1-DEP | Prüflücke | AP-12, AP-15, M1-DEP | Planner |
