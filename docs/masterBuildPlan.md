@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-28 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 34 Arbeitspaketen (~55 h Agent-Zeit).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 36 Arbeitspaketen (~57 h Agent-Zeit).
 
 ---
 
@@ -22,13 +22,13 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-28 · M4 W1 abgeschlossen (AP-25, AP-26, AP-27 in `dev`, HEAD 5952362 Plan). Aufräumpaket vom Nutzer freigegeben und in M4 W2 als AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) eingeplant; M4-DEP wartet darauf.
-- **Fertig:** AP-01–AP-32, M0-DEP, M1-DEP, AP-25–AP-27 · **Bereit:** AP-33, AP-34 (M4 W2), M2-DEP, M3-DEP · **Offen:** M4-DEP (wartet auf AP-33, AP-34, H-04).
-- **Unterbrochen oder laufend:** keine gemeldet. Branches und Worktrees der gemergten Pakete (M3 und M4) aufräumen: Lead (§9.1 Schritt 7).
-- **Erkenntnisse:** Datenordner-Wechsel legt das Start-Backup im neuen Ordner an, kein Backup des alten Ordners (PE-65, Q-11). AP-24 ohne Zeitlimit für `printToPDF` und Speichern-Dialog; `period` wird gestrippt (§18). AP-25 Befunde (1)–(3) in AP-34, (4)–(6) in AP-33. Details §18.
-- **Nächster Schritt:** Lead startet M4 W2: AP-33 (c1) und AP-34 (c2) parallel, Eigentum disjunkt (§8, §12). Danach M4-DEP mit Prüfpunkt Backup im neuen Datenordner.
-- **Entschieden (2026-10-28):** AP-25 nicht atomares Ersetzen akzeptiert, Export-ZIP unverschlüsselt belassen mit Pflicht-Vermerk (PE-66, PE-67); AP-24 (a)–(c) in AP-34, (d) verworfen (PE-68); Zweiturteil abgeschaltet (PE-69); PE-53-Annahmen und Lizenzangaben bestätigt (PE-53, PE-20).
-- **Offene Nutzerpunkte:** H-04 (Datenordner `D:\appManagerDaten` anlegen und im M4-DEP in der installierten App wählen); Q-11 (Backup des alten Ordners beim Wechsel); Q-10 (Befunde ohne Eintrag im Paket, §16); H-05 Designer-Gespräch (fällig nach M1-DEP); H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`)
+- **Stand:** 2026-10-28 · M4 W1 abgeschlossen (AP-25–AP-27 in `dev`). M4 W2 läuft: AP-33 (UI, c1) und AP-34 (MAIN/OPS, c2). Pflegeauftrag 2026-10-28: AP-35 (MAIN, opus, W2b, nach AP-34) und AP-36 (UI, haiku, W2b, nach AP-33) neu geplant; M4-DEP (W3) wartet auf AP-33–AP-36.
+- **Fertig:** AP-01–AP-32, M0-DEP, M1-DEP, AP-25–AP-27 · **In Arbeit:** AP-33, AP-34 · **Offen:** AP-35, AP-36 (W2b), M4-DEP (H-04) · **Bereit:** M2-DEP, M3-DEP (Nutzer).
+- **Unterbrochen oder laufend:** AP-33 und AP-34 laufen in Worktrees (laut Nutzer). Branches und Worktrees der gemergten Pakete (M3 und M4) aufräumen: Lead (§9.1 Schritt 7).
+- **Erkenntnisse:** Datenordner-Wechsel legt das Start-Backup im neuen Ordner an (PE-65); seit PE-70 zusätzlich ein Backup des alten Ordners, bei Fehler Abbruch (AP-35). Fehler zeigt in den Einstellungen nur den generischen Text IO (Hinweis in AP-36, PE-71). AP-24 Zeitlimits bestätigt (PE-68); AP-25 Befunde (1)–(3) in AP-34, (4)–(6) in AP-33. Details §18.
+- **Nächster Schritt:** Lead merged AP-33 und AP-34. Danach W2b: AP-35 (nach AP-34) und AP-36 (nach AP-33) parallel, Eigentum disjunkt (§8, §12). Dann M4-DEP mit Prüfpunkt Backup im alten und im neuen Datenordner.
+- **Entschieden (2026-10-28):** AP-25 nicht atomares Ersetzen akzeptiert, Export-ZIP unverschlüsselt mit Pflicht-Vermerk (PE-66, PE-67); AP-24 (a)–(c) in AP-34, PDF-Werte bestätigt (PE-68); Zweiturteil abgeschaltet (PE-69); Backup des alten Ordners beim Wechsel Pflicht, Q-11 geklärt (PE-70); PE-53 und PE-20 bestätigt.
+- **Offene Nutzerpunkte:** H-04 (Datenordner `D:\appManagerDaten` anlegen und im M4-DEP wählen); Q-12 (Wechsel, wenn der alte Ordner nicht gesichert werden kann; Vorschlag: abbrechen); Q-10 (Befunde ohne Eintrag im Paket, §16); H-05 Designer-Gespräch (fällig nach M1-DEP); H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`)
 
 ### Rollen und Dokumente
 
@@ -76,7 +76,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 9 | Meilensteine und Wellen | fertig | – | G2 ✔ |
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
-| 12 | Arbeitspakete | fertig (M0–M4); AP-33, AP-34 (M4 W2) neu geplant 2026-10-28 | – | G2 ✔ (M0–M4; M4 mit AP-33/34) |
+| 12 | Arbeitspakete | fertig (M0–M4); AP-33–AP-36 (M4) neu geplant 2026-10-28 | – | G2 ✔ (M0–M4; M4 mit AP-33–AP-36) |
 | 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-04, H-05, H-06 offen) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
@@ -271,8 +271,8 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 |---|---|---|
 | Größe ZIP-Import | 50 MB | global |
 | Anzahl Backups | 10 | global |
-| Zeitlimit `printToPDF` · Speichern-Dialog (angenommen, PE-68) | 60 s · 10 min | PDF-Export |
-| Zeitraum PDF-Bericht (angenommen, PE-68) | höchstens 50 Jahre | PDF-Export |
+| Zeitlimit `printToPDF` · Speichern-Dialog (bestätigt, PE-68) | 60 s · 10 min | PDF-Export |
+| Zeitraum PDF-Bericht (bestätigt, PE-68) | höchstens 50 Jahre | PDF-Export |
 | Textfelder (Name, Beschreibung, Notiz) | 200 / 2 000 / 5 000 Zeichen | je Feld |
 
 **Nie kürzbar:** Electron-Härtung, zod-Validierung, Zip-Slip-Schutz, atomares Schreiben + Backups, Tests des Rechenkerns.
@@ -387,11 +387,11 @@ flowchart TD
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
 | `src/preload/index.ts` | AP-01 → AP-07 | M0 W1, W3 |
-| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround). M4 W2 nur AP-34: `storage/__tests__/service.test.ts` (Test Backup im neuen Ordner, PE-65), `ipc/handlers.ts` (Kommentar Z. 50), `storage/store.ts` nur falls zwingend (Vermerk im Bericht) | M0 W3, M1 W1, M4 W2 |
+| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround). M4 W2 nur AP-34: `storage/__tests__/service.test.ts` (Test Backup im neuen Ordner, PE-65), `ipc/handlers.ts` (Kommentar Z. 50), `storage/store.ts` nur falls zwingend (Vermerk im Bericht). M4 W2b nur AP-35: `storage/service.ts` (Alt-Backup vor dem Wechsel, PE-70) und `storage/__tests__/service.test.ts` (nur neue Tests, nach dem AP-34-Merge) | M0 W3, M1 W1, M4 W2, M4 W2b |
 | `src/main/transfer/**` | AP-25; M4 W2: AP-34 (Befunde (1)–(3)) | M4 W1, M4 W2 |
 | `src/main/pdf/**` | AP-24; M4 W2: AP-34 (Zeitlimit, Validierung, Zeitraum, PE-68) | M3 W2, M4 W2 |
 | `e2e/fixtures.ts`, `e2e/flows.spec.ts` | AP-26; M4 W2: AP-34 nur `fixtures.ts` (Umgebungsvariablen), AP-33 nur `flows.spec.ts` (Selektoren, Ausnahme zur OPS-Lane, PE-64) | M4 W1, M4 W2 |
-| `README.md` (Abschnitt „Datenordner und Backups“), `src/core/README.md` (Absatz unter der Tabelle im Abschnitt „Ziele (PE-53)“) | AP-27 (README), AP-32 (Abschnitt „Ziele“); M4 W2: AP-34 | M4 W1, M3 W2, M4 W2 |
+| `README.md` (Abschnitt „Datenordner und Backups“), `src/core/README.md` (Absatz unter der Tabelle im Abschnitt „Ziele (PE-53)“) | AP-27 (README), AP-32 (Abschnitt „Ziele“); M4 W2: AP-34; M4 W2b: AP-35 (ein Satz im Abschnitt „Datenordner und Backups“) | M4 W1, M3 W2, M4 W2, M4 W2b |
 | `src/renderer/app/routes.tsx`, `src/renderer/app/Layout.tsx` | AP-04 | M0 W2 |
 | `src/renderer/components/ui/**` (shadcn) | AP-04 legt Grundsatz an; AP-10 ergänzt | M0 W2, M1 W1b |
 | `src/renderer/styles/globals.css` (Design-Variablen) | AP-01 → AP-04; später Design-Pakete | – |
@@ -400,6 +400,7 @@ flowchart TD
 | `src/core/aggregate/fixedCosts.ts` | AP-31 (Fallbacks entfernen, Verhalten gleich) | M1 W4 |
 | `src/core/goals/goals.ts`, `src/core/goals/goals*.test.ts`, Abschnitt „Ziele“ in `src/core/README.md` | AP-32 (Kostenlimit erst nach Stichtag); AP-20 hat den Ordner angelegt | M3 W2 |
 | `src/renderer/**` (Aufräumpaket, Dateiliste in §12 AP-33) | AP-33; Cross-Imports `pages/projects/*` → neuer Ordner `src/renderer/components/ledger/**` | M4 W2 |
+| `src/renderer/pages/settings/DataSection.tsx`, `src/renderer/pages/settings/i18n.ts` | AP-36 (erst nach dem Merge von AP-33) | M4 W2b |
 
 ---
 
@@ -411,7 +412,7 @@ flowchart TD
 | M1 | Prototyp | Buchungs-Engine, UI-Baukasten, Einstellungen/Kurse, Projekte, Dienste, Ausgaben/Einnahmen, einfache Übersicht | Kernfluss erfassen → Übersicht stimmt; danach Designer-Gespräch (H-05) |
 | M2 | Menschen & Marketing | Kennzahlen-Kern, Mitarbeiterverwaltung, Kampagnen, Nutzerzahlen | Personen, Kampagnen, Nutzerstände erfassbar mit Kennzahlen |
 | M3 | Auswertung | Prognose/Break-even/Ziel-Kern, Diagramme, Statistikseite, Startseite mit Zielen, PDF | Statistiken und PDF stimmen mit App überein |
-| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33, AP-34) | Release-Installer auf `D:`, Abnahme G3 |
+| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36) | Release-Installer auf `D:`, Abnahme G3 |
 
 ### 9.1 Ablauf einer Welle
 
@@ -517,7 +518,8 @@ flowchart TD
 |---|---|
 | W1 | AP-25, AP-26, AP-27 |
 | W2 | AP-33 (UI, Aufräumen) und AP-34 (MAIN/OPS, Härtung), parallel, Eigentum disjunkt (§8). Nach dem zweiten Merge `npm run typecheck` und `npm run test:e2e` (AP-34 bindet `e2e/**` in den Typecheck ein) |
-| W3 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 und AP-34 |
+| W2b | AP-35 (MAIN, Alt-Backup vor dem Ordnerwechsel, nach AP-34) und AP-36 (UI, Hinweis, nach AP-33), parallel, Eigentum disjunkt |
+| W3 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 bis AP-36 |
 
 ##### M4-DEP – Deployment [Mensch]
 
@@ -527,7 +529,7 @@ flowchart TD
   - [ ] Release-Installer auf `D:`, externer echter Datenordner gewählt
   - [ ] `npm run dist` erzeugt den Installer (AP-27 nicht real geprüft); NSIS schlägt `D:\appManager` vor, Zielordner änderbar, Deinstallation lässt den Datenordner stehen (bei Problemen Alternative `preInit` statt `customInit` in `build/installer.nsh`)
   - [ ] PDF-Export aus der installierten App erzeugt eine gültige Datei; Optik per Sichtprüfung (AP-26 prüft nur die Dateierzeugung)
-  - [ ] Datenordner wechseln: `D:\appManagerDaten` in der installierten App wählen (H-04). Danach liegt im neuen Ordner ein Backup (`backups/`, neuer Zeitstempel) (PE-65)
+  - [ ] Datenordner wechseln: `D:\appManagerDaten` in der installierten App wählen (H-04). Danach liegt im neuen Ordner ein Backup und im bisherigen Ordner ein Backup (jeweils `backups/`, neuer Zeitstempel) (PE-65, PE-70)
   - [ ] Abnahmekriterien §1 abgehakt
 
 ---
@@ -576,9 +578,11 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | c1 | fertig |
 | AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | c2 | fertig |
 | AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | c3 | fertig |
-| AP-33 | Aufräumen UI (Befunde M2–M4, AP-25/AP-26 UI-Teil) | M4 | UI | W2 | AP-10, AP-11, AP-12, AP-17–AP-19, AP-21–AP-23, AP-25, AP-26 | L | sonnet | – | bereit |
-| AP-34 | Härtung MAIN/OPS (PDF-Zeitlimit und Validierung, ZIP-Befunde, Konfiguration, Doku) | M4 | MAIN+OPS+CORE | W2 | AP-07, AP-24–AP-27, AP-32 | L | opus | – | bereit |
-| M4-DEP | Release und Abnahme | M4 | HUM | W3 | AP-25–AP-27, AP-33, AP-34 | H | – | Nutzer | offen |
+| AP-33 | Aufräumen UI (Befunde M2–M4, AP-25/AP-26 UI-Teil) | M4 | UI | W2 | AP-10, AP-11, AP-12, AP-17–AP-19, AP-21–AP-23, AP-25, AP-26 | L | sonnet | c1 | in Arbeit |
+| AP-34 | Härtung MAIN/OPS (PDF-Zeitlimit und Validierung, ZIP-Befunde, Konfiguration, Doku) | M4 | MAIN+OPS+CORE | W2 | AP-07, AP-24–AP-27, AP-32 | L | opus | c2 | in Arbeit |
+| AP-35 | Backup des alten Datenordners vor dem Wechsel (PE-70) | M4 | MAIN | W2b | AP-07, AP-34 | M | opus | – | offen |
+| AP-36 | Hinweis bei abgebrochenem Ordnerwechsel (PE-71) | M4 | UI | W2b | AP-33 | S | haiku | – | offen |
+| M4-DEP | Release und Abnahme | M4 | HUM | W3 | AP-25–AP-27, AP-33–AP-36 | H | – | Nutzer | offen |
 
 ---
 
@@ -616,6 +620,8 @@ flowchart LR
     AP27["AP-27"]
     AP33["AP-33"]
     AP34["AP-34"]
+    AP35["AP-35"]
+    AP36["AP-36"]
   end
   AP05 & AP06 --> AP09
   AP02 & AP07 --> AP28
@@ -627,13 +633,17 @@ flowchart LR
   AP25 --> AP33 & AP34
   AP26 --> AP33
   AP24 --> AP34
+  AP34 --> AP35
+  AP33 --> AP36
 ```
 
 **Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
 
 **Nachtrag 2026-10-26 (Pflegeauftrag):** AP-32 (Fix Kostenlimit, Kern, M3 W2) hängt an AP-20 und ist Voraussetzung für AP-23. AP-23 startet daher in W2b, nach dem Merge von AP-32. AP-22 und AP-24 hängen nicht davon ab.
 
-**Nachtrag 2026-10-28 (Pflegeauftrag):** AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) bilden M4 W2 und laufen parallel; ihr Dateieigentum ist disjunkt (§8). AP-33 hängt an fertigen UI- und M2/M3-Paketen, AP-34 an AP-07, AP-24–AP-27 und AP-32. M4-DEP (W3) hängt an beiden.
+**Nachtrag 2026-10-28 (Pflegeauftrag):** AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) bilden M4 W2 und laufen parallel; ihr Dateieigentum ist disjunkt (§8). AP-33 hängt an fertigen UI- und M2/M3-Paketen, AP-34 an AP-07, AP-24–AP-27 und AP-32. M4-DEP (W3) hängt an AP-33 bis AP-36 (siehe Pflegeauftrag 2 unten).
+
+**Nachtrag 2026-10-28 (Pflegeauftrag 2):** AP-35 (MAIN, opus) hängt an AP-34 und AP-07 (Eigentum `storage/service.ts` und dessen Test, erst nach dem AP-34-Merge). AP-36 (UI, haiku) hängt an AP-33 (Eigentum `DataSection.tsx`, erst nach dem AP-33-Merge). Beide laufen in W2b parallel; ihr Eigentum ist disjunkt.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1504,7 +1514,7 @@ flowchart LR
   - `src/renderer/features/metrics/UserMetricsView.tsx`
   - `src/renderer/features/stats/StatsView.tsx`
   - `src/renderer/features/transfer/TransferSection.tsx`, `i18n.ts`, `transfer-logic.ts` (mit Tests)
-  - `src/renderer/pages/settings/DataSection.tsx`
+  - `src/renderer/pages/settings/DataSection.tsx` (danach AP-36, §8)
   - `e2e/flows.spec.ts` (nur Selektoren auf `data-testid`; Ausnahme zur OPS-Lane, PE-64)
 - **Nicht anfassen:** `src/main/**`, `src/preload/**`, `src/shared/**`, `src/core/**`, `e2e/fixtures.ts`, `tsconfig*.json`, `package.json`, übrige Seiten und Features
 - **Freigegebene Abhängigkeiten:** keine neuen
@@ -1549,14 +1559,14 @@ flowchart LR
 - **Nicht anfassen:** `src/shared/**` (Vertrag; PE-68 (d) verworfen), `src/renderer/**`, `src/main/index.ts`, `src/main/window.ts`, `src/main/security.ts`, `package.json`, `vitest.config.ts`, `.gitignore`
 - **Freigegebene Abhängigkeiten:** keine neuen
 - **Umsetzung:**
-  1. AP-24 (a): `printToPDF` und Speichern-Dialog mit Zeitlimit; Timer injizierbar wie `createReadyGate`. `printToPDF` 60 s, Speichern-Dialog 10 min (PE-68, angenommen). Bei Ablauf: bestehender Fehlercode INTERNAL, Druckfenster schließen, Export-Sperre freigeben. Ein danach noch offener Dialog wird verworfen, es wird nichts geschrieben (Electron kann den nativen Dialog nicht schließen).
+  1. AP-24 (a): `printToPDF` und Speichern-Dialog mit Zeitlimit; Timer injizierbar wie `createReadyGate`. `printToPDF` 60 s, Speichern-Dialog 10 min (PE-68, bestätigt). Bei Ablauf: bestehender Fehlercode INTERNAL, Druckfenster schließen, Export-Sperre freigeben. Ein danach noch offener Dialog wird verworfen, es wird nichts geschrieben (Electron kann den nativen Dialog nicht schließen).
   2. AP-24 (b): `period` mit Zusatzfeldern in `parsePdfExportInput` ablehnen, nicht stillschweigend entfernen. Nur in `params.ts`, kein Eingriff in `src/shared/**`.
-  3. AP-24 (c): Zeitraum höchstens 50 Kalenderjahre (`to` minus `from`), Konstante in `params.ts`, Ablehnung als VALIDATION (PE-68, angenommen). Der Gesamtbericht ab 2000 bleibt möglich.
+  3. AP-24 (c): Zeitraum höchstens 50 Kalenderjahre (`to` minus `from`), Konstante in `params.ts`, Ablehnung als VALIDATION (PE-68, bestätigt). Der Gesamtbericht ab 2000 bleibt möglich.
   4. AP-25 (1): Anzahl der Einträge aus dem EOCD-Datensatz vor `JSZip.loadAsync` prüfen (`declaredEntryCount` in `archive.ts`); Abweichung ablehnen.
   5. AP-25 (2): Größenprüfung und Lesen zusammenführen. Das Limit gilt für die tatsächlich gelesenen Bytes (TOCTOU bei stat, dann readFile). Nichts wird vor der Prüfung überschrieben.
   6. AP-25 (3): Export liest die Dateien nach `store.idle()` außerhalb des Locks. Ziel ist ein konsistenter Snapshot: unter Sperre lesen oder erkennen, dass sich der Bestand beim Lesen geändert hat, und dann mit klarem Fehler abbrechen. Braucht das eine Store-Änderung, dann nur minimal in `storage/store.ts` (Vermerk).
   7. OPS: `tsconfig.node.json` erfasst `e2e/**/*`; `e2e/fixtures.ts` reicht nur die für den Start nötigen Umgebungsvariablen weiter (Liste im Code begründet). `electron-builder.yml` Z. 19: Kommentar korrigieren, denn er gilt nur, wenn der Nutzer den Datenordner außerhalb des Installationsordners wählt (PE-18). README-Abschnitt „Datenordner und Backups“: Hinweis, dass ein Datenordner im Installationsordner möglich, aber nicht empfohlen ist.
-  8. Test-Ergänzung in `storage/__tests__/service.test.ts` („switches to another folder“): nach dem Wechsel liegt im neuen Ordner ein Backup unter `backups/` (PE-65). Keine Codeänderung in `storage/service.ts`.
+  8. Test-Ergänzung in `storage/__tests__/service.test.ts` („switches to another folder“): nach dem Wechsel liegt im neuen Ordner ein Backup unter `backups/` (PE-65). Keine Codeänderung in `storage/service.ts` (das Alt-Backup beim Wechsel folgt in AP-35).
   9. `src/main/ipc/handlers.ts` Z. 50: Kommentar „export/import/pdf follow in AP-24/AP-25“ korrigieren (nur Kommentar).
   10. `src/core/README.md`, Abschnitt „Ziele (PE-53)“: Absatz „Status sonst missed …“ eindeutiger fassen. Die Regel bleibt unverändert (PE-53).
 - **Schnittstellen:** keine Änderung an IPC-Kanälen, Verträgen oder Fehlercodes. Zeitlimit und neue Ablehnungen nutzen bestehende Codes.
@@ -1570,6 +1580,64 @@ flowchart LR
 - **Kürzbar bei Budgetnot:** nein (Nutzer-Entscheidung PE-64, PE-68)
 - **Commit-Typ:** `fix(AP-34): harden pdf timeouts and zip import checks`
 
+#### AP-35 – Backup des alten Datenordners vor dem Wechsel (PE-70)
+
+- **Meilenstein, Lane, Welle:** M4 · MAIN · W2b
+- **Ziel:** Beim Wechsel des Datenordners wird vorher ein Backup des bisherigen Ordners angelegt. Gelingt das nicht, bricht der Wechsel ab: der alte Ordner bleibt aktiv, nichts wird umgeschaltet, keine Einstellung gespeichert (PE-70, Q-11).
+- **Pflichtlektüre:** F-14, PE-18, PE-65, PE-70, §5 (Anzahl Backups 10), `src/main/storage/service.ts`, `src/main/storage/backups.ts` (nur `createBackup`), `src/main/index.ts` (nur lesen: `chooseAndSwitchDataDir`)
+- **Abhängigkeiten:** AP-07, AP-34 (AP-34 ändert `storage/__tests__/service.test.ts`; Start erst nach dem Merge von AP-34)
+- **Parallel möglich mit:** AP-36 (Eigentum disjunkt)
+- **Dateien (Eigentum):**
+  - `src/main/storage/service.ts`
+  - `src/main/storage/__tests__/service.test.ts` (nur neue Tests, nach dem Merge von AP-34)
+  - `README.md` (nur ein Satz im Abschnitt „Datenordner und Backups“)
+- **Nicht anfassen:** `src/main/storage/store.ts`, `src/main/storage/backups.ts`, `src/main/index.ts` (Signatur von `open` bleibt), `src/main/config/**`, `src/shared/**`, `src/renderer/**`, `package.json`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. `DataService.open` (`service.ts`): Gibt es einen aktiven Datenordner und weicht sein Pfad vom neuen `dir` ab (Vergleich nach `path.resolve`), dann zuerst `await previous.idle()` und danach `createBackup(previous.dir, this.deps.now(), previous.allUsable() ? this.keep : null)`. Das passiert **vor** `mkdir` des neuen Ordners.
+  2. Scheitert das Backup: `this.log('backups', 'IO')` und `throw new StorageError('IO', 'backups: previous folder could not be backed up')`. Dann ist noch nichts geändert: kein neuer Ordner, `beforeActivate` läuft nicht, der alte Ordner bleibt aktiv.
+  3. Ohne aktiven Ordner (Start) oder bei gleichem Pfad gibt es kein Alt-Backup; der Ablauf bleibt wie bisher.
+  4. Rest unverändert (Start-Backup im neuen Ordner, `beforeActivate`, Umschalten). Doc-Kommentar von `open` anpassen.
+  5. README-Abschnitt „Datenordner und Backups“: ein Satz, dass ein Wechsel vorher ein Backup des bisherigen Ordners anlegt und bei Fehler abbricht.
+- **Schnittstellen:** keine Änderung an Signatur, IPC-Kanälen oder Fehlercodes (es wird der bestehende Code `IO` genutzt).
+- **Akzeptanzkriterien:** Wechsel von Ordner A nach B: `A/backups/` und `B/backups/` enthalten danach je ein Backup. Scheitert das Alt-Backup (z. B. Datei namens `backups` in A), wirft `open` den Fehler IO, `dir` bleibt A, B wird nicht angelegt, `beforeActivate` wird nicht aufgerufen. Im alten Ordner bleiben höchstens `MAX_BACKUPS` Backups. `npm run lint`, `npm run typecheck`, `npm test` grün.
+- **Tests:** in `service.test.ts` mit temporären Verzeichnissen (keine echten Daten, R2): (a) Alt-Backup entsteht, (b) Fehlschlag bricht ab ohne Änderung, (c) Rotation mit `keepBackups: 2`, (d) gleicher Pfad legt kein Alt-Backup an. Die Tests aus AP-34 bleiben grün.
+- **Review-Schwerpunkte:** Datenverlust (Reihenfolge: Alt-Backup vor `mkdir` und vor dem Schreiben der Konfiguration), keine Pfade aus dem Renderer (R6), keine Pfade im Log (R2), kein hängender Zustand nach einem Fehler.
+- **Design-Review:** nein
+- **Doku-Pflichten:** README-Satz (Umsetzung 5)
+- **Aufwand:** M · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** Sicherheit (Datensicherung beim Umschalten des aktiven Datenordners)
+- **Kürzbar bei Budgetnot:** nein (Nutzer-Entscheidung PE-70)
+- **Commit-Typ:** `fix(AP-35): back up previous data folder before switching`
+
+#### AP-36 – Hinweis bei abgebrochenem Ordnerwechsel (PE-71)
+
+- **Meilenstein, Lane, Welle:** M4 · UI · W2b
+- **Ziel:** Scheitert der Wechsel des Datenordners, zeigen die Einstellungen zusätzlich, dass der bisherige Datenordner aktiv bleibt (PE-71). Fehlercode und Fehlerlogik bleiben unverändert.
+- **Pflichtlektüre:** PE-65, PE-70, PE-71, §8 (Eigentum), `src/renderer/pages/settings/DataSection.tsx`, `src/renderer/i18n/shared-keys.ts` (nur lesen), `src/renderer/hooks/errors.ts` (nur lesen)
+- **Abhängigkeiten:** AP-33 (Eigentum von `DataSection.tsx` geht nach dem Merge an AP-36 über)
+- **Parallel möglich mit:** AP-35 (Eigentum disjunkt)
+- **Dateien (Eigentum):**
+  - `src/renderer/pages/settings/DataSection.tsx` (nur der Fehlerpfad beim Ordnerwechsel)
+  - `src/renderer/pages/settings/i18n.ts` (neuer Schlüssel, de und en gleich)
+  - `src/renderer/pages/settings/settings-logic.ts` und `settings-logic.test.ts` (nur falls eine Hilfsfunktion nötig ist)
+- **Nicht anfassen:** `src/renderer/i18n/shared-keys.ts`, `src/renderer/hooks/**`, `src/shared/**`, `src/main/**`, übrige Seiten, `package.json`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. Schlägt `window.api.dataDir.choose()` fehl, steht unter dem bestehenden Fehlertext (`ipcErrorText`) ein zweiter Satz. de: „Der Wechsel ist nicht erfolgt. Der bisherige Datenordner bleibt aktiv.“ en: „The change did not happen. The previous data folder stays active.“
+  2. Der Zusatz gilt nur für Fehler aus dem Ordnerwechsel, nicht für das Laden von Ordner oder Backup-Liste.
+  3. Kein neuer Fehlercode, keine Änderung an `src/shared/**`.
+- **Schnittstellen:** keine.
+- **Akzeptanzkriterien:** Ein Fehler beim Wechsel zeigt Fehlertext und Zusatz; Lade- und Backup-Fehler unverändert; de und en haben gleiche Schlüssel (RI-10); `npm run lint`, `npm run typecheck`, `npm test` grün. Die Anzeige prüft der Nutzer im M4-DEP.
+- **Tests:** Ist eine Hilfsfunktion nötig, Unit-Test in `settings-logic.test.ts`; sonst Sichtprüfung im M4-DEP.
+- **Review-Schwerpunkte:** Text nur für den Wechsel, i18n-Gleichheit, keine Verhaltensänderung im Fehlerfall.
+- **Design-Review:** nein (kein freigegebener Design-Brief, PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** S · **Modell:** haiku · **Effort:** low
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** ja (reiner Hinweistext, keine Sicherheitsfrage; PE-71)
+- **Commit-Typ:** `feat(AP-36): explain aborted data folder switch`
+
 ---
 
 ## 13. Menschliche Schritte
@@ -1580,7 +1648,7 @@ flowchart LR
 | H-07 | `idee.txt` löschen (PE-44) | sofort | – | ☑ |
 | H-02 | GitHub-Repo `CemDCoding/appManager` anlegen und als `origin` eintragen | sofort | Push durch Lead | ☑ |
 | H-03 | Test-Datenordner für stage anlegen (Kopie von `data-dev/` nach `npm run seed`) | M0-DEP | Smoke-Tests | ☑ |
-| H-04 | Datenordner `D:\appManagerDaten` anlegen (außerhalb des Projekts) und in der installierten App wählen; Backup-Prüfpunkt im M4-DEP (PE-65) | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
+| H-04 | Datenordner `D:\appManagerDaten` anlegen (außerhalb des Projekts) und in der installierten App wählen; Backup-Prüfpunkt im M4-DEP: Backup im neuen und im alten Ordner (PE-65, PE-70) | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
 | H-05 | Designer-Gespräch nach M1: `start-agent.ps1 -Project "D:\Private Projekte\appManager" -Role designer`; danach beauftragt der Lead den Planner mit „Design übernehmen“ | nach M1-DEP | Design-Pakete (folgen) | ☐ |
 | H-06 | Smoke-Tests M0–M4 laut §9 und Merges `dev` → `stage` → `master` | je Meilenstein | nächster Meilenstein | ☐ teilweise: Smoke-Tests M0 und M1 bestanden (2026-10-26); Smoke-Tests M2, M3, M4 offen (M2-DEP, M3-DEP, M4-DEP); Merges `dev` → `stage` → `master` für M0 bis M4 noch offen (Anleitung §9.2, PE-42). Auf GitHub steht `stage` auf dem dev-Stand 205f5c3 |
 
@@ -1594,14 +1662,16 @@ flowchart LR
 | M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 5 (2 opus) | 9,75 h | 2–3 |
-| M4 | 5 (2 opus) | 8,75 h | 2–3 |
-| **Gesamt** | **34** | **55 h** + Reviews | **13–17** |
+| M4 | 7 (3 opus) | 11 h | 3–4 |
+| **Gesamt** | **36** | **57,25 h** + Reviews | **14–18** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
 **Nachtrag 2026-10-26:** AP-29, AP-30 und AP-31 (je S, 0,75 h) sind in der M1-Zeile enthalten. AP-32 (S, 0,75 h) ist in der M3-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
 
 **Nachtrag 2026-10-28:** AP-33 (L, sonnet, 2,5 h) und AP-34 (L, opus, 2,5 h) sind in der M4-Zeile enthalten (M4 jetzt 8,75 h statt 3,75 h). Gesamt 55 h. Die Fensterzahl wird als 13–17 geschätzt; sie bleibt geschätzt, bis Messwerte aus M4 vorliegen.
+
+**Nachtrag 2026-10-28 (Pflegeauftrag 2):** AP-35 (M, opus, 1,5 h) und AP-36 (S, haiku, 0,75 h) kommen zur M4-Zeile dazu. M4 jetzt 11 h mit 7 Paketen (3 opus). Gesamt 36 Pakete, 57,25 h, geschätzt 14–18 Fenster.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. Die Fensterzahlen wurden bei einem früheren Zielwert geschätzt; den aktuellen Wert liefert `.claude/ma-usage.json`. 5 parallele Coder (PE-23) erreichen den Zielwert schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1708,8 +1778,10 @@ flowchart LR
 | PE-65 | Datenordner-Wechsel: Backups entstehen im neuen Datenordner. Code-Prüfung: `DataService.open` (`src/main/storage/service.ts`) legt das Start-Backup im gewählten Ordner an, bevor er ihn aktiviert (aufgerufen aus `chooseAndSwitchDataDir`). Beim Wechsel entsteht kein Backup des bisherigen Ordners (offen: Q-11). Lücke: der Test „switches to another folder“ prüft kein Backup; AP-34 ergänzt ihn. Prüfpunkt im M4-DEP (H-04). | Nutzer-Hinweis zu H-04; Code-Prüfung durch Planner | Nutzer am 2026-10-28 (Chat); Prüfung Planner 2026-10-28 |
 | PE-66 | AP-25: Mehrdatei-Ersetzen bleibt nicht atomar. Bei Fehler Rollback aus einem frischen Backup. Kein Datenverlust, solange das Backup gelingt. Abweichung von §12 AP-25 akzeptiert. | Nutzer-Entscheidung | Nutzer am 2026-10-28 (Chat) |
 | PE-67 | AP-25: Export-ZIP bleibt unverschlüsselt (enthält Personendaten). **Vermerk:** Falls die App öffentlich zugänglich gemacht oder weitergegeben werden soll, MUSS vorher eine optionale Export-Verschlüsselung als eigenes Paket kommen (§5, §15 RI-14). | Nutzer-Entscheidung; R2 | Nutzer am 2026-10-28 (Chat) |
-| PE-68 | AP-24 (Nutzer-Entscheidung): (a) Zeitlimit für `printToPDF` und Speichern-Dialog, danach Fehler und Fenster schließen; (b) `period` mit Zusatzfeldern ablehnen statt strippen; (c) Obergrenze für den Zeitraum. Umgesetzt in AP-34. (d) Kanal `pdf:failed` verworfen (Vertragsänderung, nicht umgesetzt). Werte (angenommen vom Planner, Nutzer kann sie ändern): `printToPDF` 60 s, Speichern-Dialog 10 min (danach Export-Sperre frei, Ergebnis verworfen, nichts geschrieben), Zeitraum höchstens 50 Jahre. | Nutzer-Entscheidung; Werte Planner | Nutzer am 2026-10-28 (Chat); Werte angenommen vom Planner |
+| PE-68 | AP-24 (Nutzer-Entscheidung): (a) Zeitlimit für `printToPDF` und Speichern-Dialog, danach Fehler und Fenster schließen; (b) `period` mit Zusatzfeldern ablehnen statt strippen; (c) Obergrenze für den Zeitraum. Umgesetzt in AP-34. (d) Kanal `pdf:failed` verworfen (Vertragsänderung, nicht umgesetzt). Werte (bestätigt vom Nutzer am 2026-10-28): `printToPDF` 60 s, Speichern-Dialog 10 min (danach Export-Sperre frei, Ergebnis verworfen, nichts geschrieben), Zeitraum höchstens 50 Jahre. | Nutzer-Entscheidung; Werte Nutzer | Nutzer am 2026-10-28 (Chat); Werte bestätigt am 2026-10-28 (Chat) |
 | PE-69 | Das Zweiturteil (Anbieter-Brücke) im Review ist abgeschaltet; Review Runde 1 reicht. Betrifft nur die Agent-Dateien, nicht den Plan. | Betriebsentscheidung, bestätigt | Nutzer am 2026-10-28 (Chat) |
+| PE-70 | Datenordner-Wechsel: Vor dem Umschalten wird ein Backup des bisherigen aktiven Ordners angelegt (unter `backups/` im alten Ordner, dieselbe Regel wie das Start-Backup, Rotation letzte 10). Schlägt es fehl, bricht der Wechsel ab: der alte Ordner bleibt aktiv, nichts wird umgeschaltet, keine Einstellung gespeichert. Zusätzlich zum Start-Backup im neuen Ordner (PE-65). Umsetzung AP-35. | Q-11 (Vorschlag „Abbruch bei Fehler“ bestätigt) | Nutzer am 2026-10-28 (Chat) |
+| PE-71 | Bei einem fehlgeschlagenen Ordnerwechsel zeigen die Einstellungen zusätzlich den Satz „Der bisherige Datenordner bleibt aktiv“. Der Fehlercode bleibt IO, kein neuer Vertrag (§4 unverändert). Umsetzung AP-36 (Folgepaket). | Der allgemeine IO-Text („Die Daten konnten nicht gelesen oder gespeichert werden“) ist für einen abgebrochenen Wechsel irreführend | angenommen vom Planner (Folge aus PE-70); Nutzer kann ändern |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1726,7 +1798,8 @@ flowchart LR
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
 | Q-09 | Einnahmen werden ohne Aktivitätsprüfung gebucht; PE-50 gilt nur für die Aufteilung von Ausgaben. Ist das gewollt? | W | §4, PE-08, PE-50 | ja, Einnahme gehört zum gewählten Projekt; bei Buchung außerhalb des Aktivzeitraums Hinweis anzeigen | geklärt → PE-58 (Nutzer am 2026-10-26) |
 | Q-10 | Befunde aus §18 ohne Eintrag im Umfang von AP-33/AP-34 aufnehmen? AP-22: NaN-Verhalten von `convert` in Diagrammen nicht belegt. AP-23: Einnahmenziel mit 0 gilt sofort als erreicht; Hinweis „Zielwerte in EUR“ im Label. AP-24: Kampagnentabelle zeigt im Projektbericht Gesamtkosten | O | §18, AP-33 | in ein Folgepaket nach M4-DEP, oder als bekannt verwerfen | offen (Nutzer) |
-| Q-11 | Soll der Datenordner-Wechsel zusätzlich ein Backup des bisherigen Ordners anlegen? Heute nur das Start-Backup im neuen Ordner (PE-65). | W | §4, PE-18, PE-65 | ja, vor dem Wechsel sichern; sonst bleibt der bisherige Stand nur im alten Ordner | offen (Nutzer) |
+| Q-11 | Soll der Datenordner-Wechsel zusätzlich ein Backup des bisherigen Ordners anlegen? Heute nur das Start-Backup im neuen Ordner (PE-65). | W | §4, PE-18, PE-65 | ja, vor dem Wechsel sichern; sonst bleibt der bisherige Stand nur im alten Ordner | geklärt → PE-70 (Nutzer am 2026-10-28, Chat) |
+| Q-12 | Darf der Wechsel stattfinden, wenn das Backup des alten Ordners scheitert (z. B. beschädigte Datei, fehlende Schreibrechte)? Ausweg bei Abbruch: der Nutzer kopiert Dateien von Hand. | W | PE-70, AP-35 | nein, Wechsel abbrechen (wie PE-70) | offen (Nutzer) |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
@@ -1754,7 +1827,7 @@ flowchart LR
 | F-12 Ziele/Startseite | AP-20, AP-23, AP-32 |
 | PE-53 Ziele, Kostenlimit erst nach Stichtag | AP-20, AP-23, AP-32 |
 | F-13 Nutzerzahlen | AP-16, AP-19 |
-| F-14 Datensicherung | AP-07, AP-11, AP-25, AP-34 (Backup im neuen Datenordner, PE-65) |
+| F-14 Datensicherung | AP-07, AP-11, AP-25, AP-34 (Backup im neuen Datenordner, PE-65), AP-35 (Backup im alten Ordner, PE-70) |
 | PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
 | PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28, AP-30, AP-31 |
 | PE-26 Werbung ohne Doppelerfassung | AP-14, AP-18, AP-29 |
@@ -1764,6 +1837,8 @@ flowchart LR
 | §5 Vermerk Export-Verschlüsselung (PE-67) | kein Paket, Vermerk; Pflichtpaket vor Weitergabe (RI-14) |
 | PE-64 Aufräumpaket (Befunde M2–M4) | AP-33, AP-34 |
 | PE-65 Datenordner-Wechsel erzeugt Backup im neuen Ordner | AP-34 (Test), M4-DEP (H-04) |
+| PE-70 Backup des alten Ordners vor dem Wechsel, Abbruch bei Fehler | AP-35 (Test), M4-DEP (H-04) |
+| PE-71 Hinweis bei abgebrochenem Ordnerwechsel | AP-36 |
 | PE-68 PDF-Härtung (Zeitlimit, Validierung, Zeitraum) | AP-34 |
 | R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
 | R2 DSGVO | AP-02, AP-07, AP-08, AP-17, Review |
@@ -1848,3 +1923,5 @@ flowchart LR
 | 2026-10-28 | Erkenntnis AP-24 (Code-Prüfung): `printToPDF` und Speichern-Dialog laufen ohne Zeitlimit (`src/main/pdf/exporter.ts`). `PdfExportInputSchema` (`src/shared/ipc.ts`) ist nicht strikt; `period` verliert Zusatzfelder stillschweigend, die Prüfung auf unbekannte Felder gilt nur oben (`src/main/pdf/params.ts`). Keine Obergrenze für den Zeitraum. Bestätigt die Befunde aus AP-24 | Befunde bestätigt | AP-34 | Planner |
 | 2026-10-28 | Erkenntnis AP-27 (Code-Prüfung): Der Kommentar in `electron-builder.yml` Z. 19 lautet „Uninstall never touches the data folder (it lives outside the install folder)“. Er gilt nur, wenn der Datenordner außerhalb des Installationsordners liegt. Korrektur in AP-34 | Befund bestätigt | AP-34 | Planner |
 | 2026-10-28 | Erkenntnis Eigentum: `docs/design/` existiert nicht, daher Design-Review für AP-33 und AP-34 nein (PE-21). `src/renderer/pages/settings/DataSection.tsx` (AP-11) und `e2e/flows.spec.ts` (AP-26) liegen nach `fertig` bei AP-33 | Eigentumsprüfung | AP-33 | Planner |
+| 2026-10-28 | Nutzer-Entscheidungen (Chat, Pflegeauftrag 2): PE-68-Werte bestätigt (Vermerk „angenommen“ in §5, §12 AP-34 und §16 entfernt). Q-11 geklärt als PE-70: Backup des alten Ordners beim Wechsel ist Pflicht, bei Fehler Abbruch. Neu: AP-35 (MAIN, opus, M, Opus-Grund Sicherheit, W2b nach AP-34) und AP-36 (UI, haiku, S, W2b nach AP-33, Hinweis PE-71). PE-65 ergänzt, Q-12 offen. §0, §5, §8–§17 angepasst (M4 jetzt 7 Pakete, 11 h; gesamt 36 Pakete, 57,25 h). AP-33 (c1) und AP-34 (c2) auf `in Arbeit` gesetzt, laut Nutzer | Nutzer-Entscheidung im Chat | AP-33–AP-36, M4-DEP, PE-65, PE-68, PE-70, PE-71, Q-11, Q-12 | Nutzer am 2026-10-28 (Chat) |
+| 2026-10-28 | Erkenntnis AP-35 (Code-Prüfung, nur lesen): `DataService.open` (`src/main/storage/service.ts`) bekommt den neuen Pfad aus `chooseAndSwitchDataDir` (`src/main/index.ts`); der bisherige Ordner ist dann noch `active`. Das Alt-Backup gehört nach `previous.idle()` und vor `mkdir` des neuen Ordners; die Konfiguration (`beforeActivate`) wird erst danach geschrieben. Ohne aktiven Ordner (Start) gibt es kein Alt-Backup. Der Fehler IO erreicht die Einstellungen mit dem allgemeinen Text „Die Daten konnten nicht gelesen oder gespeichert werden“ (`src/renderer/i18n/shared-keys.ts`), ohne Hinweis, dass der alte Ordner aktiv bleibt (AP-36). Testweg: Datei namens `backups` im alten Ordner lässt das Backup scheitern. Offen: beschädigter alter Ordner (Q-12) | Code-Prüfung Planner | AP-35, AP-36 | Planner |
