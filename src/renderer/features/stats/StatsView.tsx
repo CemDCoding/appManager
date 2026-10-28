@@ -16,8 +16,12 @@ import { Label } from '@/components/ui/label'
 import { Select } from '@/components/ui/select'
 import { useCollection, useDisplayCurrency, useRates } from '@/hooks'
 import { useFormat, useT } from '@/i18n'
-import { LedgerWarnings } from '@/pages/projects/LedgerWarnings'
-import { todayIso } from '@/pages/projects/logic'
+import {
+  LedgerWarnings,
+  fixedErrorsForProject,
+  ledgerErrorsForProject,
+  todayIso
+} from '@/components/ledger'
 import { statsDict } from './i18n'
 import {
   breakEvenRows,
@@ -74,7 +78,9 @@ export function StatsView({ scope, toolbar }: StatsViewProps) {
   const categoryLabel = useListLabel('expenseCategories')
   const platformLabel = useListLabel('campaignPlatforms')
   const rankId = useId()
-  const today = useMemo(() => todayIso(), [])
+  // Bei jedem Rendern (also auch nach jedem Laden) frisch, damit eine Sitzung über
+  // Mitternacht nicht mit dem Vortag rechnet. Die Memos hängen am Text, nicht am Objekt.
+  const today = todayIso()
   const [period, setPeriod] = useState<Period>(() => periodFor('year', today))
   const [rankBy, setRankBy] = useState<RankingKey>('costPerUser')
 
@@ -116,6 +122,23 @@ export function StatsView({ scope, toolbar }: StatsViewProps) {
   const okStats = stats === 'error' ? null : stats
   const okOutlook = outlook === 'error' ? null : outlook
 
+  // Projektansicht: nur nicht umrechenbare Buchungen, die dieses Projekt betreffen.
+  const warnings = useMemo(() => {
+    if (!okStats) return { ledger: null, fixedCosts: null }
+    if (scope === null) return { ledger: okStats.ledger, fixedCosts: okStats.fixedCosts }
+    return {
+      ledger: { errors: ledgerErrorsForProject(okStats.ledger.errors, input, scope) },
+      fixedCosts: {
+        errors: fixedErrorsForProject(
+          okStats.fixedCosts.errors,
+          input,
+          okStats.fixedCostDate,
+          scope
+        )
+      }
+    }
+  }, [okStats, input, scope])
+
   const ranking = useMemo(
     () =>
       okStats
@@ -156,103 +179,126 @@ export function StatsView({ scope, toolbar }: StatsViewProps) {
     [forecastMonths, money]
   )
 
-  const cash = (cents: number) => display.format(cents).text
-  const monthLabel = (m: string) => fmt.date(`${m}-01`, { month: 'long', year: 'numeric' })
-  const projectName = (name: string | null) => name ?? <em>{t('unallocated')}</em>
-  const breakEvenText = (r: BreakEven) =>
-    r === 'notInSight'
-      ? t('notInSight')
-      : 'reachedAt' in r
-        ? t('reachedAt', { month: monthLabel(r.reachedAt) })
-        : t('expectedAt', { month: monthLabel(r.expectedAt) })
+  // Spalten nur neu bauen, wenn sich Sprache, Format oder Anzeigewährung ändern.
+  const {
+    monthColumns,
+    categoryColumns,
+    projectColumns,
+    fixedColumns,
+    campaignColumns,
+    breakEvenColumns
+  } = useMemo(() => {
+    const cash = (cents: number) => display.format(cents).text
+    const monthLabel = (m: string) => fmt.date(`${m}-01`, { month: 'long', year: 'numeric' })
+    const projectName = (name: string | null) => name ?? <em>{t('unallocated')}</em>
+    const breakEvenText = (r: BreakEven) =>
+      r === 'notInSight'
+        ? t('notInSight')
+        : 'reachedAt' in r
+          ? t('reachedAt', { month: monthLabel(r.reachedAt) })
+          : t('expectedAt', { month: monthLabel(r.expectedAt) })
 
-  const monthColumns: DataColumn<MonthRow>[] = [
-    {
-      id: 'month',
-      header: t('colMonth'),
-      cell: (r) => monthLabel(r.month),
-      sortValue: (r) => r.month
-    },
-    moneyColumn('income', t('colIncome'), (r) => r.incomeCents, cash),
-    moneyColumn('expenses', t('colExpenses'), (r) => r.expenseCents, cash),
-    moneyColumn('balance', t('colBalance'), (r) => r.balanceCents, cash)
-  ]
-  const categoryColumns: DataColumn<CategoryRow>[] = [
-    {
-      id: 'category',
-      header: t('colCategory'),
-      cell: (r) => categoryLabel(r.key),
-      sortValue: (r) => categoryLabel(r.key)
-    },
-    moneyColumn('expenses', t('colExpenses'), (r) => r.cents, cash)
-  ]
-  const projectColumns: DataColumn<ProjectRow>[] = [
-    {
-      id: 'project',
-      header: t('colProject'),
-      cell: (r) => projectName(r.name),
-      sortValue: (r) => r.name ?? ''
-    },
-    moneyColumn('income', t('colIncome'), (r) => r.incomeCents, cash),
-    moneyColumn('expenses', t('colExpenses'), (r) => r.expenseCents, cash),
-    moneyColumn('balance', t('colBalance'), (r) => r.balanceCents, cash)
-  ]
-  const fixedColumns: DataColumn<FixedCostRow>[] = [
-    {
-      id: 'project',
-      header: t('colProject'),
-      cell: (r) => projectName(r.name),
-      sortValue: (r) => r.name ?? ''
-    },
-    moneyColumn('fixed', t('colFixed'), (r) => r.cents, cash)
-  ]
-  const dash = '–'
-  const optionalMoney = (c: number | null) => (c === null ? dash : cash(c))
-  const campaignColumns: DataColumn<RankedCampaign>[] = [
-    { id: 'name', header: t('colCampaign'), cell: (r) => r.campaign.name },
-    { id: 'platform', header: t('colPlatform'), cell: (r) => platformLabel(r.campaign.platform) },
-    { id: 'start', header: t('colStart'), cell: (r) => fmt.date(r.campaign.startDate) },
-    { id: 'cost', header: t('colCost'), align: 'right', cell: (r) => cash(r.kpis.costEurCents) },
-    {
-      id: 'users',
-      header: t('colUsers'),
-      align: 'right',
-      cell: (r) => fmt.number(r.campaign.usersGained)
-    },
-    {
-      id: 'costPerUser',
-      header: t('colCostPerUser'),
-      align: 'right',
-      cell: (r) => optionalMoney(r.kpis.costPerUserCents)
-    },
-    { id: 'cpc', header: t('colCpc'), align: 'right', cell: (r) => optionalMoney(r.kpis.cpcCents) },
-    {
-      id: 'ctr',
-      header: t('colCtr'),
-      align: 'right',
-      cell: (r) =>
-        r.kpis.ctrBasisPoints === null ? dash : fmt.percent(r.kpis.ctrBasisPoints / 10000, 2)
-    },
-    {
-      id: 'rating',
-      header: t('colRating'),
-      align: 'right',
-      cell: (r) => fmt.number(r.campaign.rating)
+    const monthColumns: DataColumn<MonthRow>[] = [
+      {
+        id: 'month',
+        header: t('colMonth'),
+        cell: (r) => monthLabel(r.month),
+        sortValue: (r) => r.month
+      },
+      moneyColumn('income', t('colIncome'), (r) => r.incomeCents, cash),
+      moneyColumn('expenses', t('colExpenses'), (r) => r.expenseCents, cash),
+      moneyColumn('balance', t('colBalance'), (r) => r.balanceCents, cash)
+    ]
+    const categoryColumns: DataColumn<CategoryRow>[] = [
+      {
+        id: 'category',
+        header: t('colCategory'),
+        cell: (r) => categoryLabel(r.key),
+        sortValue: (r) => categoryLabel(r.key)
+      },
+      moneyColumn('expenses', t('colExpenses'), (r) => r.cents, cash)
+    ]
+    const projectColumns: DataColumn<ProjectRow>[] = [
+      {
+        id: 'project',
+        header: t('colProject'),
+        cell: (r) => projectName(r.name),
+        sortValue: (r) => r.name ?? ''
+      },
+      moneyColumn('income', t('colIncome'), (r) => r.incomeCents, cash),
+      moneyColumn('expenses', t('colExpenses'), (r) => r.expenseCents, cash),
+      moneyColumn('balance', t('colBalance'), (r) => r.balanceCents, cash)
+    ]
+    const fixedColumns: DataColumn<FixedCostRow>[] = [
+      {
+        id: 'project',
+        header: t('colProject'),
+        cell: (r) => projectName(r.name),
+        sortValue: (r) => r.name ?? ''
+      },
+      moneyColumn('fixed', t('colFixed'), (r) => r.cents, cash)
+    ]
+    const dash = '–'
+    const optionalMoney = (c: number | null) => (c === null ? dash : cash(c))
+    const campaignColumns: DataColumn<RankedCampaign>[] = [
+      { id: 'name', header: t('colCampaign'), cell: (r) => r.campaign.name },
+      { id: 'platform', header: t('colPlatform'), cell: (r) => platformLabel(r.campaign.platform) },
+      { id: 'start', header: t('colStart'), cell: (r) => fmt.date(r.campaign.startDate) },
+      { id: 'cost', header: t('colCost'), align: 'right', cell: (r) => cash(r.kpis.costEurCents) },
+      {
+        id: 'users',
+        header: t('colUsers'),
+        align: 'right',
+        cell: (r) => fmt.number(r.campaign.usersGained)
+      },
+      {
+        id: 'costPerUser',
+        header: t('colCostPerUser'),
+        align: 'right',
+        cell: (r) => optionalMoney(r.kpis.costPerUserCents)
+      },
+      {
+        id: 'cpc',
+        header: t('colCpc'),
+        align: 'right',
+        cell: (r) => optionalMoney(r.kpis.cpcCents)
+      },
+      {
+        id: 'ctr',
+        header: t('colCtr'),
+        align: 'right',
+        cell: (r) =>
+          r.kpis.ctrBasisPoints === null ? dash : fmt.percent(r.kpis.ctrBasisPoints / 10000, 2)
+      },
+      {
+        id: 'rating',
+        header: t('colRating'),
+        align: 'right',
+        cell: (r) => fmt.number(r.campaign.rating)
+      }
+    ]
+    const breakEvenColumns: DataColumn<BreakEvenRow>[] = [
+      {
+        id: 'project',
+        header: t('colProject'),
+        cell: (r) => (r.name === null ? <strong>{t('portfolioTotal')}</strong> : r.name)
+      },
+      {
+        id: 'breakEven',
+        header: t('colBreakEven'),
+        cell: (r) => breakEvenText(r.result),
+        sortValue: (r) => breakEvenSortValue(r.result)
+      }
+    ]
+    return {
+      monthColumns,
+      categoryColumns,
+      projectColumns,
+      fixedColumns,
+      campaignColumns,
+      breakEvenColumns
     }
-  ]
-  const breakEvenColumns: DataColumn<BreakEvenRow>[] = [
-    {
-      id: 'project',
-      header: t('colProject'),
-      cell: (r) => (r.name === null ? <strong>{t('portfolioTotal')}</strong> : r.name)
-    },
-    {
-      id: 'breakEven',
-      header: t('colBreakEven'),
-      cell: (r) => breakEvenText(r.result),
-      sortValue: (r) => breakEvenSortValue(r.result)
-    }
-  ]
+  }, [t, fmt, display, categoryLabel, platformLabel])
 
   const computeFailed = stats === 'error' || outlook === 'error' || breakEvens === 'error'
   const forecastErrors = okOutlook?.forecast.errors.length ?? 0
@@ -277,7 +323,7 @@ export function StatsView({ scope, toolbar }: StatsViewProps) {
           {t('computeError')}
         </p>
       )}
-      <LedgerWarnings ledger={okStats?.ledger ?? null} fixedCosts={okStats?.fixedCosts ?? null} />
+      <LedgerWarnings ledger={warnings.ledger} fixedCosts={warnings.fixedCosts} />
       {(historyErrors > 0 || forecastErrors > 0 || campaignErrors > 0) && (
         <div role="alert" className="grid gap-1 rounded-md border border-destructive p-3 text-sm">
           {historyErrors > 0 && <p>{t('historyErrors', { count: historyErrors })}</p>}
@@ -297,10 +343,26 @@ export function StatsView({ scope, toolbar }: StatsViewProps) {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title={t('income')} eurCents={okStats?.totals.incomeCents} loading={loading} />
-        <KpiCard title={t('expenses')} eurCents={okStats?.totals.expenseCents} loading={loading} />
-        <KpiCard title={t('balance')} eurCents={okStats?.totals.balanceCents} loading={loading} />
         <KpiCard
+          testId="kpi-income"
+          title={t('income')}
+          eurCents={okStats?.totals.incomeCents}
+          loading={loading}
+        />
+        <KpiCard
+          testId="kpi-expenses"
+          title={t('expenses')}
+          eurCents={okStats?.totals.expenseCents}
+          loading={loading}
+        />
+        <KpiCard
+          testId="kpi-balance"
+          title={t('balance')}
+          eurCents={okStats?.totals.balanceCents}
+          loading={loading}
+        />
+        <KpiCard
+          testId="kpi-fixed-costs"
           title={t('fixedCosts')}
           eurCents={okStats?.fixedCostsCents}
           loading={loading}

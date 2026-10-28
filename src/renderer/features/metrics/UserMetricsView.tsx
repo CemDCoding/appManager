@@ -9,9 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useCollection } from '@/hooks/useCollection'
 import { useEntityMutation } from '@/hooks/useEntityMutation'
 import { useFormat, useT } from '@/i18n'
-import { LedgerWarnings } from '@/pages/projects/LedgerWarnings'
-import { todayIso } from '@/pages/projects/logic'
-import { useProjectLedger } from '@/pages/projects/useProjectLedger'
+import { LedgerWarnings, todayIso, useProjectLedger } from '@/components/ledger'
 import { metricsDict } from './i18n'
 import { chartSeries, projectSnapshots } from './logic'
 import { SnapshotDialog } from './SnapshotDialog'
@@ -25,7 +23,6 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
   const [period, setPeriod] = useState(() => periodFor('year', today))
   const state = useProjectLedger(period, today)
   const snapshotsState = useCollection('userMetrics')
-  const campaigns = useCollection('campaigns')
   const { remove, errorText: removeError, reset } = useEntityMutation('userMetrics')
   const [dialog, setDialog] = useState<{ open: boolean; snapshot?: UserMetric }>({ open: false })
   const [deleting, setDeleting] = useState<UserMetric | null>(null)
@@ -37,12 +34,13 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
   )
 
   const metrics = useMemo(() => {
-    if (!state.ledger || campaigns.loading || campaigns.errorText) return null
+    // Das Journal gibt es nur, wenn auch die Kampagnen fehlerfrei geladen sind.
+    if (!state.ledger) return null
     try {
       return userMetrics(
         snapshotsState.items,
         state.ledger,
-        campaigns.items,
+        state.campaigns,
         projectId,
         { from: period.from, to: period.to },
         state.projects
@@ -54,9 +52,7 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
     snapshotsState.items,
     state.ledger,
     state.projects,
-    campaigns.items,
-    campaigns.loading,
-    campaigns.errorText,
+    state.campaigns,
     projectId,
     period.from,
     period.to
@@ -73,7 +69,7 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
   )
 
   const loading = state.loading || snapshotsState.loading
-  const loadError = state.errorText ?? snapshotsState.errorText ?? campaigns.errorText
+  const loadError = state.errorText ?? snapshotsState.errorText
   if (loadError) {
     return (
       <p role="alert" className="text-destructive">
@@ -169,6 +165,7 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <KpiCard
+          testId="kpi-users-latest"
           title={t('kpiLatest')}
           value={latest ? fmt.number(latest.usersTotal) : dash}
           loading={waiting}
@@ -183,18 +180,21 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
           }
         />
         <KpiCard
+          testId="kpi-users-growth"
           title={t('kpiGrowth')}
           value={metrics?.growth != null ? fmt.number(metrics.growth) : dash}
           loading={waiting}
         />
         {metrics?.costPerUserCents != null ? (
           <KpiCard
+            testId="kpi-cost-per-user"
             title={t('kpiCostPerUser')}
             eurCents={metrics.costPerUserCents}
             hint={t('kpiCostPerUserHint')}
           />
         ) : (
           <KpiCard
+            testId="kpi-cost-per-user"
             title={t('kpiCostPerUser')}
             value={dash}
             loading={waiting}
@@ -203,12 +203,14 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
         )}
         {metrics?.incomePerPayingUserCents != null ? (
           <KpiCard
+            testId="kpi-income-per-paying"
             title={t('kpiIncomePerPaying')}
             eurCents={metrics.incomePerPayingUserCents}
             hint={t('kpiIncomePerPayingHint')}
           />
         ) : (
           <KpiCard
+            testId="kpi-income-per-paying"
             title={t('kpiIncomePerPaying')}
             value={dash}
             loading={waiting}
@@ -216,6 +218,7 @@ export function UserMetricsView({ projectId }: { projectId: string }) {
           />
         )}
         <KpiCard
+          testId="kpi-campaign-share"
           title={t('kpiCampaignShare')}
           value={
             metrics?.campaignShareBasisPoints != null

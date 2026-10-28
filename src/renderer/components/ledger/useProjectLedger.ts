@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { buildLedger, type Ledger } from '@core/ledger/ledger'
 import { monthlyFixedCosts, type MonthlyFixedCosts } from '@core/aggregate/fixedCosts'
+import type { Campaign } from '@shared/schemas/campaign'
 import type { Project } from '@shared/schemas/project'
 import type { Service } from '@shared/schemas/service'
 import { useCollection } from '@/hooks'
@@ -16,6 +17,8 @@ export interface ProjectLedgerState {
   fixedCosts: MonthlyFixedCosts | null
   projects: Project[]
   services: Service[]
+  /** Geladene Kampagnen (dieselbe Liste wie im Journal, kein zweites Laden). */
+  campaigns: Campaign[]
 }
 
 /**
@@ -75,6 +78,7 @@ export function useProjectLedger(
     ledger,
     fixedCosts,
     projects: projects.items,
-    services: services.items
+    services: services.items,
+    campaigns: campaigns.items
   }
 }
