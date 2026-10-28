@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixelwerk Studio · appManager</title>
+<link rel="stylesheet" href="../export/tokens.css">
+<link rel="stylesheet" href="kurszettel.css">
+<style>
+  .crumb { font-size: var(--font-size-sm); color: var(--color-text-muted); }
+  .crumb a { color: inherit; text-decoration: none; } .crumb a:hover { color: var(--color-text-default); }
+  .meta { display: flex; gap: var(--space-2); align-items: center; margin-top: var(--space-2); flex-wrap: wrap; }
+  .status { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-status-success-fg); }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
+  .bars { width: 100%; height: 200px; display: block; }
+  .legend { display: flex; gap: var(--space-5); font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: var(--space-1); vertical-align: -1px; }
+  .cat { display: grid; grid-template-columns: 1fr auto; gap: var(--space-1) var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-soft); }
+  .cat .track { grid-column: 1 / -1; height: 3px; background: var(--color-value-progress-track); border-radius: 2px; }
+  .cat .track i { display: block; height: 100%; background: var(--color-chart-secondary); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="app" data-component="Layout">
+  <aside class="sidebar" data-component="Sidebar">
+    <div class="wordmark">app<span>Manager</span></div>
+    <nav aria-label="Hauptnavigation">
+      <ul class="nav-group">
+        <li><a class="nav-item" href="start.html">Start</a></li>
+        <li><a class="nav-item" href="projekt.html" aria-current="page">Projekte</a></li>
+        <li><a class="nav-item" href="#">Dienste</a></li>
+      </ul>
+      <ul class="nav-group">
+        <li><a class="nav-item" href="ausgaben.html">Ausgaben</a></li>
+        <li><a class="nav-item" href="#">Einnahmen</a></li>
+        <li><a class="nav-item" href="#">Personen</a></li>
+        <li><a class="nav-item" href="#">Kampagnen</a></li>
+      </ul>
+      <ul class="nav-group">
+        <li><a class="nav-item" href="#">Nutzerzahlen</a></li>
+        <li><a class="nav-item" href="#">Statistik</a></li>
+        <li><a class="nav-item" href="#">Berichte</a></li>
+        <li><a class="nav-item" href="#">Einstellungen</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-foot">Anzeige in EUR · Backup heute 08:14</div>
+  </aside>
+
+  <main class="main" id="main" tabindex="-1" data-component="ProjectDetailPage">
+    <div class="main-inner">
+      <div class="page-head">
+        <div>
+          <nav class="crumb" aria-label="Pfad"><a href="#">Projekte</a> › Pixelwerk Studio</nav>
+          <h1 class="page-title">Pixelwerk Studio</h1>
+          <div class="meta"><span class="tag">Steam</span><span class="tag">Desktop</span><span class="status">aktiv</span><span class="muted" style="font-size:var(--font-size-xs)">seit 03.02.2025</span></div>
+        </div>
+        <div style="display:flex;gap:var(--space-2)"><button class="btn btn-secondary">Bearbeiten</button><button class="btn btn-secondary">PDF-Bericht</button></div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Bereiche des Projekts">
+        <button class="tab" role="tab" aria-selected="true">Übersicht</button><button class="tab" role="tab" aria-selected="false">Buchungen</button><button class="tab" role="tab" aria-selected="false">Dienste</button><button class="tab" role="tab" aria-selected="false">Personen</button><button class="tab" role="tab" aria-selected="false">Kampagnen</button><button class="tab" role="tab" aria-selected="false">Nutzerzahlen</button>
+      </div>
+
+      <div class="page-head" style="margin-bottom:var(--space-2)">
+        <span class="eyebrow">Gesamt seit Start · Stand 28.10.2026</span>
+        <div class="seg" role="group" aria-label="Zeitraum"><button aria-pressed="false">Monat</button><button aria-pressed="false">Jahr</button><button aria-pressed="true">Gesamt</button></div>
+      </div>
+
+      <section class="hero" style="padding-top:0" data-component="KpiCard (Hero: Saldo)">
+        <div>
+          <h2 class="hero-label">Saldo</h2>
+          <div class="hero-value">−640<span class="cents">,00 €</span></div>
+          <div class="delta">Break-even voraussichtlich <b>März 2027</b> <span class="muted">· Prognose aus 6 Monaten</span></div>
+        </div>
+        <svg class="hero-chart" viewBox="0 0 400 120" preserveAspectRatio="none" role="img" aria-label="Kumulierter Saldo seit Februar 2025, von −2.000 € auf −640 € steigend, Prognose erreicht 0 im März 2027">
+          <line x1="0" y1="30" x2="400" y2="30" stroke="var(--color-chart-axis)" stroke-width="1" stroke-dasharray="2 4"/>
+          <text x="2" y="24" text-anchor="start" font-size="10" fill="var(--color-chart-axis)">0 €</text>
+          <polyline fill="none" stroke="var(--color-chart-negative)" stroke-width="2.2" stroke-linejoin="round" points="0,112 30,110 60,106 90,104 120,96 150,92 180,84 210,80 240,72 270,66 300,60"/>
+          <polyline fill="none" stroke="var(--color-chart-secondary)" stroke-width="2" stroke-dasharray="4 4" points="300,60 340,46 380,32 400,26"/>
+        </svg>
+      </section>
+      <dl class="figs">
+        <div class="fig"><dt>Einnahmen</dt><dd>4.912,40 €</dd><span class="hint">Steam 4.410,00 € · Spenden 502,40 €</span></div>
+        <div class="fig"><dt>Ausgaben</dt><dd>5.552,40 €</dd><span class="hint">davon 1.180,00 € Freelancer</span></div>
+        <div class="fig"><dt>Einnahmen pro Nutzer</dt><dd>2,74 €</dd><span class="hint">1.793 Spieler · Stichtag 01.10.2026</span></div>
+      </dl>
+
+      <div class="cols" style="display:grid;grid-template-columns:1.5fr 1fr;gap:var(--space-12);margin-top:var(--space-10)">
+        <section data-component="BarChartMonthly">
+          <div class="section-head"><h2 class="section-title">Monate</h2><span class="muted" style="font-size:var(--font-size-xs)">Mai – Okt 2026</span></div>
+          <svg class="bars" viewBox="0 0 600 200" role="img" aria-label="Einnahmen und Ausgaben je Monat, Mai bis Oktober 2026. Tabelle unter Buchungen.">
+            <g stroke="var(--color-chart-grid)"><line x1="0" y1="20" x2="600" y2="20"/><line x1="0" y1="75" x2="600" y2="75"/><line x1="0" y1="130" x2="600" y2="130"/><line x1="0" y1="180" x2="600" y2="180" stroke="var(--color-border-strong)"/></g>
+            <g fill="var(--color-chart-primary)"><rect x="30" y="120" width="26" height="60" rx="3"/><rect x="130" y="110" width="26" height="70" rx="3"/><rect x="230" y="96" width="26" height="84" rx="3"/><rect x="330" y="104" width="26" height="76" rx="3"/><rect x="430" y="70" width="26" height="110" rx="3"/><rect x="530" y="58" width="26" height="122" rx="3"/></g>
+            <g fill="var(--color-chart-tertiary)"><rect x="60" y="100" width="26" height="80" rx="3"/><rect x="160" y="128" width="26" height="52" rx="3"/><rect x="260" y="122" width="26" height="58" rx="3"/><rect x="360" y="90" width="26" height="90" rx="3"/><rect x="460" y="130" width="26" height="50" rx="3"/><rect x="560" y="126" width="26" height="54" rx="3"/></g>
+            <g font-size="11" fill="var(--color-chart-axis)" text-anchor="middle"><text x="58" y="196">Mai</text><text x="158" y="196">Jun</text><text x="258" y="196">Jul</text><text x="358" y="196">Aug</text><text x="458" y="196">Sep</text><text x="558" y="196">Okt</text></g>
+          </svg>
+          <div class="legend"><span><i style="background:var(--color-chart-primary)"></i>Einnahmen</span><span><i style="background:var(--color-chart-tertiary)"></i>Ausgaben</span></div>
+        </section>
+        <section data-component="DonutChart → Kategorienliste">
+          <div class="section-head"><h2 class="section-title">Ausgaben nach Kategorie</h2></div>
+          <div class="cat"><span>Hosting/Server</span><span class="num">1.640,00 €</span><div class="track"><i style="width:100%"></i></div></div>
+          <div class="cat"><span>Mitarbeiter/Freelancer</span><span class="num">1.180,00 €</span><div class="track"><i style="width:72%"></i></div></div>
+          <div class="cat"><span>KI-Abo</span><span class="num">975,80 €</span><div class="track"><i style="width:60%"></i></div></div>
+          <div class="cat"><span>Werbung</span><span class="num">960,00 €</span><div class="track"><i style="width:59%"></i></div></div>
+          <div class="cat"><span>Software-Lizenz</span><span class="num">612,40 €</span><div class="track"><i style="width:37%"></i></div></div>
+          <div class="cat"><span>Sonstiges (2)</span><span class="num">184,20 €</span><div class="track"><i style="width:11%"></i></div></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

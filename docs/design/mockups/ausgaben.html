@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ausgaben · appManager</title>
+<link rel="stylesheet" href="../export/tokens.css">
+<link rel="stylesheet" href="kurszettel.css">
+<style>
+  .filters { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; margin: var(--space-6) 0 var(--space-4); }
+  .filters .input { width: 16rem; }
+  .filters .select { width: auto; }
+  .sum-line { display: flex; gap: var(--space-8); padding: var(--space-4) 0; border-top: 1px solid var(--color-border-default); border-bottom: 1px solid var(--color-border-default); margin-top: var(--space-6); }
+  .sum-line div { display: grid; }
+  .sum-line span { font-size: var(--font-size-xs); color: var(--color-text-muted); }
+  .sum-line b { font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); letter-spacing: var(--font-tracking-tight); font-variant-numeric: tabular-nums; }
+  .rec { font-size: var(--font-size-xs); color: var(--color-text-muted); }
+</style>
+</head>
+<body>
+<div class="app" data-component="Layout">
+  <aside class="sidebar" data-component="Sidebar">
+    <div class="wordmark">app<span>Manager</span></div>
+    <nav aria-label="Hauptnavigation">
+      <ul class="nav-group">
+        <li><a class="nav-item" href="start.html">Start</a></li>
+        <li><a class="nav-item" href="projekt.html">Projekte</a></li>
+        <li><a class="nav-item" href="#">Dienste</a></li>
+      </ul>
+      <ul class="nav-group">
+        <li><a class="nav-item" href="ausgaben.html" aria-current="page">Ausgaben</a></li>
+        <li><a class="nav-item" href="#">Einnahmen</a></li>
+        <li><a class="nav-item" href="#">Personen</a></li>
+        <li><a class="nav-item" href="#">Kampagnen</a></li>
+      </ul>
+      <ul class="nav-group">
+        <li><a class="nav-item" href="#">Nutzerzahlen</a></li>
+        <li><a class="nav-item" href="#">Statistik</a></li>
+        <li><a class="nav-item" href="#">Berichte</a></li>
+        <li><a class="nav-item" href="#">Einstellungen</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-foot">Anzeige in EUR · Backup heute 08:14</div>
+  </aside>
+
+  <main class="main" id="main" tabindex="-1" data-component="ExpensesPage">
+    <div class="main-inner">
+      <div class="page-head" data-component="Header">
+        <div><span class="eyebrow">Buchungen · Oktober 2026</span><h1 class="page-title">Ausgaben</h1></div>
+        <div style="display:flex;gap:var(--space-4);align-items:center">
+          <div class="seg" role="group" aria-label="Zeitraum" data-component="PeriodPicker"><button aria-pressed="true">Monat</button><button aria-pressed="false">Quartal</button><button aria-pressed="false">Jahr</button><button aria-pressed="false">Eigener</button></div>
+          <button class="btn btn-primary">+ Ausgabe</button>
+        </div>
+      </div>
+
+      <div class="sum-line" aria-label="Summen im Zeitraum">
+        <div><span>Summe</span><b>1.236,80 €</b></div>
+        <div><span>davon wiederkehrend</span><b>312,40 €</b></div>
+        <div><span>Buchungen</span><b>17</b></div>
+      </div>
+
+      <div class="filters" role="search">
+        <label class="sr-only" for="q">Suchen</label><input id="q" class="input" placeholder="Suchen …">
+        <label class="sr-only" for="cat">Kategorie</label><select id="cat" class="select"><option>Alle Kategorien</option></select>
+        <label class="sr-only" for="prj">Projekt</label><select id="prj" class="select" data-component="ProjectPicker"><option>Alle Projekte</option></select>
+      </div>
+
+      <table class="table" data-component="BookingTable">
+        <caption class="sr-only">Ausgaben im Oktober 2026</caption>
+        <thead><tr><th aria-sort="descending"><button>Datum ↓</button></th><th>Beschreibung</th><th>Kategorie</th><th>Aufteilung</th><th class="r"><button>Betrag</button></th><th><span class="sr-only">Aktionen</span></th></tr></thead>
+        <tbody>
+          <tr><td class="num">27.10.2026</td><td><b>Steam Direct Gebühr</b></td><td><span class="tag">Store-/Plattformgebühr</span></td><td>Pixelwerk Studio</td><td class="r">100,00 $<small>92,10 €</small></td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+          <tr><td class="num">20.10.2026</td><td><b>Anthropic API Guthaben</b></td><td><span class="tag">KI-Guthaben</span></td><td>3 Projekte</td><td class="r">50,00 €</td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+          <tr><td class="num">18.10.2026</td><td><b>Lea Sommer – Icon-Set</b><small>Arbeitspaket · 24 Icons</small></td><td><span class="tag">Mitarbeiter/Freelancer</span></td><td>Kassenbuch Mobile</td><td class="r">240,00 €</td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+          <tr><td class="num">14.10.2026</td><td><b>Railway Pro</b><span class="rec"> · monatlich</span></td><td><span class="tag">Hosting/Server</span></td><td>2 Projekte</td><td class="r">20,00 $<small>18,42 €</small></td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+          <tr><td class="num">05.10.2026</td><td><b>Domain wetterdienst-widget.de</b><span class="rec"> · jährlich</span></td><td><span class="tag">Domain</span></td><td>Wetterdienst-Widget für den Windows-Desktop</td><td class="r">12,90 €</td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+          <tr><td class="num">01.10.2026</td><td><b>Claude Max</b><span class="rec"> · monatlich</span></td><td><span class="tag">KI-Abo</span></td><td>alle Projekte</td><td class="r">90,00 €</td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+          <tr><td class="num">01.10.2026</td><td><b>JetBrains All Products</b><span class="rec"> · jährlich</span></td><td><span class="tag">Software-Lizenz</span></td><td><em class="muted">nicht zugeordnet</em></td><td class="r">28,90 €</td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+        </tbody>
+      </table>
+      <p class="help" style="margin-top:var(--space-3)">7 von 17 Buchungen · Fremdwährungen mit Kurs vom Buchungstag umgerechnet</p>
+    </div>
+  </main>
+</div>
+</body>
+</html>
