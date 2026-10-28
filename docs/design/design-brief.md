@@ -1,7 +1,7 @@
 # Design-Brief – appManager
 
-**Status:** entwurf
-**Stand:** Design-System fertig (Tokens, Exporte, Styleguide, 4 Screens hell/dunkel), Übergabe geschrieben. Wartet auf Freigabe durch den Nutzer (2026-10-28).
+**Status:** freigegeben am 2026-10-28
+**Stand:** Design-System fertig (Tokens, Exporte, Styleguide, 4 Screens hell/dunkel), Übergabe geschrieben, vom Nutzer freigegeben. Nächster Schritt: Planner-Auftrag „Design übernehmen“ durch den Lead.
 
 ## Ausgangslage
 
@@ -60,6 +60,7 @@
 - 2026-10-28 Nutzer: Apple-Stil = macOS-Apps (1a); auf keinen Fall verspielt, altmodisch, unübersichtlich; Dichte ausgewogen (3a); hell und dunkel gleichwertig, Standard nach System (4a).
 - 2026-10-28 Nutzer: Blau als Akzent mit Bedeutungsfarben (5a), dazu „Carbon-Optik, nur leicht getönt“ (Auslegung: graphitfarbene, leicht blau getönte Neutraltöne; Carbon-Struktur höchstens als feines Detail, wird in den Richtungen gezeigt); Ebenen ohne Blur (6a); Inter mit tabellarischen Ziffern (7a); Windows-Titelbalken bleibt (8b).
 - 2026-10-28 Nutzer: Richtung C „Kurszettel“ gewählt.
+- 2026-10-28 Nutzer: Design freigegeben.
 
 ## Übergabe an den Planner
 
