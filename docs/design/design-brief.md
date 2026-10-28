@@ -1,7 +1,7 @@
 # Design-Brief – appManager
 
 **Status:** entwurf
-**Stand:** Interview Runden 1–2 beantwortet (2026-10-28). Nächster Schritt: drei Richtungen als Mockups der Startseite (Schritt 3).
+**Stand:** Interview Runden 1–2 beantwortet (2026-10-28). Drei Richtungen (A Systemeinstellungen, B Carbon, C Kurszettel) als Mockups der Startseite vorgelegt (`mockups/richtung-*.html`, `screenshots/richtung-*-desktop.png`). Wartet auf Wahl des Nutzers.
 
 ## Ausgangslage
 
