@@ -1,7 +1,7 @@
 # Design-Brief – appManager
 
 **Status:** entwurf
-**Stand:** Interview Runde 1 beantwortet (2026-10-28). Nächste Runde: Bestand/Akzentfarbe, Vorbilder, Diagramme/Icons.
+**Stand:** Interview Runden 1–2 beantwortet (2026-10-28). Nächster Schritt: drei Richtungen als Mockups der Startseite (Schritt 3).
 
 ## Ausgangslage
 
@@ -21,6 +21,10 @@
 - **Dichte:** ausgewogen: großzügige Kennzahlen oben, Tabellen darunter kompakter
 - **Themes:** hell und dunkel gleichwertig, Standard folgt der Windows-Einstellung
 - **Vorbilder:** macOS Numbers, Aktien, Systemeinstellungen · **Abgrenzung:** Excel-Look, verspielte Dashboards
+- **Farbe:** klares Blau als Hauptakzent; Neutraltöne in „Carbon“-Optik (Graphit, nur leicht blau getönt); Grün = Einnahmen/Plus, Rot/Orange = Ausgaben/Minus, immer zusätzlich Vorzeichen/Symbol
+- **Tiefe:** Ebenen mit feinen Linien und sehr dezenten Schatten, getönte Seitenleiste, gruppierte abgerundete Abschnitte; kein Glas/Blur
+- **Schrift:** Inter bleibt, tabellarische Ziffern, große Kennzahlen fett und leicht enger gesetzt
+- **Fensterrahmen:** normaler Windows-Titelbalken bleibt
 
 ## Gewählte Richtung
 
@@ -39,6 +43,7 @@ offen
 ## Entscheidungen
 
 - 2026-10-28 Nutzer: Apple-Stil = macOS-Apps (1a); auf keinen Fall verspielt, altmodisch, unübersichtlich; Dichte ausgewogen (3a); hell und dunkel gleichwertig, Standard nach System (4a).
+- 2026-10-28 Nutzer: Blau als Akzent mit Bedeutungsfarben (5a), dazu „Carbon-Optik, nur leicht getönt“ (Auslegung: graphitfarbene, leicht blau getönte Neutraltöne; Carbon-Struktur höchstens als feines Detail, wird in den Richtungen gezeigt); Ebenen ohne Blur (6a); Inter mit tabellarischen Ziffern (7a); Windows-Titelbalken bleibt (8b).
 
 ## Übergabe an den Planner
 
