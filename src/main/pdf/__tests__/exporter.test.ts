@@ -192,6 +192,89 @@ describe('PdfExporter', () => {
     expect(win.closed).toBe(true)
   })
 
+  it('Zeitlimit printToPDF (60 s): INTERNAL, Fenster zu, Sperre frei, kein Dialog', async () => {
+    const win = fakeWindow()
+    win.printToPDF = vi.fn(() => new Promise<Uint8Array>(() => {}))
+    const { deps, exporter } = setup({ createPrintWindow: vi.fn(() => win) })
+    const run = exporter.export(input)
+    const check = expect(run).rejects.toMatchObject({ code: 'INTERNAL' })
+    await vi.advanceTimersByTimeAsync(0)
+    exporter.notifyReady(win.id)
+    await vi.advanceTimersByTimeAsync(59_999)
+    expect(win.closed).toBe(false)
+    await vi.advanceTimersByTimeAsync(1)
+    await check
+    expect(win.closed).toBe(true)
+    expect(deps.showSaveDialog).not.toHaveBeenCalled()
+    expect(deps.writeFile).not.toHaveBeenCalled()
+    // Sperre frei: ein neuer Export startet (kein CONFLICT).
+    const win2 = fakeWindow(8)
+    ;(deps.createPrintWindow as ReturnType<typeof vi.fn>).mockReturnValue(win2)
+    const second = exporter.export(input)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(exporter.notifyReady(8)).toBe(true)
+    await expect(second).resolves.toEqual({ saved: true })
+  })
+
+  it('Zeitlimit Speichern-Dialog (10 min): INTERNAL, Sperre frei, späte Antwort schreibt nichts', async () => {
+    let answer: (path: string | null) => void = () => {}
+    const showSaveDialog = vi.fn(
+      () =>
+        new Promise<string | null>((resolve) => {
+          answer = resolve
+        })
+    )
+    const { win, deps, exporter } = setup({ showSaveDialog })
+    const run = exporter.export(input)
+    const check = expect(run).rejects.toMatchObject({ code: 'INTERNAL' })
+    await vi.advanceTimersByTimeAsync(0)
+    exporter.notifyReady(win.id)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(showSaveDialog).toHaveBeenCalledTimes(1)
+    await vi.advanceTimersByTimeAsync(10 * 60_000 - 1)
+    await vi.advanceTimersByTimeAsync(1)
+    await check
+    expect(win.closed).toBe(true)
+    // Der Nutzer wählt danach doch noch einen Pfad: wird verworfen.
+    answer('D:/reports/late.pdf')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(deps.writeFile).not.toHaveBeenCalled()
+    // Sperre frei: der nächste Export läuft durch.
+    showSaveDialog.mockImplementation(async () => 'D:/reports/next.pdf')
+    const next = fakeWindow(9)
+    ;(deps.createPrintWindow as ReturnType<typeof vi.fn>).mockReturnValue(next)
+    const second = exporter.export(input)
+    await vi.advanceTimersByTimeAsync(0)
+    exporter.notifyReady(9)
+    await expect(second).resolves.toEqual({ saved: true })
+    expect(deps.writeFile).toHaveBeenCalledTimes(1)
+    expect(deps.writeFile).toHaveBeenCalledWith('D:/reports/next.pdf', PDF)
+  })
+
+  it('eigene Zeitlimits über deps.printTimeoutMs und deps.dialogTimeoutMs', async () => {
+    const win = fakeWindow()
+    win.printToPDF = vi.fn(() => new Promise<Uint8Array>(() => {}))
+    const { exporter } = setup({ createPrintWindow: () => win, printTimeoutMs: 50 })
+    const run = exporter.export(input)
+    const check = expect(run).rejects.toMatchObject({ code: 'INTERNAL' })
+    await vi.advanceTimersByTimeAsync(0)
+    exporter.notifyReady(win.id)
+    await vi.advanceTimersByTimeAsync(50)
+    await check
+
+    const slow = setup({
+      showSaveDialog: vi.fn(() => new Promise<string | null>(() => {})),
+      dialogTimeoutMs: 70
+    })
+    const run2 = slow.exporter.export(input)
+    const check2 = expect(run2).rejects.toMatchObject({ code: 'INTERNAL' })
+    await vi.advanceTimersByTimeAsync(0)
+    slow.exporter.notifyReady(slow.win.id)
+    await vi.advanceTimersByTimeAsync(70)
+    await check2
+    expect(slow.deps.writeFile).not.toHaveBeenCalled()
+  })
+
   it('Schreibfehler → IO ohne Pfad in der Meldung', async () => {
     const { win, exporter } = setup({
       writeFile: vi.fn(async () => {

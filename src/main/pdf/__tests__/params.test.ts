@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
+import { IPC_CHANNELS } from '@shared/ipc'
+import { registerPdfHandlers } from '../ipc'
 import {
+  PDF_MAX_PERIOD_YEARS,
+  PDF_PRINT_TIMEOUT_MS,
   PDF_READY_TIMEOUT_MS,
+  PDF_SAVE_DIALOG_TIMEOUT_MS,
+  latestAllowedTo,
   buildPrintRoute,
   buildPrintToPdfOptions,
   buildSaveDialogOptions,
@@ -47,6 +53,63 @@ describe('parsePdfExportInput', () => {
     ['unbekannter Bereich', { ...portfolio, scope: 'all' }]
   ])('lehnt ab: %s', (_name, payload) => {
     expect(parsePdfExportInput(payload).ok).toBe(false)
+  })
+
+  it.each([
+    ['Pfad in period', { from: '2026-01-01', to: '2026-03-31', path: 'C:/x.pdf' }],
+    ['unbekanntes Feld in period', { from: '2026-01-01', to: '2026-03-31', extra: 1 }]
+  ])('lehnt Zusatzfelder in period ab statt sie zu entfernen: %s', (_name, period) => {
+    const r = parsePdfExportInput({ ...portfolio, period })
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.message).toMatch(/^Unknown field \(period\./)
+  })
+
+  it('Zeitraum: genau 50 Jahre erlaubt, einen Tag mehr abgelehnt', () => {
+    expect(PDF_MAX_PERIOD_YEARS).toBe(50)
+    const ok50 = parsePdfExportInput({
+      ...portfolio,
+      period: { from: '2000-01-01', to: '2050-01-01' }
+    })
+    expect(ok50.ok).toBe(true)
+    const over = parsePdfExportInput({
+      ...portfolio,
+      period: { from: '2000-01-01', to: '2050-01-02' }
+    })
+    expect(over.ok).toBe(false)
+    if (!over.ok) expect(over.message).toContain('50 years')
+    // Gesamtbericht ab 2000 bis heute bleibt möglich.
+    expect(
+      parsePdfExportInput({ ...portfolio, period: { from: '2000-01-01', to: '2026-12-31' } }).ok
+    ).toBe(true)
+  })
+
+  it('Zeitraum ab 29.02.: Grenze ist der 28.02. fünfzig Jahre später', () => {
+    expect(latestAllowedTo('2000-02-29')).toBe('2050-02-29')
+    expect(
+      parsePdfExportInput({ ...portfolio, period: { from: '2000-02-29', to: '2050-02-28' } }).ok
+    ).toBe(true)
+    expect(
+      parsePdfExportInput({ ...portfolio, period: { from: '2000-02-29', to: '2050-03-01' } }).ok
+    ).toBe(false)
+  })
+
+  it('Zeitraum über 50 Jahre wird im IPC-Handler als VALIDATION abgelehnt', async () => {
+    const handlers = new Map<string, (e: unknown, p: unknown) => Promise<unknown>>()
+    const exporter = {
+      export: vi.fn(async () => ({ saved: true })),
+      isPrintWindow: () => false,
+      notifyReady: () => false
+    }
+    registerPdfHandlers(
+      { handle: (ch, l) => handlers.set(ch, l as (e: unknown, p: unknown) => Promise<unknown>) },
+      { exporter, isTrustedSender: () => true }
+    )
+    const res = await handlers.get(IPC_CHANNELS.pdfExport)!(
+      { sender: { id: 1 } },
+      { ...portfolio, period: { from: '1900-01-01', to: '2026-01-01' } }
+    )
+    expect(res).toMatchObject({ ok: false, error: { code: 'VALIDATION' } })
+    expect(exporter.export).not.toHaveBeenCalled()
   })
 
   it.each(['filePath', 'path', 'outputPath', 'url'])(
@@ -111,8 +174,10 @@ describe('Druck- und Dialogoptionen', () => {
     expect(d.filters).toEqual([{ name: 'PDF', extensions: ['pdf'] }])
   })
 
-  it('Zeitlimit ist 30 s', () => {
+  it('Zeitlimits: ready 30 s, printToPDF 60 s, Speichern-Dialog 10 min (PE-68)', () => {
     expect(PDF_READY_TIMEOUT_MS).toBe(30_000)
+    expect(PDF_PRINT_TIMEOUT_MS).toBe(60_000)
+    expect(PDF_SAVE_DIALOG_TIMEOUT_MS).toBe(600_000)
   })
 })
 

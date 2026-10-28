@@ -136,11 +136,17 @@ const MAX_ZIP_COMMENT = 0xffff
  * Returns null if there is no record or the archive uses ZIP64.
  */
 export function declaredEntryCount(data: Uint8Array): number | null {
+  if (data.length < EOCD_MIN_SIZE) return null
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength)
   const lowest = Math.max(0, data.length - EOCD_MIN_SIZE - MAX_ZIP_COMMENT)
   for (let i = data.length - EOCD_MIN_SIZE; i >= lowest; i--) {
     if (view.getUint32(i, true) !== EOCD_SIGNATURE) continue
+    const disk = view.getUint16(i + 4, true)
+    const centralDirDisk = view.getUint16(i + 6, true)
+    const onThisDisk = view.getUint16(i + 8, true)
     const total = view.getUint16(i + 10, true)
+    // Multi-disk archives and inconsistent counts are not supported.
+    if (disk !== 0 || centralDirDisk !== 0 || onThisDisk !== total) return null
     return total === 0xffff ? null : total
   }
   return null
@@ -207,6 +213,12 @@ export async function readImportArchive(
 ): Promise<CollectionContents> {
   if (data.length > maxBytes) throw invalid('file too large')
 
+  // Check the declared entry count before JSZip parses the central directory,
+  // so archives with many (or a manipulated number of) entries are never loaded.
+  const declared = declaredEntryCount(data)
+  if (declared === null) throw invalid('not a valid ZIP archive')
+  if (declared !== ALLOWED_ENTRIES.size) throw invalid('unexpected number of entries')
+
   let zip: JSZip
   try {
     // No CRC check here: it would unpack everything without a size limit.
@@ -215,12 +227,9 @@ export async function readImportArchive(
     throw invalid('not a valid ZIP archive')
   }
 
+  // JSZip keeps one entry per normalised name: fewer names = duplicates.
   const names = Object.keys(zip.files)
-  const declared = declaredEntryCount(data)
-  if (declared === null || declared !== names.length) {
-    throw invalid('duplicate or unsupported entries')
-  }
-  if (names.length !== ALLOWED_ENTRIES.size) throw invalid('unexpected number of entries')
+  if (names.length !== declared) throw invalid('duplicate or unsupported entries')
 
   const entries = new Map<string, JSZip.JSZipObject>()
   for (const name of names) {
