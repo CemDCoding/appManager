@@ -1,7 +1,7 @@
 # Design-Brief – appManager
 
 **Status:** entwurf
-**Stand:** Interview Runden 1–2 beantwortet (2026-10-28). Drei Richtungen (A Systemeinstellungen, B Carbon, C Kurszettel) als Mockups der Startseite vorgelegt (`mockups/richtung-*.html`, `screenshots/richtung-*-desktop.png`). Wartet auf Wahl des Nutzers.
+**Stand:** Interview Runden 1–2 beantwortet (2026-10-28). Richtung C gewählt. Nächster Schritt: Design-System (tokens.json, Exporte, Styleguide, Screen-Mockups), Schritt 4.
 
 ## Ausgangslage
 
@@ -28,7 +28,12 @@
 
 ## Gewählte Richtung
 
-offen
+**C – „Kurszettel“** (Nutzer, 2026-10-28)
+
+- **Leitidee:** Wie die Aktien-App von macOS: eine große Zahl erzählt den Zustand, darunter ordnen nur Haarlinien und Typografie, keine Kästen.
+- **Erkennungsmerkmal:** großer Saldo (Euro groß, Cents kleiner) mit Verlaufskurve daneben; Salden in Tabellen als grüne bzw. rote Wertfelder mit Vorzeichen.
+- **Carbon:** Grautöne in Graphit, leicht blau getönt (Farbton 259°); im Dunkelmodus tiefes Carbon statt Schwarz.
+- Abgelehnt: A „Systemeinstellungen“ (gruppierte Kästen, zu brav), B „Carbon“ (dunkle Kachel-Seitenleiste, zu dominant). Gruppierte Abschnitte aus A bleiben als Muster für Formulare/Einstellungen erlaubt.
 
 ## Grundsätze
 
@@ -44,6 +49,7 @@ offen
 
 - 2026-10-28 Nutzer: Apple-Stil = macOS-Apps (1a); auf keinen Fall verspielt, altmodisch, unübersichtlich; Dichte ausgewogen (3a); hell und dunkel gleichwertig, Standard nach System (4a).
 - 2026-10-28 Nutzer: Blau als Akzent mit Bedeutungsfarben (5a), dazu „Carbon-Optik, nur leicht getönt“ (Auslegung: graphitfarbene, leicht blau getönte Neutraltöne; Carbon-Struktur höchstens als feines Detail, wird in den Richtungen gezeigt); Ebenen ohne Blur (6a); Inter mit tabellarischen Ziffern (7a); Windows-Titelbalken bleibt (8b).
+- 2026-10-28 Nutzer: Richtung C „Kurszettel“ gewählt.
 
 ## Übergabe an den Planner
 
