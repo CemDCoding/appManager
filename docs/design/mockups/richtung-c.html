@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Richtung C – Kurszettel · appManager</title>
+<style>
+  /* Richtung C: wie die Aktien-App: eine große Zahl, Haarlinien statt Kästen, Farbe nur für Plus/Minus */
+  :root {
+    --brand-600: #1668dc;
+    --ink: #17191d; --ink-2: #3f444c; --mute: #5f6672; --line: #e1e4e9; --line-soft: #eceef1; --paper: #fbfbfc; --side: #f3f4f6;
+    --pos: #157a3c; --neg: #c2321f;
+    --font: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--paper); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+  .num { font-variant-numeric: tabular-nums; }
+  .app { display: flex; min-height: 100vh; }
+
+  aside { width: 210px; flex-shrink: 0; background: var(--side); border-right: 1px solid var(--line); padding: 22px 14px; }
+  .brand { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; padding: 0 10px 22px; }
+  .brand span { color: var(--brand-600); }
+  nav ul { list-style: none; margin: 0 0 14px; padding: 0 0 14px; border-bottom: 1px solid var(--line); display: grid; gap: 1px; }
+  nav ul:last-child { border-bottom: 0; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 6px; color: var(--ink-2); text-decoration: none; font-weight: 500; min-height: 30px; }
+  nav a:hover { color: var(--ink); background: rgb(23 25 29 / .05); }
+  nav a[aria-current="page"] { color: var(--ink); font-weight: 650; }
+  nav a[aria-current="page"]::after { content: ""; margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: var(--brand-600); }
+  nav a:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+
+  main { flex: 1; min-width: 0; padding: 32px 48px 56px; max-width: 1180px; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .eyebrow { font-size: 13px; font-weight: 600; color: var(--mute); }
+  .seg { display: inline-flex; gap: 2px; }
+  .seg button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: transparent; color: var(--mute); padding: 4px 10px; border-radius: 6px; min-height: 26px; }
+  .seg button[aria-pressed="true"] { color: var(--ink); background: rgb(23 25 29 / .07); }
+
+  /* Erkennungsmerkmal: der Kurszettel – eine riesige Saldo-Zahl mit Verlauf daneben */
+  .hero { display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: end; padding: 14px 0 28px; border-bottom: 1px solid var(--line); }
+  .hero h1 { margin: 0; font-size: 15px; font-weight: 600; }
+  .big { font-size: 64px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; margin: 8px 0 10px; }
+  .big .cents { font-size: 34px; letter-spacing: -0.03em; color: var(--ink-2); }
+  .chg { font-weight: 600; }
+  .pos { color: var(--pos); } .neg { color: var(--neg); }
+  .hero svg { width: 100%; height: 120px; display: block; }
+
+  .figs { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+  .fig { padding: 18px 0 20px; }
+  .fig + .fig { padding-left: 24px; border-left: 1px solid var(--line); }
+  .fig dt { font-size: 13px; color: var(--mute); font-weight: 500; }
+  .fig dd { margin: 4px 0 0; font-size: 24px; font-weight: 650; letter-spacing: -0.02em; }
+  .fig small { font-size: 12px; color: var(--mute); }
+  .fig small.pos { color: var(--pos); font-weight: 600; }
+
+  .note { margin: 18px 0 0; padding-left: 12px; border-left: 3px solid #c77700; color: var(--ink-2); }
+
+  .cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; margin-top: 36px; }
+  h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 6px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 12px; font-weight: 500; color: var(--mute); text-align: left; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 12px 0; border-bottom: 1px solid var(--line-soft); vertical-align: baseline; }
+  th + th, td + td { padding-left: 16px; }
+  .r { text-align: right; font-variant-numeric: tabular-nums; }
+  td b { font-weight: 600; } td small { display: block; color: var(--mute); font-size: 12px; }
+  .pill { display: inline-block; min-width: 92px; text-align: right; padding: 2px 8px; border-radius: 6px; font-weight: 600; color: #fff; }
+  .pill.pos { background: var(--pos); color: #fff; } .pill.neg { background: var(--neg); color: #fff; }
+  em.un { color: var(--mute); }
+  .goal { padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
+  .goal-t { display: flex; justify-content: space-between; gap: 12px; }
+  .goal b { font-weight: 600; } .goal small { font-size: 12px; color: var(--mute); }
+  .line { height: 3px; background: var(--line); margin: 10px 0 6px; border-radius: 2px; }
+  .line i { display: block; height: 100%; background: var(--ink); border-radius: 2px; }
+  .line.done i { background: var(--pos); }
+  @media (max-width: 1000px) { aside { display: none; } main { padding: 20px; } .hero, .cols { grid-template-columns: 1fr; gap: 16px; } .figs { grid-template-columns: 1fr; } .fig + .fig { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); } .big { font-size: 48px; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside data-component="Sidebar">
+    <div class="brand">app<span>Manager</span></div>
+    <nav aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#" aria-current="page">Start</a></li>
+        <li><a href="#">Projekte</a></li>
+        <li><a href="#">Dienste</a></li>
+      </ul>
+      <ul>
+        <li><a href="#">Ausgaben</a></li>
+        <li><a href="#">Einnahmen</a></li>
+        <li><a href="#">Personen</a></li>
+        <li><a href="#">Kampagnen</a></li>
+      </ul>
+      <ul>
+        <li><a href="#">Nutzerzahlen</a></li>
+        <li><a href="#">Statistik</a></li>
+        <li><a href="#">Berichte</a></li>
+        <li><a href="#">Einstellungen</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main data-component="HomePage">
+    <div class="top" data-component="Header">
+      <span class="eyebrow">Portfolio · Oktober 2026 · EUR</span>
+      <div class="seg" role="group" aria-label="Zeitraum" data-component="PeriodPicker">
+        <button aria-pressed="true">Monat</button><button aria-pressed="false">Quartal</button><button aria-pressed="false">Jahr</button><button aria-pressed="false">Eigener</button>
+      </div>
+    </div>
+
+    <section class="hero" data-component="KpiCard">
+      <div>
+        <h1>Saldo</h1>
+        <div class="big num">+947<span class="cents">,70 €</span></div>
+        <div class="chg pos">▲ 312,10 € (+49 %) zum Vormonat</div>
+      </div>
+      <svg viewBox="0 0 400 120" preserveAspectRatio="none" aria-label="Saldo-Verlauf der letzten 12 Monate, steigend" role="img">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#157a3c" stop-opacity=".18"/><stop offset="1" stop-color="#157a3c" stop-opacity="0"/></linearGradient></defs>
+        <line x1="0" y1="80" x2="400" y2="80" stroke="#e1e4e9" stroke-dasharray="3 4"/>
+        <path d="M0,96 L36,90 L72,100 L109,84 L145,88 L181,70 L218,74 L254,60 L290,64 L327,44 L363,38 L400,22 L400,120 L0,120Z" fill="url(#g)"/>
+        <polyline fill="none" stroke="#157a3c" stroke-width="2.2" stroke-linejoin="round" points="0,96 36,90 72,100 109,84 145,88 181,70 218,74 254,60 290,64 327,44 363,38 400,22"/>
+      </svg>
+    </section>
+
+    <dl class="figs">
+      <div class="fig" data-component="KpiCard"><dt>Einnahmen</dt><dd class="num">2.184,50 €</dd><small class="pos">▲ 12 %</small></div>
+      <div class="fig" data-component="KpiCard"><dt>Ausgaben</dt><dd class="num">1.236,80 €</dd><small class="pos">▼ 4 %</small></div>
+      <div class="fig" data-component="KpiCard"><dt>Fixkosten/Monat</dt><dd class="num">312,40 €</dd><small>Stand 28.10.2026</small></div>
+    </dl>
+
+    <p class="note" role="status">2 Buchungen konnten keinem aktiven Projekt zugeordnet werden. Sie zählen im Gesamtergebnis, erscheinen aber unter „Nicht zuordenbar“.</p>
+
+    <div class="cols">
+      <section data-component="DataTable">
+        <h2>Projekte nach Saldo</h2>
+        <table>
+          <caption style="position:absolute;left:-9999px">Projekte nach Saldo</caption>
+          <thead><tr><th>Projekt</th><th class="r">Einnahmen</th><th class="r">Ausgaben</th><th class="r">Saldo ↓</th></tr></thead>
+          <tbody>
+            <tr><td><b>Kassenbuch Mobile</b><small>Mobile</small></td><td class="r">1.420,00 €</td><td class="r">386,20 €</td><td class="r"><span class="pill pos">+1.033,80 €</span></td></tr>
+            <tr><td><b>Pixelwerk Studio</b><small>Steam</small></td><td class="r">764,50 €</td><td class="r">512,90 €</td><td class="r"><span class="pill pos">+251,60 €</span></td></tr>
+            <tr><td><b>Rezeptkiste</b><small>Web</small></td><td class="r">0,00 €</td><td class="r">94,30 €</td><td class="r"><span class="pill neg">−94,30 €</span></td></tr>
+            <tr><td><b>Wetterdienst-Widget für den Windows-Desktop</b><small>Desktop</small></td><td class="r">0,00 €</td><td class="r">181,60 €</td><td class="r"><span class="pill neg">−181,60 €</span></td></tr>
+            <tr><td><em class="un">Nicht zuordenbar</em></td><td class="r">0,00 €</td><td class="r">61,80 €</td><td class="r"><span class="pill neg">−61,80 €</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section data-component="GoalsSection">
+        <h2>Ziele</h2>
+        <div class="goal"><div class="goal-t"><b>Break-even Pixelwerk Studio</b><span class="num">68 %</span></div><div class="line"><i style="width:68%"></i></div><small>bis 31.12.2026 · 1.360 € von 2.000 €</small></div>
+        <div class="goal"><div class="goal-t"><b>Kosten ≤ 350 € pro Monat</b><span class="pos">✓ erreicht</span></div><div class="line done"><i style="width:100%"></i></div><small>Portfolio · aktuell 312,40 €</small></div>
+        <div class="goal"><div class="goal-t"><b>1.000 Nutzer Kassenbuch Mobile</b><span class="num">41 %</span></div><div class="line"><i style="width:41%"></i></div><small>bis 30.06.2027 · 412 Nutzer</small></div>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

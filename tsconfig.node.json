@@ -28,6 +28,7 @@
     "src/preload/**/*",
     "src/shared/**/*",
     "src/core/**/*",
-    "scripts/**/*"
+    "scripts/**/*",
+    "e2e/**/*"
   ]
 }

@@ -2,7 +2,6 @@ import { defineDictionary } from '@/i18n'
 
 export const homeDict = defineDictionary(
   {
-    title: 'Übersicht',
     income: 'Einnahmen',
     expenses: 'Ausgaben',
     balance: 'Saldo',
@@ -18,11 +17,9 @@ export const homeDict = defineDictionary(
       '{count} Buchung(en) konnten nicht umgerechnet werden und fehlen in den Summen (Kurs prüfen).',
     fixedCostErrors:
       '{count} wiederkehrende Ausgabe(n) konnten nicht umgerechnet werden und fehlen in den Fixkosten.',
-    invalidPeriod: 'Der Zeitraum ist ungültig (Von darf nicht nach Bis liegen).',
-    loadFailed: 'Daten konnten nicht geladen werden.'
+    invalidPeriod: 'Der Zeitraum ist ungültig (Von darf nicht nach Bis liegen).'
   },
   {
-    title: 'Overview',
     income: 'Income',
     expenses: 'Expenses',
     balance: 'Balance',
@@ -38,7 +35,6 @@ export const homeDict = defineDictionary(
       '{count} booking(s) could not be converted and are missing from the totals (check the rate).',
     fixedCostErrors:
       '{count} recurring expense(s) could not be converted and are missing from the fixed costs.',
-    invalidPeriod: 'The period is invalid (From must not be after To).',
-    loadFailed: 'Data could not be loaded.'
+    invalidPeriod: 'The period is invalid (From must not be after To).'
   }
 )

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Styleguide · appManager · Kurszettel</title>
+<link rel="stylesheet" href="export/tokens.css">
+<link rel="stylesheet" href="mockups/kurszettel.css">
+<style>
+  .sg { max-width: 72rem; margin: 0 auto; padding: var(--space-12) var(--space-8) var(--space-16); }
+  .sg h1 { font-size: var(--font-size-3xl); letter-spacing: var(--font-tracking-tight); margin: 0 0 var(--space-1); }
+  .sg > section { padding: var(--space-10) 0; border-top: 1px solid var(--color-border-default); }
+  .sg h2 { font-size: var(--font-size-xl); margin: 0 0 var(--space-6); letter-spacing: var(--font-tracking-tight); }
+  .sg h3 { font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-text-muted); margin: var(--space-6) 0 var(--space-3); letter-spacing: var(--font-tracking-label); }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--space-3); }
+  .sw { font-size: var(--font-size-xs); }
+  .sw i { display: block; height: 3rem; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px rgb(127 127 127 / .25); margin-bottom: var(--space-1); }
+  .sw code { color: var(--color-text-muted); }
+  .rowx { display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: center; }
+  .state { display: grid; gap: var(--space-1); justify-items: start; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+  .type-row { display: grid; grid-template-columns: 9rem 1fr; gap: var(--space-4); align-items: baseline; padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border-soft); }
+  .type-row code { font-size: var(--font-size-xs); color: var(--color-text-muted); }
+  .rules { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-2); }
+  .space-row { display: flex; align-items: center; gap: var(--space-3); font-size: var(--font-size-xs); }
+  .space-row i { display: block; height: 10px; background: var(--color-action-bg); border-radius: 2px; }
+  .demo-dialog { position: relative; inset: auto; padding: var(--space-8); border-radius: var(--radius-lg); }
+</style>
+</head>
+<body>
+<main class="sg">
+  <p class="eyebrow">appManager · Design-System</p>
+  <h1>Kurszettel</h1>
+  <p class="muted">Eine große Zahl erzählt den Zustand, darunter ordnen Haarlinien und Typografie. Theme: <a class="link" href="?theme=light">hell</a> · <a class="link" href="?theme=dark">dunkel</a></p>
+
+  <section>
+    <h2>Grundsätze</h2>
+    <ol class="rules">
+      <li>Keine Kästen um Inhaltsbereiche. Gliederung durch Haarlinien (<code>border.default</code>), Abstände und Überschriften. Flächen mit Schatten nur für Dialoge, Popover und Toasts.</li>
+      <li>Pro Ansicht genau eine Hauptzahl in <code>font.size.display</code>; Cents kleiner und in <code>text.secondary</code>.</li>
+      <li>Grün und Rot nur für Geldwerte (Plus/Minus) und Status, immer mit Vorzeichen bzw. Symbol (▲ ▼ + −). Saldo-Spalten als Wertfeld (<code>.pill</code>).</li>
+      <li>Blau (<code>action.bg</code>) nur für die Hauptaktion pro Ansicht, Links und den Fokus. Fortschrittsbalken sind graphit, erreicht = grün.</li>
+      <li>Alle Zahlen mit tabellarischen Ziffern, rechtsbündig, ohne Umbruch.</li>
+      <li>Abstände nur aus der <code>space</code>-Skala, Radien nur aus <code>radius</code>.</li>
+      <li>Fokus immer sichtbar: 2 px <code>focus.ring</code>. Klickflächen mindestens 24 × 24 px.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Farben</h2>
+    <h3>SEMANTIK (WECHSELT MIT DEM THEME)</h3>
+    <div class="swatches" id="sem"></div>
+    <h3>ROHWERTE</h3>
+    <div class="swatches" id="raw"></div>
+  </section>
+
+  <section>
+    <h2>Typografie</h2>
+    <p class="muted">Inter (SIL OFL 1.1), lokal über <code>@fontsource/inter</code>. Fallback Segoe UI.</p>
+    <div class="type-row"><code>display / 700 / −0,045em</code><span class="hero-value" style="margin:0">+947<span class="cents">,70 €</span></span></div>
+    <div class="type-row"><code>3xl / 700 / −0,02em</code><span class="page-title" style="margin:0">Projekte</span></div>
+    <div class="type-row"><code>2xl / 600</code><span style="font-size:var(--font-size-2xl);font-weight:600;letter-spacing:var(--font-tracking-tight)" class="num">2.184,50 €</span></div>
+    <div class="type-row"><code>xl / 700</code><span class="section-title">Projekte nach Saldo</span></div>
+    <div class="type-row"><code>lg / 600</code><span style="font-size:var(--font-size-lg);font-weight:600">Noch keine Ausgaben</span></div>
+    <div class="type-row"><code>md / 600</code><span style="font-size:var(--font-size-md);font-weight:600">Saldo</span></div>
+    <div class="type-row"><code>base / 400</code><span>Sie zählen im Gesamtergebnis, erscheinen aber unter „Nicht zuordenbar“.</span></div>
+    <div class="type-row"><code>sm / 600 (Label)</code><span class="label">Betrag</span></div>
+    <div class="type-row"><code>xs / 500 (Spaltenkopf)</code><span style="font-size:var(--font-size-xs);font-weight:500" class="muted">Einnahmen</span></div>
+  </section>
+
+  <section>
+    <h2>Abstände und Radien</h2>
+    <div style="display:grid;gap:var(--space-2)">
+      <div class="space-row"><i style="width:var(--space-1)"></i>space-1 · 4 px</div>
+      <div class="space-row"><i style="width:var(--space-2)"></i>space-2 · 8 px</div>
+      <div class="space-row"><i style="width:var(--space-3)"></i>space-3 · 12 px</div>
+      <div class="space-row"><i style="width:var(--space-4)"></i>space-4 · 16 px</div>
+      <div class="space-row"><i style="width:var(--space-6)"></i>space-6 · 24 px</div>
+      <div class="space-row"><i style="width:var(--space-8)"></i>space-8 · 32 px</div>
+      <div class="space-row"><i style="width:var(--space-12)"></i>space-12 · 48 px</div>
+    </div>
+    <h3>RADIEN</h3>
+    <div class="rowx">
+      <span class="tag" style="border-radius:var(--radius-sm);padding:var(--space-3)">sm 4 px · Checkbox, Tag</span>
+      <span class="tag" style="border-radius:var(--radius-md);padding:var(--space-3)">md 6 px · Buttons, Felder, Wertfeld</span>
+      <span class="tag" style="border-radius:var(--radius-lg);padding:var(--space-3)">lg 10 px · Dialog, Toast</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Buttons und Links</h2>
+    <div class="rowx" style="align-items:start;gap:var(--space-6)">
+      <div class="state">normal<button class="btn btn-primary">+ Ausgabe</button></div>
+      <div class="state">hover<button class="btn btn-primary is-hover">+ Ausgabe</button></div>
+      <div class="state">focus-visible<button class="btn btn-primary is-focus">+ Ausgabe</button></div>
+      <div class="state">active<button class="btn btn-primary is-active">+ Ausgabe</button></div>
+      <div class="state">disabled<button class="btn btn-primary" disabled>+ Ausgabe</button></div>
+    </div>
+    <div class="rowx" style="align-items:start;gap:var(--space-6);margin-top:var(--space-4)">
+      <div class="state">sekundär<button class="btn btn-secondary">Abbrechen</button></div>
+      <div class="state">sekundär hover<button class="btn btn-secondary is-hover">Abbrechen</button></div>
+      <div class="state">dezent<button class="btn btn-quiet">+ Ziel</button></div>
+      <div class="state">dezent hover<button class="btn btn-quiet is-hover">+ Ziel</button></div>
+      <div class="state">gefährlich<button class="btn btn-danger">Löschen</button></div>
+      <div class="state">gefährlich hover<button class="btn btn-danger is-hover">Löschen</button></div>
+      <div class="state">klein<button class="btn btn-secondary btn-sm">Bearbeiten</button></div>
+    </div>
+    <div class="rowx" style="margin-top:var(--space-4)">
+      <a class="link" href="#">Alle Projekte</a> <a class="link is-hover" href="#">Link hover</a>
+    </div>
+    <p class="help" style="margin-top:var(--space-3)">Genau eine primäre Schaltfläche pro Ansicht. „Löschen“ erscheint als gefährlich erst im Bestätigungsdialog.</p>
+  </section>
+
+  <section>
+    <h2>Zeitraum und Tabs</h2>
+    <div class="seg" role="group" aria-label="Zeitraum" data-component="PeriodPicker">
+      <button aria-pressed="true">Monat</button><button aria-pressed="false">Quartal</button><button aria-pressed="false">Jahr</button><button aria-pressed="false">Eigener</button>
+    </div>
+    <div class="tabs" role="tablist" data-component="Tabs">
+      <button class="tab" role="tab" aria-selected="true">Übersicht</button><button class="tab" role="tab" aria-selected="false">Buchungen</button><button class="tab" role="tab" aria-selected="false">Dienste</button><button class="tab" role="tab" aria-selected="false">Kampagnen</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Kennzahlen</h2>
+    <div class="hero" data-component="KpiCard (Hero)">
+      <div><p class="hero-label">Saldo</p><div class="hero-value">+947<span class="cents">,70 €</span></div><div class="delta pos">▲ 312,10 € (+49 %) zum Vormonat</div></div>
+      <svg class="hero-chart" viewBox="0 0 400 120" preserveAspectRatio="none" role="img" aria-label="Saldo-Verlauf, steigend"><polyline fill="none" stroke="var(--color-chart-positive)" stroke-width="2.2" points="0,96 50,90 100,98 150,80 200,84 250,64 300,60 350,40 400,24"/></svg>
+    </div>
+    <dl class="figs">
+      <div class="fig" data-component="KpiCard"><dt>Einnahmen</dt><dd>2.184,50 €</dd><span class="delta pos">▲ 12 %</span></div>
+      <div class="fig" data-component="KpiCard"><dt>Ausgaben (laden)</dt><dd><span class="skel" style="width:8rem;height:1.75rem"></span></dd><span class="skel" style="width:3rem;height:.75rem;margin-top:6px"></span></div>
+      <div class="fig" data-component="KpiCard"><dt>Fixkosten/Monat (Fehler)</dt><dd class="muted">–</dd><span class="hint">Kurs fehlt · <a class="link" href="#">Kurse prüfen</a></span></div>
+    </dl>
+    <h3>WERTFELDER</h3>
+    <div class="rowx"><span class="pill is-pos">+1.033,80 €</span><span class="pill is-neg">−181,60 €</span><span class="pill is-zero">0,00 €</span><span class="pos">+251,60 €</span><span class="neg">−94,30 €</span></div>
+  </section>
+
+  <section>
+    <h2>Tabelle</h2>
+    <table class="table" data-component="DataTable">
+      <caption class="sr-only">Beispieltabelle Ausgaben</caption>
+      <thead><tr><th><button>Datum</button></th><th>Beschreibung</th><th>Kategorie</th><th class="r" aria-sort="descending"><button>Betrag ↓</button></th><th><span class="sr-only">Aktionen</span></th></tr></thead>
+      <tbody>
+        <tr><td class="num">14.10.2026</td><td><b>Railway Pro</b><small>Kassenbuch Mobile, Rezeptkiste</small></td><td><span class="tag">Hosting/Server</span></td><td class="r">20,00 $ <small>18,42 €</small></td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+        <tr><td class="num">01.10.2026</td><td><b>Claude Max</b><small>alle Projekte · monatlich</small></td><td><span class="tag">KI-Abo</span></td><td class="r">90,00 €</td><td class="r"><span class="row-actions"><button class="btn btn-quiet btn-sm">Bearbeiten</button></span></td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3">Summe</td><td class="r">108,42 €</td><td></td></tr></tfoot>
+    </table>
+    <h3>LEER</h3>
+    <div class="empty" data-component="DataTable (leer)">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30 L16 20 L22 25 L34 12" fill="none" stroke="var(--color-border-strong)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 34 H34" stroke="var(--color-border-strong)" stroke-width="2"/></svg>
+      <h3>Noch keine Ausgaben</h3><p>Erfasse die erste Ausgabe, dann erscheint hier die Liste.</p><button class="btn btn-primary">+ Ausgabe</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Formular</h2>
+    <div class="grid-2" style="max-width:40rem">
+      <div class="field"><label class="label" for="f1">Beschreibung</label><input id="f1" class="input" value="Railway Pro"><span class="help">Höchstens 2.000 Zeichen</span></div>
+      <div class="field"><label class="label" for="f2">Betrag (hover)</label><div class="input-group"><input id="f2" class="input money is-hover num" value="20,00"><select class="select" aria-label="Währung"><option>USD</option></select></div></div>
+      <div class="field"><label class="label" for="f3">Datum (Fokus)</label><input id="f3" class="input is-focus num" value="14.10.2026"></div>
+      <div class="field"><label class="label" for="f4">Kurs (Fehler)</label><input id="f4" class="input num" aria-invalid="true" aria-describedby="e4" value="0"><span class="error" id="e4">⚠ Kurs muss größer als 0 sein.</span></div>
+      <div class="field"><label class="label" for="f5">Projekt (deaktiviert)</label><input id="f5" class="input" disabled value="Archiviert"></div>
+      <div class="field"><label class="label" for="f6">Kategorie</label><select id="f6" class="select"><option>Hosting/Server</option></select></div>
+    </div>
+    <div class="rowx" style="margin-top:var(--space-5)">
+      <span class="choice"><span class="box is-on" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 12 12"><path d="M2 6.5 5 9l5-6" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>Wiederkehrend</span>
+      <span class="choice"><span class="box" aria-hidden="true"></span>Archiviert</span>
+      <span class="choice"><span class="box is-disabled" aria-hidden="true"></span><span class="muted">Deaktiviert</span></span>
+      <span class="choice"><span class="box round is-on" aria-hidden="true"></span>Monatlich</span>
+      <span class="choice"><span class="box round" aria-hidden="true"></span>Jährlich</span>
+      <span class="stars" aria-label="4 von 5 Sternen">★★★★<span class="off">★</span></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Hinweise, Toast, Fortschritt</h2>
+    <p class="note" role="status">2 Buchungen konnten keinem aktiven Projekt zugeordnet werden.</p>
+    <div style="display:grid;gap:var(--space-2);margin-top:var(--space-5);max-width:40rem">
+      <div class="callout is-success" role="status"><span>✓</span><span><b>Backup erstellt.</b> 10 Sicherungen vorhanden.</span></div>
+      <div class="callout is-warning" role="status"><span>⚠</span><span><b>Kurs fehlt.</b> 3 Buchungen in USD ohne Kurs.</span></div>
+      <div class="callout is-danger" role="alert"><span>✕</span><span><b>Import fehlgeschlagen.</b> Die Datei ist kein gültiger Export.</span></div>
+      <div class="callout is-info" role="status"><span>i</span><span>Beträge werden in EUR angezeigt.</span></div>
+    </div>
+    <div class="rowx" style="margin-top:var(--space-5)">
+      <div class="toast" role="status"><span class="dot" style="background:var(--color-value-positive)"></span>Ausgabe gespeichert<button class="btn btn-quiet btn-sm" style="margin-left:auto">Rückgängig</button></div>
+    </div>
+    <div style="max-width:28rem;margin-top:var(--space-5)" data-component="GoalsSection">
+      <div class="goal"><div class="goal-top"><b>Break-even Pixelwerk Studio</b><span class="num">68 %</span></div><div class="progress" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"><i style="width:68%"></i></div><small>bis 31.12.2026 · 1.360 € von 2.000 €</small></div>
+      <div class="goal"><div class="goal-top"><b>Kosten ≤ 350 € pro Monat</b><span class="pos">✓ erreicht</span></div><div class="progress is-done"><i style="width:100%"></i></div><small>Portfolio · aktuell 312,40 €</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Navigation</h2>
+    <div style="width:var(--layout-sidebar-width);background:var(--color-surface-sidebar);padding:var(--space-3);border-radius:var(--radius-md)">
+      <ul class="nav-group" style="border:0;margin:0;padding:0">
+        <li><a class="nav-item" href="#" aria-current="page">Start (aktiv)</a></li>
+        <li><a class="nav-item" href="#" style="background:var(--color-surface-hover);color:var(--color-text-default)">Projekte (hover)</a></li>
+        <li><a class="nav-item" href="#" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Dienste (Fokus)</a></li>
+        <li><a class="nav-item" href="#">Ausgaben</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Dialog</h2>
+    <div class="scrim demo-dialog">
+      <div class="dialog" role="dialog" aria-labelledby="dlg" data-component="ConfirmDialog">
+        <div class="dialog-head"><h2 id="dlg">Projekt löschen?</h2></div>
+        <div class="dialog-body"><p class="muted" style="margin:0">„Rezeptkiste“ und die Zuordnung von 14 Buchungen werden entfernt. Das lässt sich nicht rückgängig machen.</p></div>
+        <div class="dialog-foot"><button class="btn btn-secondary">Abbrechen</button><button class="btn btn-danger">Löschen</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+  const sem = ['text-default','text-secondary','text-muted','text-link','surface-default','surface-sidebar','surface-raised','surface-sunken','surface-hover','surface-selected','border-default','border-soft','border-strong','border-input','action-bg','action-bg-hover','action-secondary-bg','focus-ring','value-positive','value-negative','value-progress','status-success-bg','status-warning-bg','status-warning-line','status-danger-bg','status-info-bg','chart-primary','chart-secondary','chart-tertiary','chart-grid'];
+  const raw = ['brand-400','brand-600','brand-700','neutral-25','neutral-50','neutral-150','neutral-650','neutral-975','neutral-1000','green-600','green-400','red-600','red-400','amber-600','amber-400'];
+  const fill = (id, list) => document.getElementById(id).innerHTML = list.map(n => {
+    const v = getComputedStyle(document.documentElement).getPropertyValue('--color-' + n).trim();
+    return `<div class="sw"><i style="background:var(--color-${n})"></i>${n}<br><code>${v}</code></div>`;
+  }).join('');
+  fill('sem', sem); fill('raw', raw);
+</script>
+</body>
+</html>

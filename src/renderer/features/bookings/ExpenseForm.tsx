@@ -20,6 +20,7 @@ import {
   emptyExpenseDraft,
   expenseDraftFrom,
   expenseDraftToInput,
+  isSelectableExpenseCategory,
   localToday,
   QUICK_CATEGORIES,
   referenceDate,
@@ -144,6 +145,7 @@ export function ExpenseForm({
           {tb('category')}
           <CategorySelect
             list="expenseCategories"
+            filter={isSelectableExpenseCategory}
             aria-label={tb('category')}
             value={draft.category}
             onChange={(c) => patch({ category: c })}

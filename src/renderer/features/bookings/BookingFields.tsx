@@ -24,6 +24,7 @@ export function TimingFields({
   onRecurrenceChange,
   currency,
   dateHint,
+  dateNotice,
   showDateError
 }: {
   kind: BookingKind
@@ -34,6 +35,8 @@ export function TimingFields({
   onRecurrenceChange: (value: RecurrenceDraft) => void
   currency: string
   dateHint?: string
+  /** Hinweistext unter dem Datumsfeld (blockiert nichts). */
+  dateNotice?: string
   showDateError: boolean
 }) {
   const tb = useT(bookingsDict)
@@ -69,6 +72,11 @@ export function TimingFields({
             className="w-44"
           />
           <FieldMessage error>{showDateError ? tu('invalidDate') : null}</FieldMessage>
+          {dateNotice && (
+            <p role="status" className="text-sm text-muted-foreground">
+              {dateNotice}
+            </p>
+          )}
         </div>
       ) : (
         <RecurrenceEditor value={recurrence} onChange={onRecurrenceChange} currency={currency} />

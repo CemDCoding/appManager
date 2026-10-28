@@ -109,8 +109,8 @@ export interface BookingTableProps {
 }
 
 /**
- * Buchungsliste mit Originalbetrag (Originalwährung) und Anzeigebetrag
- * (aus EUR in die Anzeigewährung, PE-50) und Warnsymbol bei nicht zuordenbaren oder
+ * Buchungsliste mit Anzeigebetrag (aus EUR in die Anzeigewährung, PE-50; der
+ * Originalbetrag steht nur in den Formularen, PE-59) und Warnsymbol bei nicht zuordenbaren oder
  * nicht umrechenbaren Einträgen.
  */
 export function BookingTable({
@@ -179,13 +179,6 @@ export function BookingTable({
       )
     },
     {
-      id: 'original',
-      header: tb('columnOriginal'),
-      align: 'right',
-      sortValue: (r) => r.original.cents,
-      cell: (r) => fmt.money(r.original.cents, r.original.currency)
-    },
-    {
       id: 'display',
       header: tb('columnDisplay', { currency: display.currency }),
       align: 'right',
@@ -243,7 +236,7 @@ export function BookingTable({
         onRowClick={(r) => onEdit(r.sourceId)}
         footer={
           <TableRow>
-            <TableCell colSpan={5} className="font-medium">
+            <TableCell colSpan={4} className="font-medium">
               {tb('total')}
             </TableCell>
             <TableCell className="text-right font-medium tabular-nums">

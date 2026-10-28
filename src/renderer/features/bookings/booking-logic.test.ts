@@ -20,6 +20,8 @@ import {
   expenseDraftToInput,
   incomeDraftFrom,
   incomeDraftToInput,
+  isOutsideActivePeriod,
+  isSelectableExpenseCategory,
   localToday,
   QUICK_CATEGORIES,
   referenceDate,
@@ -430,5 +432,28 @@ describe('incomes', () => {
     const income: Income = { ...BASE, id: '77777777-7777-4777-8777-777777777777', ...r.value }
     const back = incomeDraftToInput(incomeDraftFrom(income, 'de', '2026-10-26'), 'de')
     expect(back).toEqual(r)
+  })
+})
+
+describe('AP-29 helpers', () => {
+  it('advertising is not selectable for new expenses (PE-60), other categories are', () => {
+    expect(isSelectableExpenseCategory('advertising')).toBe(false)
+    expect(isSelectableExpenseCategory('hosting')).toBe(true)
+    expect(isSelectableExpenseCategory('myCustom')).toBe(true)
+  })
+
+  it('detects a date outside the active period (PE-58)', () => {
+    const open = { startDate: '2026-02-01' }
+    const closed = { startDate: '2026-02-01', endDate: '2026-02-28' }
+    expect(isOutsideActivePeriod(open, '2026-01-31')).toBe(true)
+    expect(isOutsideActivePeriod(open, '2026-02-01')).toBe(false)
+    expect(isOutsideActivePeriod(open, '2030-01-01')).toBe(false)
+    expect(isOutsideActivePeriod(closed, '2026-02-28')).toBe(false)
+    expect(isOutsideActivePeriod(closed, '2026-03-01')).toBe(true)
+  })
+
+  it('shows no notice without project or with an invalid date', () => {
+    expect(isOutsideActivePeriod(undefined, '2026-01-01')).toBe(false)
+    expect(isOutsideActivePeriod({ startDate: '2026-02-01' }, '')).toBe(false)
   })
 })

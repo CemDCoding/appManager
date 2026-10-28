@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ausgabe erfassen · appManager</title>
+<link rel="stylesheet" href="../export/tokens.css">
+<link rel="stylesheet" href="kurszettel.css">
+<style>
+  body { overflow: hidden; }
+  .bg { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+  .alloc { display: grid; gap: var(--space-2); }
+  .alloc-row { display: grid; grid-template-columns: 1fr 6rem 7rem; gap: var(--space-3); align-items: center; padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border-soft); }
+  .alloc-row .input { text-align: right; }
+  .alloc-sum { display: flex; justify-content: space-between; font-weight: var(--font-weight-semibold); padding-top: var(--space-1); }
+</style>
+</head>
+<body>
+<iframe class="bg" title="Hintergrund: Ausgabenliste" aria-hidden="true" tabindex="-1" id="bg" src="ausgaben.html"></iframe>
+<script>if(t)document.getElementById('bg').src='ausgaben.html?theme='+t;</script>
+<div class="scrim">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title" data-component="ExpenseForm (Dialog)">
+    <div class="dialog-head"><h2 id="dlg-title">Ausgabe erfassen</h2></div>
+    <form class="dialog-body">
+      <div class="form-section" style="border-top:0;padding-top:var(--space-3)">
+        <div class="field"><label class="label" for="d">Beschreibung</label><input id="d" class="input" value="Railway Pro"></div>
+        <div class="grid-2">
+          <div class="field" data-component="MoneyInput"><label class="label" for="a">Betrag</label><div class="input-group"><input id="a" class="input money num" value="20,00"><select class="select" aria-label="Währung"><option>USD</option></select></div><span class="help num">= 18,42 € zum Kurs 0,9210</span></div>
+          <div class="field" data-component="DateInput"><label class="label" for="dt">Datum</label><input id="dt" class="input num" value="14.10.2026"></div>
+        </div>
+        <div class="grid-2">
+          <div class="field" data-component="CategorySelect"><label class="label" for="c">Kategorie</label><select id="c" class="select"><option>Hosting/Server</option></select></div>
+          <div class="field"><label class="label" for="r">Kurs USD → EUR</label><input id="r" class="input num" aria-invalid="true" aria-describedby="re" value="0,000"><span class="error" id="re">⚠ Für USD am 14.10.2026 fehlt ein Kurs.</span></div>
+        </div>
+      </div>
+      <fieldset class="form-section" data-component="RecurrenceEditor" style="border-left:0;border-right:0;border-bottom:0;margin:0">
+        <legend class="sr-only">Wiederholung</legend>
+        <h3 aria-hidden="true">Wiederholung</h3>
+        <div style="display:flex;gap:var(--space-6)">
+          <label class="choice"><span class="box round" aria-hidden="true"></span>Einmalig</label>
+          <label class="choice"><span class="box round is-on" aria-hidden="true"></span>Monatlich</label>
+          <label class="choice"><span class="box round" aria-hidden="true"></span>Jährlich</label>
+        </div>
+      </fieldset>
+      <fieldset class="form-section" data-component="AllocationEditor" style="border-left:0;border-right:0;border-bottom:0;margin:0">
+        <legend class="sr-only">Aufteilung auf Projekte</legend>
+        <div style="display:flex;justify-content:space-between;align-items:center"><h3 aria-hidden="true">Aufteilung</h3>
+          <div class="seg" role="group" aria-label="Aufteilungsart"><button type="button" aria-pressed="false">Ein Projekt</button><button type="button" aria-pressed="true">Mehrere</button><button type="button" aria-pressed="false">Alle</button></div></div>
+        <div class="alloc">
+          <div class="alloc-row"><span>Kassenbuch Mobile</span><input class="input num" aria-label="Anteil Kassenbuch Mobile in Prozent" value="50 %"><span class="r num" style="text-align:right">9,21 €</span></div>
+          <div class="alloc-row"><span>Rezeptkiste</span><input class="input num" aria-label="Anteil Rezeptkiste in Prozent" value="50 %"><span class="num" style="text-align:right">9,21 €</span></div>
+          <div class="alloc-sum"><button type="button" class="btn btn-quiet btn-sm" style="padding:0">+ Projekt</button><span class="num">100 % · 18,42 €</span></div>
+        </div>
+      </fieldset>
+    </form>
+    <div class="dialog-foot"><button class="btn btn-secondary">Abbrechen</button><button class="btn btn-primary">Speichern</button></div>
+  </div>
+</div>
+</body>
+</html>

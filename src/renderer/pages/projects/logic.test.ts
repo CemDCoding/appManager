@@ -12,7 +12,6 @@ import {
   projectServiceRows,
   suggestEndDate,
   toProjectInput,
-  todayIso,
   validateForm,
   withArchived
 } from './logic'
@@ -52,12 +51,6 @@ function entry(over: Partial<LedgerEntry>): LedgerEntry {
     ...over
   }
 }
-
-describe('todayIso', () => {
-  it('formats the local date with padding', () => {
-    expect(todayIso(new Date(2026, 0, 5))).toBe('2026-01-05')
-  })
-})
 
 describe('suggestEndDate', () => {
   it('suggests today when switching to discontinued without an end date', () => {

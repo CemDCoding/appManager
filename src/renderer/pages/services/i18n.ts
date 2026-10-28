@@ -63,11 +63,9 @@ export const servicesDict = defineDictionary(
     deleteDescription:
       'Zu diesem Dienst gibt es {count} verknüpfte Kosten. Was soll mit ihnen passieren?',
     deleteDescriptionNone: 'Zu diesem Dienst gibt es keine verknüpften Kosten.',
-    deleteKeep: 'Kosten behalten (ohne Dienst-Verknüpfung weiter in den Ausgaben)',
+    deleteKeep: 'Kosten behalten (Dienst wird gelöscht, Ausgaben bleiben ohne Dienst-Verknüpfung)',
     deleteCascade: 'Verknüpfte Kosten mitlöschen',
-    deleteOptions: 'Verknüpfte Kosten',
-    unknownService: 'Gelöschter Dienst',
-    loadError: 'Die Dienste konnten nicht geladen werden.'
+    deleteOptions: 'Verknüpfte Kosten'
   },
   {
     title: 'Services',
@@ -127,11 +125,9 @@ export const servicesDict = defineDictionary(
     deleteTitle: 'Delete service {name}?',
     deleteDescription: 'This service has {count} linked costs. What should happen to them?',
     deleteDescriptionNone: 'This service has no linked costs.',
-    deleteKeep: 'Keep costs (they stay in the expenses without a service link)',
+    deleteKeep: 'Keep costs (the service is deleted, the expenses stay without a service link)',
     deleteCascade: 'Delete linked costs as well',
-    deleteOptions: 'Linked costs',
-    unknownService: 'Deleted service',
-    loadError: 'The services could not be loaded.'
+    deleteOptions: 'Linked costs'
   }
 )
 

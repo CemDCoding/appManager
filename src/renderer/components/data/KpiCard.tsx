@@ -22,6 +22,11 @@ export interface KpiCardProps {
   icon?: ReactNode
   loading?: boolean
   className?: string
+  /**
+   * Stabile Test-ID der Kennzahl (z. B. `kpi-income`), unabhängig von Sprache und Text.
+   * Der Wert selbst trägt immer `data-testid="kpi-value"`.
+   */
+  testId?: string
 }
 
 /**
@@ -39,7 +44,8 @@ export function KpiCard({
   warning,
   icon,
   loading = false,
-  className
+  className,
+  testId
 }: KpiCardProps) {
   const t = useT(uiDict)
   const display = useDisplayCurrency()
@@ -47,7 +53,7 @@ export function KpiCard({
   const negative = eurCents !== undefined && eurCents < 0
 
   return (
-    <Card className={cn('gap-2', className)} aria-busy={loading || undefined}>
+    <Card className={cn('gap-2', className)} aria-busy={loading || undefined} data-testid={testId}>
       <CardHeader className="flex-row items-center justify-between gap-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
         {icon && (
@@ -57,7 +63,10 @@ export function KpiCard({
         )}
       </CardHeader>
       <CardContent className="grid gap-1">
-        <div className={cn('text-2xl font-semibold tabular-nums', negative && 'text-destructive')}>
+        <div
+          data-testid="kpi-value"
+          className={cn('text-2xl font-semibold tabular-nums', negative && 'text-destructive')}
+        >
           {loading ? t('loading') : money ? money.text : value}
         </div>
         {money?.converted && !loading && (

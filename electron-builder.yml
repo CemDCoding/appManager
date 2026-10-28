@@ -2,6 +2,7 @@ appId: de.cemdogan.appmanager
 productName: appManager
 directories:
   output: release
+  buildResources: build
 files:
   - out/**
   - package.json
@@ -11,4 +12,12 @@ win:
       arch: x64
 nsis:
   oneClick: false
+  perMachine: false
   allowToChangeInstallationDirectory: true
+  createStartMenuShortcut: true
+  createDesktopShortcut: false
+  # Uninstall leaves the app data in %APPDATA% alone. A data folder chosen by the
+  # user stays only if it lies outside the install folder (PE-18); one inside the
+  # install folder may be removed together with it.
+  deleteAppDataOnUninstall: false
+  include: build/installer.nsh

@@ -130,3 +130,52 @@ describe('monthlyFixedCosts', () => {
     expect(() => monthlyFixedCosts([huge, huge], [A], '2026-02-01')).toThrow(RangeError)
   })
 })
+
+describe('monthlyFixedCosts frequencies and edge dates', () => {
+  const run = (interval: 'daily' | 'weekly' | 'yearly', startDate: string, date: string): number =>
+    monthlyFixedCosts(
+      [recurringExpense('x', { interval, startDate }, { cents: 1000 }, ALL)],
+      [A],
+      date
+    ).totalCents
+
+  it('applies the PE-51 factor for daily, weekly and yearly', () => {
+    expect(run('daily', '2026-01-01', '2026-03-10')).toBe(30_417) // 30416.67
+    expect(run('weekly', '2026-01-01', '2026-03-10')).toBe(4333)
+    expect(run('yearly', '2026-01-01', '2026-03-10')).toBe(83) // 83.33
+  })
+
+  it('handles 29 February in a leap year and rejects it otherwise', () => {
+    expect(run('yearly', '2024-02-29', '2024-02-29')).toBe(83)
+    expect(run('yearly', '2024-02-29', '2024-03-01')).toBe(83)
+    expect(() => monthlyFixedCosts([], [], '2026-02-29')).toThrow(RangeError)
+  })
+
+  it('price change applies from its date and the original price before', () => {
+    const e = recurringExpense(
+      'p',
+      {
+        interval: 'monthly',
+        startDate: '2026-01-01',
+        priceChanges: [{ fromDate: '2026-03-01', cents: 2000 }]
+      },
+      { cents: 1000 },
+      ALL
+    )
+    expect(monthlyFixedCosts([e], [A], '2026-02-28').totalCents).toBe(1000)
+    expect(monthlyFixedCosts([e], [A], '2026-03-01').totalCents).toBe(2000)
+  })
+
+  it('ignores projects not yet started', () => {
+    const late = project('late', '2027-01-01')
+    const r = monthlyFixedCosts(
+      [
+        recurringExpense('x', { interval: 'monthly', startDate: '2026-01-01' }, { cents: 500 }, ALL)
+      ],
+      [late],
+      '2026-05-01'
+    )
+    expect(r.unallocatedCents).toBe(500)
+    expect(r.byProject).toEqual([{ projectId: 'late', cents: 0 }])
+  })
+})

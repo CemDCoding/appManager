@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Richtung B – Carbon · appManager</title>
+<style>
+  /* Richtung B: Pro-App-Gefühl (Logic, Final Cut): Carbon-Seitenleiste, helle Arbeitsfläche, große Zahlen */
+  :root {
+    --brand-600: #1668dc; --brand-400: #67a3ff; --brand-100: #e2eeff;
+    --c-950: #15171b; --c-900: #1d2025; --c-850: #252930; --c-800: #30353d; --c-500: #8b93a0; --c-300: #c3c8d1;
+    --n-0: #ffffff; --n-50: #f4f5f7; --n-100: #eceef1; --n-200: #dcdfe5; --n-600: #5f6672; --n-950: #16181c;
+    --pos: #157a3c; --neg: #c2321f;
+    --font: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--n-950); background: var(--n-50); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+  .num { font-variant-numeric: tabular-nums; }
+  .app { display: flex; min-height: 100vh; }
+
+  /* Erkennungsmerkmal: Carbon-Seitenleiste mit feinem Köpergewebe */
+  aside { width: 236px; flex-shrink: 0; color: var(--c-300); padding: 18px 12px; position: relative;
+    background-color: var(--c-900);
+    background-image:
+      repeating-linear-gradient(45deg, rgb(255 255 255 / .022) 0 2px, transparent 2px 4px),
+      repeating-linear-gradient(-45deg, rgb(0 0 0 / .18) 0 2px, transparent 2px 4px),
+      linear-gradient(180deg, var(--c-850), var(--c-950)); }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 2px 10px 22px; color: #fff; font-weight: 650; font-size: 15px; letter-spacing: -0.01em; }
+  .mark { width: 26px; height: 26px; border-radius: 7px; background: var(--brand-600); display: grid; place-items: center; box-shadow: inset 0 1px 0 rgb(255 255 255 / .25); }
+  .navlabel { font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--c-500); padding: 16px 10px 6px; }
+  nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  nav a { position: relative; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--c-300); text-decoration: none; font-weight: 500; min-height: 32px; }
+  nav a:hover { background: rgb(255 255 255 / .06); color: #fff; }
+  nav a[aria-current="page"] { background: rgb(255 255 255 / .09); color: #fff; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .06); }
+  nav a[aria-current="page"]::before { content: ""; position: absolute; left: -12px; top: 7px; bottom: 7px; width: 3px; border-radius: 0 3px 3px 0; background: var(--brand-400); }
+  nav a[aria-current="page"] svg { color: var(--brand-400); }
+  nav a:focus-visible { outline: 2px solid var(--brand-400); outline-offset: 1px; }
+  nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .side-foot { position: absolute; left: 22px; right: 22px; bottom: 18px; font-size: 12px; color: var(--c-500); display: flex; justify-content: space-between; }
+
+  main { flex: 1; min-width: 0; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 32px; background: var(--n-0); border-bottom: 1px solid var(--n-200); flex-wrap: wrap; }
+  h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 0; }
+  .seg { display: inline-flex; background: var(--n-100); border-radius: 8px; padding: 2px; box-shadow: inset 0 0 0 1px var(--n-200); }
+  .seg button { font: inherit; font-size: 13px; font-weight: 500; border: 0; background: transparent; color: var(--n-950); padding: 4px 14px; border-radius: 6px; min-height: 26px; }
+  .seg button[aria-pressed="true"] { background: var(--n-0); box-shadow: 0 1px 3px rgb(22 24 28 / .16); }
+  .tools { display: flex; gap: 10px; align-items: center; }
+  .btn { font: inherit; font-size: 13px; font-weight: 550; border-radius: 7px; padding: 6px 14px; min-height: 30px; border: 0; cursor: pointer; }
+  .btn-primary { background: var(--brand-600); color: #fff; box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 1px 2px rgb(22 24 28 / .2); }
+  .btn-quiet { background: var(--n-0); color: var(--n-950); box-shadow: 0 0 0 1px var(--n-200), 0 1px 2px rgb(22 24 28 / .06); }
+
+  .content { padding: 28px 32px 48px; max-width: 1180px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .card { background: var(--n-0); border-radius: 14px; box-shadow: 0 0 0 1px rgb(22 24 28 / .06), 0 2px 6px rgb(22 24 28 / .05); }
+  .kpi { padding: 18px 20px 14px; }
+  .kpi dt { font-size: 12px; font-weight: 550; color: var(--n-600); display: flex; justify-content: space-between; }
+  .kpi dd { margin: 6px 0 0; font-size: 32px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+  .kpi .cents { font-size: 18px; font-weight: 600; color: var(--n-600); letter-spacing: -0.01em; }
+  .kpi svg.spark { display: block; width: 100%; height: 30px; margin-top: 10px; }
+  .delta { font-size: 12px; font-weight: 600; }
+  .pos { color: var(--pos); } .neg { color: var(--neg); }
+  .kpi.hero { background: var(--c-900); color: #fff; box-shadow: 0 2px 10px rgb(22 24 28 / .18); }
+  .kpi.hero dt { color: var(--c-300); } .kpi.hero .cents { color: var(--c-300); }
+  .kpi.hero .pos-dark { color: #5fd38a; }
+
+  .two { display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; margin-top: 14px; align-items: start; }
+  .card h2 { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; margin: 0; }
+  .card-h { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 10px; }
+  .link { color: var(--brand-600); font-size: 13px; font-weight: 550; text-decoration: none; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 12px; font-weight: 550; color: var(--n-600); text-align: left; padding: 8px 20px; border-bottom: 1px solid var(--n-100); }
+  td { padding: 10px 20px; border-bottom: 1px solid var(--n-100); }
+  tr:last-child td { border-bottom: 0; }
+  .r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td b { font-weight: 550; } td small { display: block; color: var(--n-600); font-size: 12px; }
+  em.un { color: var(--n-600); }
+  .goal { padding: 12px 20px; border-top: 1px solid var(--n-100); }
+  .goal-t { display: flex; justify-content: space-between; gap: 12px; }
+  .goal-t b { font-weight: 550; } .goal small { color: var(--n-600); font-size: 12px; }
+  .bar { height: 8px; background: var(--n-100); border-radius: 4px; margin: 8px 0 4px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--brand-600), #3583f9); }
+  .bar.done i { background: var(--pos); }
+  .alert { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; padding: 12px 16px; border-radius: 10px; background: #fff6e8; box-shadow: inset 0 0 0 1px #f1d7aa; color: #5c3a00; }
+  @media (max-width: 1000px) { aside { display: none; } .kpis { grid-template-columns: repeat(2, 1fr); } .two { grid-template-columns: 1fr; } .content, .toolbar { padding-left: 16px; padding-right: 16px; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M6 10l6-6 6 6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 10v4h4l6 5V5L7 10zM17 9a4 4 0 0 1 0 6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-pie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 2.5A7 7 0 0 1 21.5 9H15z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 2h8l5 5v15H6zM14 2v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20zM12 10v4M12 17h.01"/></symbol>
+</svg>
+<div class="app">
+  <aside data-component="Sidebar">
+    <div class="brand"><span class="mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 19V9M12 19V5M19 19v-7"/></svg></span>appManager</div>
+    <nav aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#" aria-current="page"><svg><use href="#i-home"/></svg>Start</a></li>
+        <li><a href="#"><svg><use href="#i-folder"/></svg>Projekte</a></li>
+        <li><a href="#"><svg><use href="#i-server"/></svg>Dienste</a></li>
+      </ul>
+      <div class="navlabel">BUCHUNGEN</div>
+      <ul>
+        <li><a href="#"><svg><use href="#i-down"/></svg>Ausgaben</a></li>
+        <li><a href="#"><svg><use href="#i-up"/></svg>Einnahmen</a></li>
+        <li><a href="#"><svg><use href="#i-users"/></svg>Personen</a></li>
+        <li><a href="#"><svg><use href="#i-mega"/></svg>Kampagnen</a></li>
+      </ul>
+      <div class="navlabel">AUSWERTUNG</div>
+      <ul>
+        <li><a href="#"><svg><use href="#i-chart"/></svg>Nutzerzahlen</a></li>
+        <li><a href="#"><svg><use href="#i-pie"/></svg>Statistik</a></li>
+        <li><a href="#"><svg><use href="#i-doc"/></svg>Berichte</a></li>
+        <li><a href="#"><svg><use href="#i-gear"/></svg>Einstellungen</a></li>
+      </ul>
+    </nav>
+    <div class="side-foot"><span>Anzeige: EUR</span><span>Backup 08:14</span></div>
+  </aside>
+
+  <main data-component="HomePage">
+    <div class="toolbar" data-component="Header">
+      <h1>Start</h1>
+      <div class="seg" role="group" aria-label="Zeitraum" data-component="PeriodPicker">
+        <button aria-pressed="true">Monat</button><button aria-pressed="false">Quartal</button><button aria-pressed="false">Jahr</button><button aria-pressed="false">Eigener</button>
+      </div>
+      <div class="tools"><button class="btn btn-quiet">Bericht</button><button class="btn btn-primary">+ Buchung</button></div>
+    </div>
+
+    <div class="content">
+      <dl class="kpis">
+        <div class="card kpi hero" data-component="KpiCard"><dt>Saldo · Oktober</dt><dd class="num">+947<span class="cents">,70 €</span></dd>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#67a3ff" stroke-width="2" points="0,24 25,22 50,25 75,18 100,19 125,14 150,15 175,9 200,6"/></svg></div>
+        <div class="card kpi" data-component="KpiCard"><dt>Einnahmen <span class="delta pos">▲ 12 %</span></dt><dd class="num">2.184<span class="cents">,50 €</span></dd>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#157a3c" stroke-width="2" points="0,22 25,20 50,23 75,17 100,18 125,12 150,14 175,10 200,8"/></svg></div>
+        <div class="card kpi" data-component="KpiCard"><dt>Ausgaben <span class="delta pos">▼ 4 %</span></dt><dd class="num">1.236<span class="cents">,80 €</span></dd>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#c2321f" stroke-width="2" points="0,10 25,12 50,9 75,13 100,11 125,14 150,12 175,15 200,14"/></svg></div>
+        <div class="card kpi" data-component="KpiCard"><dt>Fixkosten/Monat</dt><dd class="num">312<span class="cents">,40 €</span></dd>
+          <svg class="spark" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#1668dc" stroke-width="2" points="0,16 50,16 60,13 120,13 130,15 200,15"/></svg></div>
+      </dl>
+
+      <div class="alert" role="status"><svg width="16" height="16" style="flex-shrink:0;margin-top:2px"><use href="#i-warn"/></svg><span>2 Buchungen konnten keinem aktiven Projekt zugeordnet werden. Sie zählen im Gesamtergebnis, erscheinen aber unter „Nicht zuordenbar“.</span></div>
+
+      <div class="two">
+        <section class="card" data-component="DataTable">
+          <div class="card-h"><h2>Projekte nach Saldo</h2><a class="link" href="#">Alle Projekte</a></div>
+          <table>
+            <caption style="position:absolute;left:-9999px">Projekte nach Saldo</caption>
+            <thead><tr><th>Projekt</th><th class="r">Einnahmen</th><th class="r">Ausgaben</th><th class="r">Saldo ↓</th></tr></thead>
+            <tbody>
+              <tr><td><b>Kassenbuch Mobile</b><small>Mobile</small></td><td class="r">1.420,00 €</td><td class="r">386,20 €</td><td class="r pos">+1.033,80 €</td></tr>
+              <tr><td><b>Pixelwerk Studio</b><small>Steam</small></td><td class="r">764,50 €</td><td class="r">512,90 €</td><td class="r pos">+251,60 €</td></tr>
+              <tr><td><b>Rezeptkiste</b><small>Web</small></td><td class="r">0,00 €</td><td class="r">94,30 €</td><td class="r neg">−94,30 €</td></tr>
+              <tr><td><b>Wetterdienst-Widget für den Windows-Desktop</b><small>Desktop</small></td><td class="r">0,00 €</td><td class="r">181,60 €</td><td class="r neg">−181,60 €</td></tr>
+              <tr><td><em class="un">Nicht zuordenbar</em></td><td class="r">0,00 €</td><td class="r">61,80 €</td><td class="r neg">−61,80 €</td></tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="card" data-component="GoalsSection">
+          <div class="card-h"><h2>Ziele</h2><a class="link" href="#">+ Ziel</a></div>
+          <div class="goal"><div class="goal-t"><b>Break-even Pixelwerk Studio</b><span class="num">68 %</span></div><div class="bar"><i style="width:68%"></i></div><small>bis 31.12.2026 · 1.360 € von 2.000 €</small></div>
+          <div class="goal"><div class="goal-t"><b>Kosten ≤ 350 € pro Monat</b><span class="pos">✓ erreicht</span></div><div class="bar done"><i style="width:100%"></i></div><small>Portfolio · aktuell 312,40 €</small></div>
+          <div class="goal"><div class="goal-t"><b>1.000 Nutzer Kassenbuch Mobile</b><span class="num">41 %</span></div><div class="bar"><i style="width:41%"></i></div><small>bis 30.06.2027 · 412 Nutzer</small></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

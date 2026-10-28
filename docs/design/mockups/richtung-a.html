@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="de">
+<head>
+<script>const t=new URLSearchParams(location.search).get('theme');if(t)document.documentElement.dataset.theme=t;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Richtung A – Systemeinstellungen · appManager</title>
+<style>
+  /* Richtung A: gruppierte Abschnitte wie in den macOS-Systemeinstellungen */
+  :root {
+    --brand-600: #1668dc; --brand-50: #f2f7ff;
+    --n-0: #ffffff; --n-50: #f6f7f8; --n-100: #ebedf0; --n-150: #e1e4e9; --n-200: #d5d9e0;
+    --n-600: #5f6672; --n-700: #545a64; --n-950: #1b1e23;
+    --pos: #157a3c; --neg: #c2321f;
+    --font: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --r-group: 12px; --r-ctl: 7px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--n-950); background: var(--n-50);
+         font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+  .num { font-variant-numeric: tabular-nums; }
+  .app { display: flex; min-height: 100vh; }
+
+  aside { width: 232px; flex-shrink: 0; background: var(--n-100); border-right: 1px solid var(--n-200);
+          padding: 18px 10px; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px 18px; font-weight: 650; font-size: 15px; }
+  .mark { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(160deg, #3a4048, #1b1e23);
+          display: grid; place-items: center; }
+  .navlabel { font-size: 11px; font-weight: 600; color: var(--n-600); padding: 14px 10px 4px; }
+  nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: var(--r-ctl);
+          color: var(--n-950); text-decoration: none; font-weight: 500; min-height: 30px; }
+  nav a:hover { background: var(--n-150); }
+  nav a[aria-current="page"] { background: var(--brand-600); color: #fff; }
+  nav a:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+  nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  main { flex: 1; padding: 28px 40px 48px; max-width: 1120px; }
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+  .sub { color: var(--n-600); margin: 2px 0 0; }
+  .seg { display: inline-flex; background: var(--n-150); border-radius: 8px; padding: 2px; }
+  .seg button { font: inherit; font-size: 13px; font-weight: 500; border: 0; background: transparent; color: var(--n-950);
+                padding: 4px 14px; border-radius: 6px; min-height: 26px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--n-0); box-shadow: 0 1px 2px rgb(27 30 35 / .14), 0 0 0 .5px rgb(27 30 35 / .08); }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--n-700); margin: 28px 0 8px 4px; }
+  .group { background: var(--n-0); border-radius: var(--r-group); box-shadow: 0 0 0 1px var(--n-200), 0 1px 2px rgb(27 30 35 / .04); overflow: hidden; }
+
+  /* Erkennungsmerkmal: Kennzahlen als eine gruppierte Leiste */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .kpi { padding: 16px 20px 18px; }
+  .kpi + .kpi { border-left: 1px solid var(--n-150); }
+  .kpi dt { font-size: 12px; font-weight: 500; color: var(--n-600); }
+  .kpi dd { margin: 4px 0 0; font-size: 26px; font-weight: 650; letter-spacing: -0.02em; }
+  .kpi small { display: block; font-size: 12px; color: var(--n-600); margin-top: 2px; }
+  .pos { color: var(--pos); } .neg { color: var(--neg); }
+
+  .row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 12px; padding: 11px 16px; min-height: 44px; }
+  .row + .row { border-top: 1px solid var(--n-150); margin-left: 56px; padding-left: 0; grid-template-columns: 1fr auto; }
+  .row + .row .ico { display: none; }
+  .goal { display: grid; grid-template-columns: 1fr 180px 84px; align-items: center; gap: 16px; padding: 12px 16px; }
+  .goal + .goal { border-top: 1px solid var(--n-150); }
+  .goal b { font-weight: 550; display: block; } .goal span { color: var(--n-600); font-size: 12px; }
+  .bar { height: 6px; background: var(--n-150); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--brand-600); border-radius: 3px; }
+  .bar.done i { background: var(--pos); }
+  .pct { text-align: right; font-weight: 550; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 12px; font-weight: 500; color: var(--n-600); text-align: left; padding: 10px 16px; border-bottom: 1px solid var(--n-150); }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--n-150); }
+  tr:last-child td { border-bottom: 0; }
+  .r { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:hover { background: var(--n-50); }
+  .pname { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+  .dot { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .tag { font-size: 11px; color: var(--n-600); background: var(--n-100); border-radius: 5px; padding: 1px 6px; font-weight: 500; }
+  em.un { color: var(--n-600); }
+  .note { display: flex; gap: 10px; align-items: flex-start; padding: 12px 16px; color: var(--n-950); }
+  .note svg { color: #b25e00; flex-shrink: 0; margin-top: 1px; }
+  @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, 1fr); } .kpi:nth-child(3) { border-left: 0; } .kpi:nth-child(n+3) { border-top: 1px solid var(--n-150); } aside { display: none; } main { padding: 20px; } .goal { grid-template-columns: 1fr 60px; } .goal .bar { grid-column: 1 / -1; grid-row: 2; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M6 10l6-6 6 6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 10v4h4l6 5V5L7 10zM17 9a4 4 0 0 1 0 6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-pie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 2.5A7 7 0 0 1 21.5 9H15z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 2h8l5 5v15H6zM14 2v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20zM12 10v4M12 17h.01"/></symbol>
+</svg>
+<div class="app">
+  <aside data-component="Sidebar">
+    <div class="brand"><span class="mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 19V9M12 19V5M19 19v-7"/></svg></span>appManager</div>
+    <nav aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#" aria-current="page"><svg><use href="#i-home"/></svg>Start</a></li>
+        <li><a href="#"><svg><use href="#i-folder"/></svg>Projekte</a></li>
+        <li><a href="#"><svg><use href="#i-server"/></svg>Dienste</a></li>
+      </ul>
+      <div class="navlabel">Buchungen</div>
+      <ul>
+        <li><a href="#"><svg><use href="#i-down"/></svg>Ausgaben</a></li>
+        <li><a href="#"><svg><use href="#i-up"/></svg>Einnahmen</a></li>
+        <li><a href="#"><svg><use href="#i-users"/></svg>Personen</a></li>
+        <li><a href="#"><svg><use href="#i-mega"/></svg>Kampagnen</a></li>
+      </ul>
+      <div class="navlabel">Auswertung</div>
+      <ul>
+        <li><a href="#"><svg><use href="#i-chart"/></svg>Nutzerzahlen</a></li>
+        <li><a href="#"><svg><use href="#i-pie"/></svg>Statistik</a></li>
+        <li><a href="#"><svg><use href="#i-doc"/></svg>Berichte</a></li>
+        <li><a href="#"><svg><use href="#i-gear"/></svg>Einstellungen</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main data-component="HomePage">
+    <div class="head" data-component="Header">
+      <div><h1>Start</h1><p class="sub">Oktober 2026 · Anzeige in EUR</p></div>
+      <div class="seg" role="group" aria-label="Zeitraum" data-component="PeriodPicker">
+        <button aria-pressed="true">Monat</button><button aria-pressed="false">Quartal</button><button aria-pressed="false">Jahr</button><button aria-pressed="false">Eigener</button>
+      </div>
+    </div>
+
+    <section class="group" aria-label="Kennzahlen">
+      <dl class="kpis">
+        <div class="kpi" data-component="KpiCard"><dt>Einnahmen</dt><dd class="num">2.184,50 €</dd><small>+12 % zum Vormonat</small></div>
+        <div class="kpi" data-component="KpiCard"><dt>Ausgaben</dt><dd class="num">1.236,80 €</dd><small>−4 % zum Vormonat</small></div>
+        <div class="kpi" data-component="KpiCard"><dt>Saldo</dt><dd class="num pos">+947,70 €</dd><small>Überschuss</small></div>
+        <div class="kpi" data-component="KpiCard"><dt>Fixkosten/Monat</dt><dd class="num">312,40 €</dd><small>Stand 28.10.2026</small></div>
+      </dl>
+    </section>
+
+    <div class="group" style="margin-top:12px" role="status">
+      <div class="note"><svg width="16" height="16"><use href="#i-warn"/></svg><span>2 Buchungen konnten keinem aktiven Projekt zugeordnet werden. Sie zählen im Gesamtergebnis, erscheinen aber unter „Nicht zuordenbar“.</span></div>
+    </div>
+
+    <h2>Ziele</h2>
+    <section class="group" data-component="GoalsSection">
+      <div class="goal"><div><b>Break-even Pixelwerk Studio</b><span>bis 31.12.2026 · 1.360 € von 2.000 €</span></div><div class="bar"><i style="width:68%"></i></div><div class="pct">68 %</div></div>
+      <div class="goal"><div><b>Kosten höchstens 350 € pro Monat</b><span>Portfolio · aktuell 312,40 €</span></div><div class="bar done"><i style="width:100%"></i></div><div class="pct pos">✓ erreicht</div></div>
+      <div class="goal"><div><b>1.000 Nutzer Kassenbuch Mobile</b><span>bis 30.06.2027 · 412 Nutzer</span></div><div class="bar"><i style="width:41%"></i></div><div class="pct">41 %</div></div>
+    </section>
+
+    <h2>Projekte nach Saldo</h2>
+    <section class="group" data-component="DataTable">
+      <table>
+        <caption style="position:absolute;left:-9999px">Projekte nach Saldo</caption>
+        <thead><tr><th>Projekt</th><th class="r">Einnahmen</th><th class="r">Ausgaben</th><th class="r">Saldo ↓</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pname"><span class="dot" style="background:#1668dc">K</span>Kassenbuch Mobile <span class="tag">Mobile</span></span></td><td class="r">1.420,00 €</td><td class="r">386,20 €</td><td class="r pos">+1.033,80 €</td></tr>
+          <tr><td><span class="pname"><span class="dot" style="background:#545a64">P</span>Pixelwerk Studio <span class="tag">Steam</span></span></td><td class="r">764,50 €</td><td class="r">512,90 €</td><td class="r pos">+251,60 €</td></tr>
+          <tr><td><span class="pname"><span class="dot" style="background:#0c53b6">R</span>Rezeptkiste <span class="tag">Web</span></span></td><td class="r">0,00 €</td><td class="r">94,30 €</td><td class="r neg">−94,30 €</td></tr>
+          <tr><td><span class="pname"><span class="dot" style="background:#3f444c">W</span>Wetterdienst-Widget für den Windows-Desktop <span class="tag">Desktop</span></span></td><td class="r">0,00 €</td><td class="r">181,60 €</td><td class="r neg">−181,60 €</td></tr>
+          <tr><td><em class="un">Nicht zuordenbar</em></td><td class="r">0,00 €</td><td class="r">61,80 €</td><td class="r neg">−61,80 €</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+</body>
+</html>

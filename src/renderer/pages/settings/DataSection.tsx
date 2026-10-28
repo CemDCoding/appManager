@@ -3,11 +3,35 @@ import { ENTITY_COLLECTION_NAMES } from '@shared/collections'
 import type { BackupInfo, IpcError } from '@shared/ipc'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog, FieldMessage } from '@/components/forms'
+import { onDataReplaced } from '@/features/transfer/transfer-logic'
 import { ipcErrorText } from '@/hooks'
 import { useFormat, useT } from '@/i18n'
 import { ipcErrorDict } from '@/i18n/shared-keys'
 import { invalidateCollections, settingsStore } from '@/state/stores'
 import { settingsDict } from './i18n'
+
+const INTERNAL_ERROR: IpcError = { code: 'INTERNAL', message: '' }
+
+interface DataSnapshot {
+  dir: { ok: true; path: string | null } | { ok: false; error: IpcError }
+  backups: { ok: true; list: BackupInfo[] } | { ok: false; error: IpcError }
+}
+
+/** Lädt Datenordner und Backup-Liste; Ausnahmen werden zu einem INTERNAL-Fehler. */
+async function fetchData(): Promise<DataSnapshot> {
+  try {
+    const [d, b] = await Promise.all([window.api.dataDir.get(), window.api.backup.list()])
+    return {
+      dir: d.ok ? { ok: true, path: d.data.path } : { ok: false, error: d.error },
+      backups: b.ok ? { ok: true, list: b.data } : { ok: false, error: b.error }
+    }
+  } catch {
+    return {
+      dir: { ok: false, error: INTERNAL_ERROR },
+      backups: { ok: false, error: INTERNAL_ERROR }
+    }
+  }
+}
 
 /** Datenordner und Backups. Pfade kommen nur aus dem Main-Prozess, der Renderer sendet keine. */
 export function DataSection() {
@@ -18,49 +42,51 @@ export function DataSection() {
   const [backups, setBackups] = useState<BackupInfo[]>([])
   const [error, setError] = useState<IpcError | null>(null)
   const [info, setInfo] = useState<string | null>(null)
+  const [switchFailed, setSwitchFailed] = useState(false)
   const [restoreName, setRestoreName] = useState<string | null>(null)
   const [restoreError, setRestoreError] = useState<string | null>(null)
 
-  const load = useCallback(async () => {
-    try {
-      const [d, b] = await Promise.all([window.api.dataDir.get(), window.api.backup.list()])
-      if (d.ok) setDir(d.data.path)
-      else setError(d.error)
-      if (b.ok) setBackups(b.data)
-      else setError(b.error)
-    } catch {
-      setError({ code: 'INTERNAL', message: '' })
-    }
+  const apply = useCallback((data: DataSnapshot) => {
+    if (!data.dir.ok || !data.backups.ok) setSwitchFailed(false)
+    if (data.dir.ok) setDir(data.dir.path)
+    else setError(data.dir.error)
+    if (data.backups.ok) setBackups(data.backups.list)
+    else setError(data.backups.error)
   }, [])
+
+  const load = useCallback(async () => apply(await fetchData()), [apply])
 
   useEffect(() => {
     let cancelled = false
-    Promise.all([window.api.dataDir.get(), window.api.backup.list()])
-      .then(([d, b]) => {
-        if (cancelled) return
-        if (d.ok) setDir(d.data.path)
-        else setError(d.error)
-        if (b.ok) setBackups(b.data)
-        else setError(b.error)
+    void fetchData().then((data) => {
+      if (!cancelled) apply(data)
+    })
+    // Ein Import (Bereich „Export/Import“) legt ein Backup an: Liste danach neu laden.
+    const unsubscribe = onDataReplaced(() => {
+      void fetchData().then((data) => {
+        if (!cancelled) apply(data)
       })
-      .catch(() => {
-        if (!cancelled) setError({ code: 'INTERNAL', message: '' })
-      })
+    })
     return () => {
       cancelled = true
+      unsubscribe()
     }
-  }, [])
+  }, [apply])
 
   const choose = async () => {
     setInfo(null)
     setError(null)
+    setSwitchFailed(false)
     try {
       const res = await window.api.dataDir.choose()
-      if (!res.ok) setError(res.error)
-      else setInfo(res.data.path === null ? ts('dirCancelled') : ts('dirChosen'))
+      if (!res.ok) {
+        setError(res.error)
+        setSwitchFailed(true)
+      } else setInfo(res.data.path === null ? ts('dirCancelled') : ts('dirChosen'))
       if (res.ok && res.data.path !== null) await load()
     } catch {
       setError({ code: 'INTERNAL', message: '' })
+      setSwitchFailed(true)
     }
   }
 
@@ -107,6 +133,9 @@ export function DataSection() {
       </div>
       <FieldMessage>{ts('restartHint')}</FieldMessage>
       <FieldMessage error>{ipcErrorText(error, tErr)}</FieldMessage>
+      <FieldMessage error>
+        {error !== null && switchFailed ? ts('dirSwitchAborted') : null}
+      </FieldMessage>
       <FieldMessage>{info}</FieldMessage>
 
       <h3 className="text-sm font-medium">{ts('backups')}</h3>

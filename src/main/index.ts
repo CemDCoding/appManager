@@ -4,6 +4,7 @@ import type { OpenDialogOptions } from 'electron'
 import { readAppConfig, writeAppConfig } from './config/appConfig'
 import { chooseDataDir, isEnvOverride, resolveDataDir } from './config/dataDir'
 import { isTrustedSenderUrl, registerIpcHandlers } from './ipc/handlers'
+import { setupPdfExport } from './pdf'
 import {
   buildContentSecurityPolicy,
   hardenSession,
@@ -12,6 +13,7 @@ import {
 } from './security'
 import { StorageError, consoleLogger } from './storage/errors'
 import { DataService } from './storage/service'
+import { setupTransfer } from './transfer'
 import { createMainWindow } from './window'
 
 // Dev-Server nur, wenn die App nicht paketiert ist und die URL lokal ist.
@@ -114,6 +116,21 @@ if (!app.requestSingleInstanceLock()) {
       restoreBackup: (name) => dataService.restoreBackup(name),
       openExternal: (url) => shell.openExternal(url),
       isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
+      log: consoleLogger
+    })
+    setupPdfExport({
+      ipcMain,
+      devServerUrl,
+      isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
+      parentWindow: () => mainWindow,
+      log: consoleLogger
+    })
+    setupTransfer({
+      ipcMain,
+      store: () => dataService.store,
+      appVersion: app.getVersion(),
+      isTrustedSender: (event) => isTrustedSenderUrl(event.senderFrame?.url, devServerUrl),
+      parentWindow: () => mainWindow,
       log: consoleLogger
     })
     openMainWindow()
