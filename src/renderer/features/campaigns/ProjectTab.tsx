@@ -55,7 +55,12 @@ export function ProjectTab({ projectId }: ProjectTabProps) {
       header: tc('columnShareCost', cur),
       align: 'right',
       sortValue: (r) => r.costEurCents,
-      cell: (r) => money(r.costEurCents)
+      cell: (r) =>
+        r.costEurCents === null ? (
+          <span className="whitespace-normal text-destructive">{tc('tabCostUnconvertible')}</span>
+        ) : (
+          money(r.costEurCents)
+        )
     },
     {
       id: 'users',

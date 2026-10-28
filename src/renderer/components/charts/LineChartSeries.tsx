@@ -60,7 +60,7 @@ export function LineChartSeries({
       title={title}
       empty={rows.length === 0}
       table={{
-        headers: [t('value'), ...series.map((s) => s.label)],
+        headers: [t('pointInTime'), ...series.map((s) => s.label)],
         rows: rows.map((r) => [
           xLabel(r.x),
           ...series.map((s) => (typeof r[s.id] === 'number' ? value(r[s.id] as number) : '–'))

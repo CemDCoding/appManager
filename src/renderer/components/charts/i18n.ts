@@ -10,6 +10,7 @@ export const chartsDict = defineDictionary(
     month: 'Monat',
     category: 'Kategorie',
     value: 'Wert',
+    pointInTime: 'Zeitpunkt',
     share: 'Anteil',
     noData: 'Keine Daten für das Diagramm.'
   },
@@ -21,6 +22,7 @@ export const chartsDict = defineDictionary(
     month: 'Month',
     category: 'Category',
     value: 'Value',
+    pointInTime: 'Point in time',
     share: 'Share',
     noData: 'No data for this chart.'
   }
