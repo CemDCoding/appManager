@@ -10,6 +10,18 @@ import { PdfExportInputSchema, PdfReadyInputSchema, type PdfExportInput } from '
 /** Zeitlimit, bis die Druckseite `pdf:ready` melden muss (Plan AP-24). */
 export const PDF_READY_TIMEOUT_MS = 30_000
 
+/** Zeitlimit für `printToPDF` (PE-68, angenommen). */
+export const PDF_PRINT_TIMEOUT_MS = 60_000
+
+/**
+ * Zeitlimit für den nativen Speichern-Dialog (PE-68, angenommen). Electron kann
+ * den Dialog nicht schließen: Ein später noch gewählter Pfad wird verworfen.
+ */
+export const PDF_SAVE_DIALOG_TIMEOUT_MS = 10 * 60_000
+
+/** Längster erlaubter Berichtszeitraum in Kalenderjahren (`to` minus `from`, PE-68). */
+export const PDF_MAX_PERIOD_YEARS = 50
+
 /** Breite/Höhe des versteckten Fensters in CSS-Pixeln (A4 bei 96 dpi). */
 export const PRINT_WINDOW_SIZE = { width: 794, height: 1123 } as const
 
@@ -22,14 +34,39 @@ const ALLOWED_KEYS: ReadonlySet<string> = new Set([
   'language',
   'displayCurrency'
 ])
+const ALLOWED_PERIOD_KEYS: ReadonlySet<string> = new Set(['from', 'to'])
 
-/** Prüft den Auftrag aus dem Renderer streng (unbekannte Felder werden abgelehnt). */
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+/**
+ * Spätestes erlaubtes `to` für ein `from` (`YYYY-MM-DD`): gleicher Kalendertag
+ * `PDF_MAX_PERIOD_YEARS` Jahre später. Für den 29.02. ergibt das ggf. ein
+ * nicht existierendes Datum; als Obergrenze im Zeichenkettenvergleich ist das
+ * gleichwertig mit dem 28.02.
+ */
+export function latestAllowedTo(from: string): string {
+  const year = Number(from.slice(0, 4)) + PDF_MAX_PERIOD_YEARS
+  return `${String(year).padStart(4, '0')}${from.slice(4)}`
+}
+
+/**
+ * Prüft den Auftrag aus dem Renderer streng: unbekannte Felder (auch in
+ * `period`) werden abgelehnt, nicht entfernt; der Zeitraum ist höchstens
+ * `PDF_MAX_PERIOD_YEARS` Kalenderjahre lang.
+ */
 export function parsePdfExportInput(payload: unknown): ParseResult {
-  if (typeof payload !== 'object' || payload === null || Array.isArray(payload)) {
-    return { ok: false, message: 'Invalid input' }
-  }
+  if (!isPlainObject(payload)) return { ok: false, message: 'Invalid input' }
   const extra = Object.keys(payload).find((key) => !ALLOWED_KEYS.has(key))
   if (extra !== undefined) return { ok: false, message: `Unknown field (${extra})` }
+  // Das Schema in `@shared/ipc` entfernt Zusatzfelder in `period` still; hier ablehnen.
+  if (isPlainObject(payload.period)) {
+    const extraPeriod = Object.keys(payload.period).find((key) => !ALLOWED_PERIOD_KEYS.has(key))
+    if (extraPeriod !== undefined) {
+      return { ok: false, message: `Unknown field (period.${extraPeriod})` }
+    }
+  }
   const parsed = PdfExportInputSchema.safeParse(payload)
   if (!parsed.success) {
     const first = parsed.error.issues[0]
@@ -37,6 +74,13 @@ export function parsePdfExportInput(payload: unknown): ParseResult {
     return {
       ok: false,
       message: `${first?.message ?? 'Invalid input'}${where ? ` (${where})` : ''}`
+    }
+  }
+  const { from, to } = parsed.data.period
+  if (to > latestAllowedTo(from)) {
+    return {
+      ok: false,
+      message: `period longer than ${PDF_MAX_PERIOD_YEARS} years (period.to)`
     }
   }
   return { ok: true, input: parsed.data }

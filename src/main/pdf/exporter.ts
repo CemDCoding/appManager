@@ -3,12 +3,16 @@
  * Dateizugriff werden als Funktionen übergeben (in Tests gemockt).
  *
  * Ablauf: verstecktes Druckfenster erzeugen → `#/print?…` laden → auf `pdf:ready`
- * warten (Zeitlimit) → `printToPDF` → Fenster schließen → nativer
- * Speichern-Dialog → Datei schreiben. Der Pfad stammt ausschließlich aus dem Dialog.
+ * warten (Zeitlimit) → `printToPDF` (Zeitlimit) → Fenster schließen → nativer
+ * Speichern-Dialog (Zeitlimit) → Datei schreiben. Der Pfad stammt ausschließlich
+ * aus dem Dialog. Bei jedem Abbruch wird das Fenster geschlossen und die
+ * Export-Sperre freigegeben (`finally`).
  */
 import type { IpcErrorCode, PdfExportInput } from '@shared/ipc'
 import {
+  PDF_PRINT_TIMEOUT_MS,
   PDF_READY_TIMEOUT_MS,
+  PDF_SAVE_DIALOG_TIMEOUT_MS,
   buildPrintRoute,
   buildPrintToPdfOptions,
   buildSaveDialogOptions
@@ -28,6 +32,8 @@ export class PdfExportError extends Error {
 export const PDF_ERRORS = {
   busy: () => new PdfExportError('CONFLICT', 'pdf: export already running'),
   timeout: () => new PdfExportError('INTERNAL', 'pdf: report page did not get ready in time'),
+  printTimeout: () => new PdfExportError('INTERNAL', 'pdf: report was not rendered in time'),
+  dialogTimeout: () => new PdfExportError('INTERNAL', 'pdf: save dialog was not answered in time'),
   renderGone: () => new PdfExportError('INTERNAL', 'pdf: report window closed unexpectedly'),
   render: () => new PdfExportError('INTERNAL', 'pdf: report could not be rendered'),
   write: () => new PdfExportError('IO', 'pdf: file could not be written')
@@ -105,12 +111,52 @@ export function createReadyGate(timeoutMs: number, timers: Timers = defaultTimer
   }
 }
 
+/**
+ * Wartet höchstens `timeoutMs` auf `promise`; danach wird mit `onTimeout()`
+ * abgelehnt. Ein späteres Ergebnis von `promise` wird verworfen (auch eine
+ * spätere Ablehnung bleibt unbeobachtet ohne Folgen).
+ */
+export function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  onTimeout: () => Error,
+  timers: Timers = defaultTimers
+): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    let settled = false
+    const timer = timers.setTimeout(() => {
+      if (settled) return
+      settled = true
+      reject(onTimeout())
+    }, timeoutMs)
+    promise.then(
+      (value) => {
+        if (settled) return
+        settled = true
+        timers.clearTimeout(timer)
+        resolve(value)
+      },
+      (error: unknown) => {
+        if (settled) return
+        settled = true
+        timers.clearTimeout(timer)
+        reject(error)
+      }
+    )
+  })
+}
+
 export interface PdfExporterDeps {
   createPrintWindow: () => PrintWindowLike
   /** Nativer Speichern-Dialog; `null` = abgebrochen. */
   showSaveDialog: (options: ReturnType<typeof buildSaveDialogOptions>) => Promise<string | null>
   writeFile: (path: string, data: Uint8Array) => Promise<void>
+  /** Zeitlimit bis `pdf:ready` (Standard `PDF_READY_TIMEOUT_MS`). */
   timeoutMs?: number
+  /** Zeitlimit für `printToPDF` (Standard `PDF_PRINT_TIMEOUT_MS`). */
+  printTimeoutMs?: number
+  /** Zeitlimit für den Speichern-Dialog (Standard `PDF_SAVE_DIALOG_TIMEOUT_MS`). */
+  dialogTimeoutMs?: number
   timers?: Timers
 }
 
@@ -149,15 +195,28 @@ export class PdfExporter {
 
       let data: Uint8Array
       try {
-        data = await win.printToPDF(buildPrintToPdfOptions(input.language))
-      } catch {
+        data = await withTimeout(
+          win.printToPDF(buildPrintToPdfOptions(input.language)),
+          this.deps.printTimeoutMs ?? PDF_PRINT_TIMEOUT_MS,
+          PDF_ERRORS.printTimeout,
+          this.deps.timers
+        )
+      } catch (err) {
+        if (err instanceof PdfExportError) throw err
         throw PDF_ERRORS.render()
       }
       this.closeWindow(win)
       win = null
       this.pending = null
 
-      const path = await this.deps.showSaveDialog(buildSaveDialogOptions(input))
+      // Nach Ablauf bleibt der native Dialog ggf. offen; seine Antwort wird
+      // verworfen, weil `withTimeout` bereits abgelehnt hat (nichts wird geschrieben).
+      const path = await withTimeout(
+        this.deps.showSaveDialog(buildSaveDialogOptions(input)),
+        this.deps.dialogTimeoutMs ?? PDF_SAVE_DIALOG_TIMEOUT_MS,
+        PDF_ERRORS.dialogTimeout,
+        this.deps.timers
+      )
       if (path === null) return { saved: false }
       try {
         await this.deps.writeFile(path, data)
