@@ -47,7 +47,10 @@ export interface IpcDeps {
   log?: SafeLogger
 }
 
-/** Channels registered here. export/import/pdf follow in AP-24/AP-25. */
+/**
+ * Channels registered here. export/import (`src/main/transfer`, AP-25) and pdf
+ * (`src/main/pdf`, AP-24) register their own handlers.
+ */
 export const HANDLED_CHANNELS: readonly IpcChannel[] = [
   IPC_CHANNELS.entityList,
   IPC_CHANNELS.entityGet,

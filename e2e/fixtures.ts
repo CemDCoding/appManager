@@ -16,17 +16,56 @@ export interface AppHandle {
   tempDir: string
 }
 
+/**
+ * Umgebungsvariablen, die an die gestartete App weitergereicht werden (Rest
+ * bleibt draussen: keine Secrets, kein `ELECTRON_RUN_AS_NODE`/`NODE_OPTIONS`,
+ * kein `ELECTRON_RENDERER_URL`, damit die gebaute App und nicht der Dev-Server
+ * getestet wird). Gross-/Kleinschreibung egal (Windows: `Path`).
+ * - `SystemRoot`, `windir`: Windows-Systemordner; ohne sie scheitern
+ *   Chromium-Netzwerk/Krypto beim Start.
+ * - `PATH`: Suche nach System-DLLs bzw. Programmen.
+ * - `TEMP`, `TMP`, `TMPDIR`: temporaere Dateien von Chromium.
+ * - `USERPROFILE`, `APPDATA`, `LOCALAPPDATA`, `HOMEDRIVE`, `HOMEPATH`, `HOME`:
+ *   Grundlage fuer `app.getPath()` (Home, AppData).
+ * - `DISPLAY`, `WAYLAND_DISPLAY`, `XDG_RUNTIME_DIR`: Anzeige unter Linux (CI).
+ * `APP_DATA_DIR` setzt die Fixture selbst (temporaerer Datenordner).
+ */
+export const PASSED_ENV_KEYS: readonly string[] = [
+  'SystemRoot',
+  'windir',
+  'PATH',
+  'TEMP',
+  'TMP',
+  'TMPDIR',
+  'USERPROFILE',
+  'APPDATA',
+  'LOCALAPPDATA',
+  'HOMEDRIVE',
+  'HOMEPATH',
+  'HOME',
+  'DISPLAY',
+  'WAYLAND_DISPLAY',
+  'XDG_RUNTIME_DIR'
+]
+
+/** Nur die Variablen aus `PASSED_ENV_KEYS` (Originalschreibweise bleibt erhalten). */
+export function appEnv(source: NodeJS.ProcessEnv, dataDir: string): Record<string, string> {
+  const allowed = new Set(PASSED_ENV_KEYS.map((key) => key.toUpperCase()))
+  const env: Record<string, string> = {}
+  for (const [key, value] of Object.entries(source)) {
+    if (value !== undefined && allowed.has(key.toUpperCase())) env[key] = value
+  }
+  env['APP_DATA_DIR'] = dataDir
+  return env
+}
+
 /** Jeder Test bekommt eine frisch gestartete App mit eigenem temporaeren Datenordner. */
 export const test = base.extend<{ appHandle: AppHandle }>({
   appHandle: async ({}, use) => {
     const tempDir = await mkdtemp(join(tmpdir(), 'appmanager-e2e-'))
     const dataDir = join(tempDir, 'data')
     const profileDir = join(tempDir, 'profile')
-    const env: Record<string, string> = {}
-    for (const [key, value] of Object.entries(process.env)) {
-      if (value !== undefined && key !== 'ELECTRON_RENDERER_URL') env[key] = value
-    }
-    env['APP_DATA_DIR'] = dataDir
+    const env = appEnv(process.env, dataDir)
     const app = await electron.launch({
       args: [resolve('.'), `--user-data-dir=${profileDir}`],
       env

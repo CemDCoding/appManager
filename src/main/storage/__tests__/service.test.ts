@@ -95,11 +95,23 @@ describe('DataService', () => {
   })
 
   it('switches to another folder', async () => {
-    const service = new DataService({ now: clock(), newId: testId })
+    const now = clock()
+    // Folder b already holds invented data (e.g. chosen again later).
+    const other = new DataService({ now, newId: testId })
+    await other.open(join(root, 'b'))
+    await other.store.create('projects', projectInput('Folder B App'))
+    expect(await readdir(join(root, 'b'))).not.toContain('backups')
+
+    const service = new DataService({ now, newId: testId })
     await service.open(join(root, 'a'))
     await service.store.create('persons', personInput())
     await service.open(join(root, 'b'))
     expect(service.dir).toBe(join(root, 'b'))
     expect(await service.store.list('persons')).toEqual([])
+    // PE-65: the switch makes the start backup in the new folder.
+    const backups = await readdir(join(root, 'b', 'backups'))
+    expect(backups).toHaveLength(1)
+    expect(await readdir(join(root, 'b', 'backups', backups[0]!))).toContain('projects.json')
+    expect(await service.listBackups()).toHaveLength(1)
   })
 })

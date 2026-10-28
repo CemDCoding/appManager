@@ -25,7 +25,8 @@ _English summary: appManager is a local, offline Windows desktop app (Electron) 
 
 - Standardmäßig liegen die Daten im Benutzerprofil der App (`userData/data`). In den Einstellungen kann ein anderer Datenordner gewählt werden.
 - Backups liegen im Unterordner `backups/` des Datenordners (Zeitstempel-Ordner, die neuesten bleiben erhalten) und können in der App wiederhergestellt werden.
-- Die Deinstallation lässt den Datenordner unberührt.
+- Die Deinstallation lässt den Datenordner unberührt, solange er außerhalb des Installationsordners liegt (Standard und Empfehlung, z. B. `D:\appManagerDaten`).
+- Ein Datenordner im Installationsordner ist möglich, aber nicht empfohlen: Er kann bei Deinstallation oder Update mit entfernt werden.
 
 ## Entwicklung
 
