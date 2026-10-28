@@ -27,7 +27,12 @@ import {
   readImportArchive
 } from '../archive'
 import { registerTransferHandlers } from '../ipc'
-import { TransferService, exportFileName, type TransferDeps } from '../service'
+import {
+  TransferService,
+  exportFileName,
+  readFileLimited,
+  type TransferDeps
+} from '../service'
 
 /** Invented test data only (R2). */
 
@@ -119,8 +124,6 @@ function serviceFor(
     now: fixedNow('2026-03-02T10:00:00.000Z'),
     showSaveDialog: async () => 'C:/invented/export.zip',
     showOpenDialog: async () => zipPath,
-    fileSize: async (p) => (await readFile(p)).length,
-    readFile: (p) => readFile(p),
     writeFile: async (p, d) => {
       written.set(p, d)
     },
@@ -159,6 +162,39 @@ describe('export', () => {
     const cancelled = serviceFor(() => store, null, { showSaveDialog: async () => null })
     expect(await cancelled.service.exportZip()).toEqual({ saved: false })
     expect(cancelled.written.size).toBe(0)
+  })
+
+  it('reads the files under the store lock (consistent snapshot)', async () => {
+    const store = await filledStore()
+    const spy = vi.spyOn(store, 'readExclusive')
+    const { service } = serviceFor(() => store, null)
+    await service.exportZip()
+    expect(spy).toHaveBeenCalledTimes(1)
+  })
+
+  it('readExclusive blocks mutations until the read is done', async () => {
+    const store = await filledStore()
+    const order: string[] = []
+    let release: () => void = () => {}
+    const reading = store.readExclusive(async () => {
+      order.push('read-start')
+      await new Promise<void>((resolve) => {
+        release = resolve
+      })
+      const contents = await readCollections(store.dir)
+      order.push('read-end')
+      return contents
+    })
+    const writing = store.create('projects', projectInput('Late App')).then(() => {
+      order.push('write')
+    })
+    await new Promise((resolve) => setImmediate(resolve))
+    expect(order).toEqual(['read-start'])
+    release()
+    const contents = await reading
+    await writing
+    expect(order).toEqual(['read-start', 'read-end', 'write'])
+    expect(contents.get('projects')).not.toContain('Late App')
   })
 
   it('names the file with the local date', () => {
@@ -336,17 +372,69 @@ describe('import rejects manipulated archives and changes nothing', () => {
     })
   }
 
-  it('file larger than the limit (checked before reading)', async () => {
+  it('file larger than the limit (limit on the bytes actually read)', async () => {
+    const target = await filledStore()
+    const data = await rawZip(validEntries())
+    const zipPath = join(await tempDir(), 'big.zip')
+    await writeFile(zipPath, data)
+    const before = await snapshot(target.dir)
+    const { service } = serviceFor(() => target, zipPath, { maxImportBytes: data.length - 1 })
+    await expect(service.importZip()).rejects.toMatchObject({ code: 'INVALID_DATA' })
+    expect(await snapshot(target.dir)).toEqual(before)
+  })
+
+  it('a reader returning more bytes than allowed is still rejected before replacing', async () => {
     const target = await filledStore()
     const before = await snapshot(target.dir)
-    const readSpy = vi.fn()
-    const { service } = serviceFor(() => target, 'C:/invented/big.zip', {
-      fileSize: async () => 50 * 1024 * 1024 + 1,
-      readFile: readSpy
+    const data = await rawZip(validEntries())
+    // Simulates a file that grew after a size check: the bytes themselves are checked.
+    const { service } = serviceFor(() => target, 'C:/invented/grown.zip', {
+      maxImportBytes: data.length - 1,
+      readImportFile: async () => data
     })
     await expect(service.importZip()).rejects.toMatchObject({ code: 'INVALID_DATA' })
-    expect(readSpy).not.toHaveBeenCalled()
     expect(await snapshot(target.dir)).toEqual(before)
+  })
+
+  it('manipulated entry count in the end record is rejected before JSZip loads it', async () => {
+    const data = await rawZip(validEntries())
+    const eocd = data.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]))
+    expect(eocd).toBeGreaterThan(0)
+    for (const count of [10, 12, 0xfffe]) {
+      const forged = Buffer.from(data)
+      forged.writeUInt16LE(count, eocd + 8)
+      forged.writeUInt16LE(count, eocd + 10)
+      const load = vi.spyOn(JSZip, 'loadAsync')
+      await expectRejected(forged)
+      expect(load).not.toHaveBeenCalled()
+      load.mockRestore()
+
+      const target = await filledStore()
+      const zipPath = join(await tempDir(), 'forged.zip')
+      await writeFile(zipPath, forged)
+      const before = await snapshot(target.dir)
+      await expect(serviceFor(() => target, zipPath).service.importZip()).rejects.toMatchObject({
+        code: 'INVALID_DATA'
+      })
+      expect(await snapshot(target.dir)).toEqual(before)
+    }
+  })
+
+  it('inconsistent counts in the end record are rejected', async () => {
+    const data = await rawZip(validEntries())
+    const eocd = data.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]))
+    const forged = Buffer.from(data)
+    forged.writeUInt16LE(10, eocd + 8) // entries on this disk != total
+    expect(declaredEntryCount(forged)).toBeNull()
+    await expectRejected(forged)
+  })
+
+  it('11 declared entries with a name collision (duplicate after normalisation)', async () => {
+    const e = validEntries()
+    delete e['goals.json']
+    const data = await rawZip({ ...e, 'x/../projects.json': serializeCollection([]) })
+    expect(declaredEntryCount(data)).toBe(11)
+    await expectRejected(data)
   })
 
   it('archive bytes larger than the limit', async () => {
@@ -371,6 +459,25 @@ describe('import rejects manipulated archives and changes nothing', () => {
   it('accepts the unmodified valid entries (control)', async () => {
     const contents = await readImportArchive(await rawZip(validEntries()))
     expect([...contents.keys()].sort()).toEqual([...COLLECTION_NAMES].sort())
+  })
+})
+
+describe('readFileLimited', () => {
+  it('reads up to the limit and rejects one byte more', async () => {
+    const dir = await tempDir()
+    const path = join(dir, 'f.zip')
+    const bytes = Buffer.alloc(200_000, 7)
+    await writeFile(path, bytes)
+    expect(Buffer.compare(await readFileLimited(path, 200_000), bytes)).toBe(0)
+    await expect(readFileLimited(path, 199_999)).rejects.toMatchObject({ code: 'INVALID_DATA' })
+  })
+
+  it('missing file or folder → IO', async () => {
+    const dir = await tempDir()
+    await expect(readFileLimited(join(dir, 'missing.zip'), 100)).rejects.toMatchObject({
+      code: 'IO'
+    })
+    await expect(readFileLimited(dir, 100)).rejects.toMatchObject({ code: 'IO' })
   })
 })
 

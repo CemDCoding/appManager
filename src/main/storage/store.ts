@@ -315,6 +315,15 @@ export class DataStore {
     })
   }
 
+  /**
+   * Runs a read-only `task` (e.g. reading the files for the ZIP export) while no
+   * store mutation or file replacement runs, so it sees one consistent state
+   * on disk (AP-34). `task` must not call store mutations (deadlock).
+   */
+  async readExclusive<T>(task: () => Promise<T>): Promise<T> {
+    return this.exclusive(task)
+  }
+
   /** Resolves once all queued mutations are done. */
   async idle(): Promise<void> {
     await this.exclusive(async () => {})
