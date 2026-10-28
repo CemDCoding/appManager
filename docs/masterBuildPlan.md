@@ -9,10 +9,10 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 
 # Master-Build-Plan appManager
 
-**Stand:** 2026-10-26 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
+**Stand:** 2026-10-28 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 32 Arbeitspaketen (~50 h Agent-Zeit).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 34 Arbeitspaketen (~55 h Agent-Zeit).
 
 ---
 
@@ -22,12 +22,13 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-26 · M4 W1 abgeschlossen: AP-25 (c1), AP-26 (c2), AP-27 (c3) in `dev` gemergt (HEAD ac25c21, gepusht; lint, typecheck, build grün, 696/696 Tests, e2e 3/3 grün). Alle Reviews Runde 1 bestanden. Budget nur in `.claude/ma-usage.json`.
-- **Fertig:** AP-01–AP-32, M0-DEP, M1-DEP · **Bereit:** M2-DEP, M3-DEP, M4-DEP (alle [Mensch]) · **Offen:** AP-33 (nur Vorschlag, §16). Alle Pakete M0–M4 sind inhaltlich fertig; offen sind die [Mensch]-Schritte.
+- **Stand:** 2026-10-28 · M4 W1 abgeschlossen (AP-25, AP-26, AP-27 in `dev`, HEAD 5952362 Plan). Aufräumpaket vom Nutzer freigegeben und in M4 W2 als AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) eingeplant; M4-DEP wartet darauf.
+- **Fertig:** AP-01–AP-32, M0-DEP, M1-DEP, AP-25–AP-27 · **Bereit:** AP-33, AP-34 (M4 W2), M2-DEP, M3-DEP · **Offen:** M4-DEP (wartet auf AP-33, AP-34, H-04).
 - **Unterbrochen oder laufend:** keine gemeldet. Branches und Worktrees der gemergten Pakete (M3 und M4) aufräumen: Lead (§9.1 Schritt 7).
-- **Erkenntnisse:** AP-25 importiert nur die 10 Collection-Dateien und `manifest.json`; Mehrdatei-Ersetzen nicht atomar (Rollback aus Backup, Abweichung von §12, §16). AP-26 erzeugt den PDF-Export real (gültig, nicht leer), Optik nur per Sichtprüfung. AP-27: Installer und NSIS-Vorschlag `D:\appManager` nicht real geprüft, das passiert im M4-DEP. Details §18.
-- **Nächster Schritt:** Nutzer führt M2-DEP, M3-DEP und M4-DEP aus (Smoke-Tests; Merges `dev` → `stage` → `master`, H-06). Vorher H-04 (echter Datenordner). Danach entscheidet der Nutzer über AP-33 (§16).
-- **Offene Nutzerpunkte:** Zweiturteil (§16); Annahmen in PE-53; AP-24-Befunde (§16); AP-25: nicht atomares Ersetzen und unverschlüsselter Export mit Personendaten (§16); AP-33-Start (§16); Lizenzangaben in `package.json` und README bestätigen (AP-27, PE-20); H-05 Designer-Gespräch (fällig nach M1-DEP); H-04; H-06
+- **Erkenntnisse:** Datenordner-Wechsel legt das Start-Backup im neuen Ordner an, kein Backup des alten Ordners (PE-65, Q-11). AP-24 ohne Zeitlimit für `printToPDF` und Speichern-Dialog; `period` wird gestrippt (§18). AP-25 Befunde (1)–(3) in AP-34, (4)–(6) in AP-33. Details §18.
+- **Nächster Schritt:** Lead startet M4 W2: AP-33 (c1) und AP-34 (c2) parallel, Eigentum disjunkt (§8, §12). Danach M4-DEP mit Prüfpunkt Backup im neuen Datenordner.
+- **Entschieden (2026-10-28):** AP-25 nicht atomares Ersetzen akzeptiert, Export-ZIP unverschlüsselt belassen mit Pflicht-Vermerk (PE-66, PE-67); AP-24 (a)–(c) in AP-34, (d) verworfen (PE-68); Zweiturteil abgeschaltet (PE-69); PE-53-Annahmen und Lizenzangaben bestätigt (PE-53, PE-20).
+- **Offene Nutzerpunkte:** H-04 (Datenordner `D:\appManagerDaten` anlegen und im M4-DEP in der installierten App wählen); Q-11 (Backup des alten Ordners beim Wechsel); Q-10 (Befunde ohne Eintrag im Paket, §16); H-05 Designer-Gespräch (fällig nach M1-DEP); H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`)
 
 ### Rollen und Dokumente
 
@@ -75,8 +76,8 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 9 | Meilensteine und Wellen | fertig | – | G2 ✔ |
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
-| 12 | Arbeitspakete | fertig (M0–M4) | – | G2 ✔ (M0–M4) |
-| 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-06 teilweise) | G2 ✔ |
+| 12 | Arbeitspakete | fertig (M0–M4); AP-33, AP-34 (M4 W2) neu geplant 2026-10-28 | – | G2 ✔ (M0–M4; M4 mit AP-33/34) |
+| 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-04, H-05, H-06 offen) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
 | 16 | Planungsentscheidungen und offene Fragen | laufend | – | laufend |
@@ -257,7 +258,8 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 | Electron-Härtung (R6): `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, strikte CSP ohne Fremdquellen, Navigation und neue Fenster blockiert, kein Laden entfernter Inhalte | Fenster-Setup in `src/main/` | Unit-Test der Optionen + Review | AP-03, AP-24 (verstecktes PDF-Fenster) |
 | Externe Links (Dienst-URLs) nur `https:`/`http:`, Öffnen über `shell.openExternal` nach Protokollprüfung | Main-Prozess | Unit-Test | AP-03, AP-07 |
 | IPC-Eingaben und JSON-Dateien mit zod validiert, keine freien Dateipfade vom Renderer | `src/main/` + `src/shared/` | Unit-Tests | AP-02, AP-07, AP-24, AP-25 |
-| ZIP-Import: Zip-Slip-Schutz, nur erwartete Dateinamen, Größenlimit, Validierung vor dem Überschreiben, Backup vorher | `src/main/` | Unit-Tests | AP-25 |
+| ZIP-Import: Zip-Slip-Schutz, nur erwartete Dateinamen, Größenlimit, Validierung vor dem Überschreiben, Backup vorher | `src/main/` | Unit-Tests | AP-25, AP-34 (Befunde (1)–(3)) |
+| **Vermerk Export-ZIP (PE-67):** Der Export enthält Personendaten unverschlüsselt. Wird die App öffentlich zugänglich gemacht oder weitergegeben, MUSS vorher eine optionale Export-Verschlüsselung als eigenes Paket kommen (§15 RI-14). | `src/main/transfer/` | Review | kein Paket, Vermerk |
 | Keine Netzwerkzugriffe, keine Telemetrie, Schrift lokal (`@fontsource/inter`) | ganze App | Review, CSP | alle |
 | Datensparsamkeit (R2): Personen nur Name, Rolle, Status, Notiz (PE-09, PE-36); löschbar; keine Daten in Logs | Datenmodell, Logging | Review | AP-02, AP-07, AP-17 |
 | Echte Daten nie im Repo, Agents nur mit erfundenen Daten in `data-dev/` (PE-18) | `.gitignore`, Seed-Skript schreibt nur nach `data-dev/` | Review | AP-01, AP-08, AP-26 |
@@ -269,6 +271,8 @@ Es gelten immer R1–R6 (siehe Agent-Dateien). Dieser Abschnitt konkretisiert si
 |---|---|---|
 | Größe ZIP-Import | 50 MB | global |
 | Anzahl Backups | 10 | global |
+| Zeitlimit `printToPDF` · Speichern-Dialog (angenommen, PE-68) | 60 s · 10 min | PDF-Export |
+| Zeitraum PDF-Bericht (angenommen, PE-68) | höchstens 50 Jahre | PDF-Export |
 | Textfelder (Name, Beschreibung, Notiz) | 200 / 2 000 / 5 000 Zeichen | je Feld |
 
 **Nie kürzbar:** Electron-Härtung, zod-Validierung, Zip-Slip-Schutz, atomares Schreiben + Backups, Tests des Rechenkerns.
@@ -377,13 +381,17 @@ flowchart TD
 
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
-| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version, description, license), AP-28 (`tsconfig.web.json`, `.env.example`) und AP-30 (`vitest.config.ts`, nur Coverage-Include) | M0 W1, M1 W1, M1 W4, M4 W1 |
+| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version, description, license), AP-28 (`tsconfig.web.json`, `.env.example`), AP-30 (`vitest.config.ts`, nur Coverage-Include) und AP-34 (`tsconfig.node.json`: `e2e/**` in den Typecheck) | M0 W1, M1 W1, M1 W4, M4 W1, M4 W2 |
 | `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`), AP-31 (`aggregate/fixedCosts.ts`, nach Merge von AP-30) und AP-32 (`goals/`, nach Merge von AP-20) | M1 W1 (AP-28), M1 W4 (AP-31), M3 W2 (AP-32) |
-| `electron-builder.yml` | AP-01, später AP-27 | M0 W1, M4 W1 |
+| `electron-builder.yml` | AP-01, später AP-27; AP-34 nur Kommentar Z. 19 | M0 W1, M4 W1, M4 W2 |
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
 | `src/preload/index.ts` | AP-01 → AP-07 | M0 W1, W3 |
-| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround) | M0 W3, M1 W1 |
+| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround). M4 W2 nur AP-34: `storage/__tests__/service.test.ts` (Test Backup im neuen Ordner, PE-65), `ipc/handlers.ts` (Kommentar Z. 50), `storage/store.ts` nur falls zwingend (Vermerk im Bericht) | M0 W3, M1 W1, M4 W2 |
+| `src/main/transfer/**` | AP-25; M4 W2: AP-34 (Befunde (1)–(3)) | M4 W1, M4 W2 |
+| `src/main/pdf/**` | AP-24; M4 W2: AP-34 (Zeitlimit, Validierung, Zeitraum, PE-68) | M3 W2, M4 W2 |
+| `e2e/fixtures.ts`, `e2e/flows.spec.ts` | AP-26; M4 W2: AP-34 nur `fixtures.ts` (Umgebungsvariablen), AP-33 nur `flows.spec.ts` (Selektoren, Ausnahme zur OPS-Lane, PE-64) | M4 W1, M4 W2 |
+| `README.md` (Abschnitt „Datenordner und Backups“), `src/core/README.md` (Absatz unter der Tabelle im Abschnitt „Ziele (PE-53)“) | AP-27 (README), AP-32 (Abschnitt „Ziele“); M4 W2: AP-34 | M4 W1, M3 W2, M4 W2 |
 | `src/renderer/app/routes.tsx`, `src/renderer/app/Layout.tsx` | AP-04 | M0 W2 |
 | `src/renderer/components/ui/**` (shadcn) | AP-04 legt Grundsatz an; AP-10 ergänzt | M0 W2, M1 W1b |
 | `src/renderer/styles/globals.css` (Design-Variablen) | AP-01 → AP-04; später Design-Pakete | – |
@@ -391,6 +399,7 @@ flowchart TD
 | `src/core/aggregate/fixedCosts.test.ts` und `src/core/aggregate/fixedCosts*.test.ts` (nur Tests) | AP-30 (fertig); AP-31 ergänzt nur Tests, bestehende unverändert, erst nach dem Merge von AP-30 | M1 W4 |
 | `src/core/aggregate/fixedCosts.ts` | AP-31 (Fallbacks entfernen, Verhalten gleich) | M1 W4 |
 | `src/core/goals/goals.ts`, `src/core/goals/goals*.test.ts`, Abschnitt „Ziele“ in `src/core/README.md` | AP-32 (Kostenlimit erst nach Stichtag); AP-20 hat den Ordner angelegt | M3 W2 |
+| `src/renderer/**` (Aufräumpaket, Dateiliste in §12 AP-33) | AP-33; Cross-Imports `pages/projects/*` → neuer Ordner `src/renderer/components/ledger/**` | M4 W2 |
 
 ---
 
@@ -402,7 +411,7 @@ flowchart TD
 | M1 | Prototyp | Buchungs-Engine, UI-Baukasten, Einstellungen/Kurse, Projekte, Dienste, Ausgaben/Einnahmen, einfache Übersicht | Kernfluss erfassen → Übersicht stimmt; danach Designer-Gespräch (H-05) |
 | M2 | Menschen & Marketing | Kennzahlen-Kern, Mitarbeiterverwaltung, Kampagnen, Nutzerzahlen | Personen, Kampagnen, Nutzerstände erfassbar mit Kennzahlen |
 | M3 | Auswertung | Prognose/Break-even/Ziel-Kern, Diagramme, Statistikseite, Startseite mit Zielen, PDF | Statistiken und PDF stimmen mit App überein |
-| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README | Release-Installer auf `D:`, Abnahme G3 |
+| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33, AP-34) | Release-Installer auf `D:`, Abnahme G3 |
 
 ### 9.1 Ablauf einer Welle
 
@@ -507,7 +516,8 @@ flowchart TD
 | Welle | Pakete (parallel) |
 |---|---|
 | W1 | AP-25, AP-26, AP-27 |
-| W2 | M4-DEP [Mensch] (Release + Abnahme G3) |
+| W2 | AP-33 (UI, Aufräumen) und AP-34 (MAIN/OPS, Härtung), parallel, Eigentum disjunkt (§8). Nach dem zweiten Merge `npm run typecheck` und `npm run test:e2e` (AP-34 bindet `e2e/**` in den Typecheck ein) |
+| W3 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 und AP-34 |
 
 ##### M4-DEP – Deployment [Mensch]
 
@@ -517,6 +527,7 @@ flowchart TD
   - [ ] Release-Installer auf `D:`, externer echter Datenordner gewählt
   - [ ] `npm run dist` erzeugt den Installer (AP-27 nicht real geprüft); NSIS schlägt `D:\appManager` vor, Zielordner änderbar, Deinstallation lässt den Datenordner stehen (bei Problemen Alternative `preInit` statt `customInit` in `build/installer.nsh`)
   - [ ] PDF-Export aus der installierten App erzeugt eine gültige Datei; Optik per Sichtprüfung (AP-26 prüft nur die Dateierzeugung)
+  - [ ] Datenordner wechseln: `D:\appManagerDaten` in der installierten App wählen (H-04). Danach liegt im neuen Ordner ein Backup (`backups/`, neuer Zeitstempel) (PE-65)
   - [ ] Abnahmekriterien §1 abgehakt
 
 ---
@@ -565,7 +576,9 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-25 | Export/Import ZIP | M4 | MAIN+UI | W1 | AP-07, AP-11, AP-24 | M | opus | c1 | fertig |
 | AP-26 | E2E-Tests | M4 | OPS | W1 | AP-24 | M | sonnet | c2 | fertig |
 | AP-27 | Installer-Feinschliff, README | M4 | OPS | W1 | AP-24, H-01 | S | sonnet | c3 | fertig |
-| M4-DEP | Release und Abnahme | M4 | HUM | W2 | AP-25–AP-27 | H | – | Nutzer | bereit |
+| AP-33 | Aufräumen UI (Befunde M2–M4, AP-25/AP-26 UI-Teil) | M4 | UI | W2 | AP-10, AP-11, AP-12, AP-17–AP-19, AP-21–AP-23, AP-25, AP-26 | L | sonnet | – | bereit |
+| AP-34 | Härtung MAIN/OPS (PDF-Zeitlimit und Validierung, ZIP-Befunde, Konfiguration, Doku) | M4 | MAIN+OPS+CORE | W2 | AP-07, AP-24–AP-27, AP-32 | L | opus | – | bereit |
+| M4-DEP | Release und Abnahme | M4 | HUM | W3 | AP-25–AP-27, AP-33, AP-34 | H | – | Nutzer | offen |
 
 ---
 
@@ -601,6 +614,8 @@ flowchart LR
     AP25["AP-25"]
     AP26["AP-26"]
     AP27["AP-27"]
+    AP33["AP-33"]
+    AP34["AP-34"]
   end
   AP05 & AP06 --> AP09
   AP02 & AP07 --> AP28
@@ -609,11 +624,16 @@ flowchart LR
   AP10 --> AP21
   AP07 & AP11 --> AP25
   AP24 --> AP25 & AP26 & AP27
+  AP25 --> AP33 & AP34
+  AP26 --> AP33
+  AP24 --> AP34
 ```
 
 **Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
 
 **Nachtrag 2026-10-26 (Pflegeauftrag):** AP-32 (Fix Kostenlimit, Kern, M3 W2) hängt an AP-20 und ist Voraussetzung für AP-23. AP-23 startet daher in W2b, nach dem Merge von AP-32. AP-22 und AP-24 hängen nicht davon ab.
+
+**Nachtrag 2026-10-28 (Pflegeauftrag):** AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) bilden M4 W2 und laufen parallel; ihr Dateieigentum ist disjunkt (§8). AP-33 hängt an fertigen UI- und M2/M3-Paketen, AP-34 an AP-07, AP-24–AP-27 und AP-32. M4-DEP (W3) hängt an beiden.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1465,6 +1485,91 @@ flowchart LR
 - **Kürzbar bei Budgetnot:** nein
 - **Commit-Typ:** `docs(AP-27): add readme and installer defaults`
 
+#### AP-33 – Aufräumen UI (Befunde M2–M4)
+
+- **Meilenstein, Lane, Welle:** M4 · UI · W2
+- **Ziel:** Alle UI-Befunde aus §16 (Vorschlag „Aufräumpaket“, Befunde M2/M3, AP-25 (4)–(6), AP-26 UI-Teil) beheben, ohne Änderung an Zahlen oder Regeln (PE-64).
+- **Pflichtlektüre:** PE-21, PE-47, PE-57, PE-59, PE-60, PE-64, §8 (Eigentum), §18 (Erkenntnisse AP-17–AP-27), `src/renderer/components/data/KpiCard.tsx`, `src/renderer/features/transfer/`
+- **Abhängigkeiten:** AP-10, AP-11, AP-12, AP-17–AP-19, AP-21–AP-23, AP-25, AP-26 (alle `fertig`)
+- **Parallel möglich mit:** AP-34 (Eigentum disjunkt)
+- **Dateien (Eigentum):**
+  - `src/renderer/components/charts/LineChartSeries.tsx`, `Sparkline.tsx`, `i18n.ts` (nur falls ein Schlüssel nötig ist) und die Aufrufer von `Sparkline` mit Prop `color`
+  - `src/renderer/components/data/KpiCard.tsx`
+  - `src/renderer/components/ledger/**` (neu: `LedgerWarnings.tsx`, `useProjectLedger.ts`, `todayIso.ts`)
+  - `src/renderer/pages/projects/LedgerWarnings.tsx`, `useProjectLedger.ts` (verschieben, danach löschen), `logic.ts` (nur `todayIso` entfernen), `ProjectDetailPage.tsx`, `ProjectsPage.tsx` (nur Importe)
+  - `src/renderer/pages/people/index.tsx`, `PersonDetailPage.tsx` (nur Importe)
+  - `src/renderer/features/people/ProjectTab.tsx` (Import), `i18n.ts`
+  - `src/renderer/features/goals/GoalsSection.tsx` (Import), `i18n.ts`
+  - `src/renderer/features/campaigns/ProjectTab.tsx`, `i18n.ts`
+  - `src/renderer/features/metrics/UserMetricsView.tsx`
+  - `src/renderer/features/stats/StatsView.tsx`
+  - `src/renderer/features/transfer/TransferSection.tsx`, `i18n.ts`, `transfer-logic.ts` (mit Tests)
+  - `src/renderer/pages/settings/DataSection.tsx`
+  - `e2e/flows.spec.ts` (nur Selektoren auf `data-testid`; Ausnahme zur OPS-Lane, PE-64)
+- **Nicht anfassen:** `src/main/**`, `src/preload/**`, `src/shared/**`, `src/core/**`, `e2e/fixtures.ts`, `tsconfig*.json`, `package.json`, übrige Seiten und Features
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. M2 `LineChartSeries.tsx`: sr-only-Spaltenüberschrift der X-Werte heißt „Zeitpunkt“ statt „Wert“ (ca. Z. 66). M2 `Sparkline`: Prop `color` auf eine feste Auswahl an Theme-Variablen begrenzen (Typ), Aufrufer anpassen.
+  2. M2 ungenutzte i18n-Schlüssel entfernen: `features/people` (`open`, `ledgerErrors`), `features/goals` (`usedLabel`, `done`, `delete`, `saveFailed`). Vorher per Suche belegen, dass sie ungenutzt sind; de und en bleiben gleich (RI-10).
+  3. M2 Kampagnenliste im Metrik-Bereich nur einmal laden (Befund AP-19; Fundstelle per Suche nach `useCollection('campaigns')`).
+  4. M2 `features/campaigns/ProjectTab.tsx` (ca. Z. 57–58): bei nicht umrechenbarer Kampagne eine Erklärung statt „–“ anzeigen (neuer i18n-Schlüssel, de und en).
+  5. M2/M3 Cross-Imports auflösen: `LedgerWarnings`, `useProjectLedger` und `todayIso` nach `src/renderer/components/ledger/` verschieben, `todayIso` in eine eigene Datei; `pages/projects/logic.ts` ohne Re-Export. Alle Importe umstellen (Liste siehe Eigentum). Keine Verhaltensänderung.
+  6. M3 `StatsView.tsx`: `today` nicht mehr einmalig per `useMemo([])` (Mitternachts-Sitzung), sondern beim Laden frisch bestimmen; `LedgerWarnings` der Projektansicht zeigt nur Fehler dieses Projekts; Spaltenarrays per `useMemo`.
+  7. AP-25 (4) Text `importIo` (`features/transfer/i18n.ts`) behauptet „ein Backup liegt im Datenordner“, auch wenn das Backup fehlgeschlagen ist: Text und Zuordnung in `transfer-logic.ts` korrigieren, sodass jede Fehlerlage den richtigen Text bekommt. AP-25 (5): nach fehlgeschlagenem Rollback Caches neu laden (`invalidateCollections`, Settings-Store); Export- und Import-Knopf mit Ladezustand und Sperre während einer laufenden Aktion. AP-25 (6): Backup-Liste in `pages/settings/DataSection.tsx` nach dem Öffnen des Bereichs und nach Import oder Wiederherstellung neu laden.
+  8. AP-26 UI-Teil: `KpiCard` erhält stabile `data-testid` je Kennzahl; `e2e/flows.spec.ts` nutzt sie dort, wo Text-Selektoren fragil sind. Die Abläufe bleiben unverändert.
+- **Schnittstellen:** keine nach außen. Neuer Ordner `components/ledger/` mit eigener `index.ts` ist erlaubt.
+- **Akzeptanzkriterien:** Jeder Punkt aus Umsetzung 1–8 ist umgesetzt und per Suche belegt (Abschluss-Bericht listet die Fundstellen). `npm run lint`, `npm run typecheck`, `npm test` grün; `npm run build && npm run test:e2e` lokal 3× grün. Keine Verhaltensänderung an Zahlen, Regeln oder Verträgen; keine neuen Abhängigkeiten.
+- **Tests:** bestehende Tests grün; neue Unit-Tests für `transfer-logic` (Zuordnung der Fehlerlage zu Text) und für `todayIso` nach der Verschiebung. Render-Verhalten nur per Sichtprüfung im M4-DEP.
+- **Review-Schwerpunkte:** Vollständigkeit gegen die Liste (jeder Punkt belegt), keine Verhaltensänderung an Zahlen, i18n-Schlüssel de/en gleich (RI-10), sr-only-Spalte korrekt, keine doppelten Ladevorgänge, Eigentum eingehalten (keine Datei außerhalb der Liste).
+- **Design-Review:** nein (kein freigegebener Design-Brief, PE-21)
+- **Doku-Pflichten:** keine
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** nein (Nutzer-Entscheidung PE-64)
+- **Commit-Typ:** `refactor(AP-33): tidy up ui review findings`
+
+#### AP-34 – Härtung MAIN/OPS (Befunde AP-24–AP-27)
+
+- **Meilenstein, Lane, Welle:** M4 · MAIN+OPS+CORE · W2
+- **Ziel:** Zeitlimits und Eingabeprüfung für den PDF-Export, drei ZIP-Befunde, Test für den Datenordner-Backup, Konfiguration und Doku-Korrekturen (PE-64, PE-65, PE-68).
+- **Pflichtlektüre:** §5 (Härtung, ZIP-Import, Limits, Vermerk PE-67), PE-17, PE-18, PE-22, PE-64, PE-65, PE-68, `src/main/pdf/*`, `src/main/transfer/*`, `src/main/storage/service.ts`, `src/shared/ipc.ts` (nur lesen: `PdfExportInputSchema`)
+- **Abhängigkeiten:** AP-07, AP-24, AP-25, AP-26, AP-27, AP-32 (alle `fertig`)
+- **Parallel möglich mit:** AP-33 (Eigentum disjunkt)
+- **Dateien (Eigentum):**
+  - `src/main/pdf/exporter.ts`, `src/main/pdf/params.ts`, `src/main/pdf/__tests__/exporter.test.ts`, `params.test.ts`
+  - `src/main/transfer/archive.ts`, `src/main/transfer/service.ts`, `src/main/transfer/__tests__/transfer.test.ts`
+  - `src/main/storage/__tests__/service.test.ts` (nur Test-Ergänzung)
+  - `src/main/storage/store.ts` nur falls für Umsetzung 6 zwingend (Vermerk im Bericht)
+  - `src/main/ipc/handlers.ts` (nur Kommentar Z. 50)
+  - `tsconfig.node.json` (`include` um `e2e/**/*` erweitern)
+  - `e2e/fixtures.ts`
+  - `electron-builder.yml` (nur Kommentar Z. 19)
+  - `README.md` (nur Abschnitt „Datenordner und Backups“)
+  - `src/core/README.md` (nur Absatz unter der Tabelle im Abschnitt „Ziele (PE-53)“, keine Regeländerung)
+- **Nicht anfassen:** `src/shared/**` (Vertrag; PE-68 (d) verworfen), `src/renderer/**`, `src/main/index.ts`, `src/main/window.ts`, `src/main/security.ts`, `package.json`, `vitest.config.ts`, `.gitignore`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. AP-24 (a): `printToPDF` und Speichern-Dialog mit Zeitlimit; Timer injizierbar wie `createReadyGate`. `printToPDF` 60 s, Speichern-Dialog 10 min (PE-68, angenommen). Bei Ablauf: bestehender Fehlercode INTERNAL, Druckfenster schließen, Export-Sperre freigeben. Ein danach noch offener Dialog wird verworfen, es wird nichts geschrieben (Electron kann den nativen Dialog nicht schließen).
+  2. AP-24 (b): `period` mit Zusatzfeldern in `parsePdfExportInput` ablehnen, nicht stillschweigend entfernen. Nur in `params.ts`, kein Eingriff in `src/shared/**`.
+  3. AP-24 (c): Zeitraum höchstens 50 Kalenderjahre (`to` minus `from`), Konstante in `params.ts`, Ablehnung als VALIDATION (PE-68, angenommen). Der Gesamtbericht ab 2000 bleibt möglich.
+  4. AP-25 (1): Anzahl der Einträge aus dem EOCD-Datensatz vor `JSZip.loadAsync` prüfen (`declaredEntryCount` in `archive.ts`); Abweichung ablehnen.
+  5. AP-25 (2): Größenprüfung und Lesen zusammenführen. Das Limit gilt für die tatsächlich gelesenen Bytes (TOCTOU bei stat, dann readFile). Nichts wird vor der Prüfung überschrieben.
+  6. AP-25 (3): Export liest die Dateien nach `store.idle()` außerhalb des Locks. Ziel ist ein konsistenter Snapshot: unter Sperre lesen oder erkennen, dass sich der Bestand beim Lesen geändert hat, und dann mit klarem Fehler abbrechen. Braucht das eine Store-Änderung, dann nur minimal in `storage/store.ts` (Vermerk).
+  7. OPS: `tsconfig.node.json` erfasst `e2e/**/*`; `e2e/fixtures.ts` reicht nur die für den Start nötigen Umgebungsvariablen weiter (Liste im Code begründet). `electron-builder.yml` Z. 19: Kommentar korrigieren, denn er gilt nur, wenn der Nutzer den Datenordner außerhalb des Installationsordners wählt (PE-18). README-Abschnitt „Datenordner und Backups“: Hinweis, dass ein Datenordner im Installationsordner möglich, aber nicht empfohlen ist.
+  8. Test-Ergänzung in `storage/__tests__/service.test.ts` („switches to another folder“): nach dem Wechsel liegt im neuen Ordner ein Backup unter `backups/` (PE-65). Keine Codeänderung in `storage/service.ts`.
+  9. `src/main/ipc/handlers.ts` Z. 50: Kommentar „export/import/pdf follow in AP-24/AP-25“ korrigieren (nur Kommentar).
+  10. `src/core/README.md`, Abschnitt „Ziele (PE-53)“: Absatz „Status sonst missed …“ eindeutiger fassen. Die Regel bleibt unverändert (PE-53).
+- **Schnittstellen:** keine Änderung an IPC-Kanälen, Verträgen oder Fehlercodes. Zeitlimit und neue Ablehnungen nutzen bestehende Codes.
+- **Akzeptanzkriterien:** Mit Fake-Timern: Zeitlimit für `printToPDF` und Dialog gibt die Sperre frei, keine Datei entsteht. `period` mit Zusatzfeld und Zeitraum über 50 Jahre werden abgelehnt. Manipulierte EOCD-Zahl und zu große Daten werden vor dem Überschreiben abgelehnt, nichts ändert sich. Datenordner-Wechsel erzeugt Backup im neuen Ordner. `npm run lint`, `npm run typecheck`, `npm test` grün; `npm run build && npm run test:e2e` lokal 3× grün.
+- **Tests:** Umsetzung 1–5 mit temporären Verzeichnissen und Fake-Timern (keine festen Wartezeiten, R2 keine echten Daten), Umsetzung 8 als Test-Ergänzung.
+- **Review-Schwerpunkte:** Sicherheit (Zip-Slip, Größe, EOCD, Validierung vor dem Überschreiben), Zeitlimit-Logik (keine hängende Sperre, keine Datei nach Abbruch), keine neuen Verträge oder IPC-Kanäle, keine Pfade aus dem Renderer, Doku-Richtigkeit (Umsetzung 7, 10).
+- **Design-Review:** nein
+- **Doku-Pflichten:** `src/core/README.md` (Absatz), README (Datenordner-Hinweis), Kommentare in `electron-builder.yml` und `handlers.ts`
+- **Aufwand:** L · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** Sicherheit (ZIP-Import-Validierung, PDF-Export mit verstecktem Fenster)
+- **Kürzbar bei Budgetnot:** nein (Nutzer-Entscheidung PE-64, PE-68)
+- **Commit-Typ:** `fix(AP-34): harden pdf timeouts and zip import checks`
+
 ---
 
 ## 13. Menschliche Schritte
@@ -1475,7 +1580,7 @@ flowchart LR
 | H-07 | `idee.txt` löschen (PE-44) | sofort | – | ☑ |
 | H-02 | GitHub-Repo `CemDCoding/appManager` anlegen und als `origin` eintragen | sofort | Push durch Lead | ☑ |
 | H-03 | Test-Datenordner für stage anlegen (Kopie von `data-dev/` nach `npm run seed`) | M0-DEP | Smoke-Tests | ☑ |
-| H-04 | Echten Datenordner auf `D:` anlegen (außerhalb des Projekts) und in der App wählen | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
+| H-04 | Datenordner `D:\appManagerDaten` anlegen (außerhalb des Projekts) und in der installierten App wählen; Backup-Prüfpunkt im M4-DEP (PE-65) | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
 | H-05 | Designer-Gespräch nach M1: `start-agent.ps1 -Project "D:\Private Projekte\appManager" -Role designer`; danach beauftragt der Lead den Planner mit „Design übernehmen“ | nach M1-DEP | Design-Pakete (folgen) | ☐ |
 | H-06 | Smoke-Tests M0–M4 laut §9 und Merges `dev` → `stage` → `master` | je Meilenstein | nächster Meilenstein | ☐ teilweise: Smoke-Tests M0 und M1 bestanden (2026-10-26); Smoke-Tests M2, M3, M4 offen (M2-DEP, M3-DEP, M4-DEP); Merges `dev` → `stage` → `master` für M0 bis M4 noch offen (Anleitung §9.2, PE-42). Auf GitHub steht `stage` auf dem dev-Stand 205f5c3 |
 
@@ -1489,12 +1594,14 @@ flowchart LR
 | M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 5 (2 opus) | 9,75 h | 2–3 |
-| M4 | 3 (1 opus) | 3,75 h | 1 |
-| **Gesamt** | **32** | **50 h** + Reviews | **12–15** |
+| M4 | 5 (2 opus) | 8,75 h | 2–3 |
+| **Gesamt** | **34** | **55 h** + Reviews | **13–17** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
 **Nachtrag 2026-10-26:** AP-29, AP-30 und AP-31 (je S, 0,75 h) sind in der M1-Zeile enthalten. AP-32 (S, 0,75 h) ist in der M3-Zeile enthalten. Das Fensterbudget bleibt geschätzt bei 3–4 Fenstern.
+
+**Nachtrag 2026-10-28:** AP-33 (L, sonnet, 2,5 h) und AP-34 (L, opus, 2,5 h) sind in der M4-Zeile enthalten (M4 jetzt 8,75 h statt 3,75 h). Gesamt 55 h. Die Fensterzahl wird als 13–17 geschätzt; sie bleibt geschätzt, bis Messwerte aus M4 vorliegen.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. Die Fensterzahlen wurden bei einem früheren Zielwert geschätzt; den aktuellen Wert liefert `.claude/ma-usage.json`. 5 parallele Coder (PE-23) erreichen den Zielwert schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1525,6 +1632,7 @@ flowchart LR
 | RI-11 | Playwright mit Electron unter Windows instabil | keine festen Wartezeiten, 3 Läufe Pflicht, Kürzung K1 | AP-26 |
 | RI-12 | Abdeckungsmessung fehlt | erledigt: `@vitest/coverage-v8` freigegeben (PE-55) | AP-01, Abnahme |
 | RI-13 | Mehrere Pakete ändern `src/main/index.ts` | streng nacheinander in getrennten Wellen (§8) | AP-01, AP-03, AP-07, AP-24, AP-25 |
+| RI-14 | Export-ZIP enthält Personendaten unverschlüsselt (PE-67). Wird die App öffentlich zugänglich gemacht oder die Datei weitergegeben, liegen Personendaten offen | Vermerk PE-67: vor Weitergabe oder Veröffentlichung muss eine optionale Export-Verschlüsselung als eigenes Paket kommen (Pflicht) | AP-25 |
 
 ---
 
@@ -1553,7 +1661,7 @@ flowchart LR
 | PE-17 | (ersetzt durch PE-18) ~~Datenordner im Projekt~~. Weiter gültig (bestätigt): eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | – | Nutzer am 2026-10-25 |
 | PE-18 | Datenpfad ist in der App einstellbar. Echte Daten liegen in einem externen Ordner auf `D:`, den nur der Nutzer anlegt und den kein Agent liest. Agents dürfen im Projekt einen Testdaten-Ordner `data-dev/` (gitignored) mit erfundenen Daten anlegen (Seed-Skript). Installation nur auf Laufwerk `D:` (Installer mit wählbarem Zielordner, Vorschlag auf `D:`). | R2, Agents sollen echte Daten nicht sehen | Nutzer am 2026-10-25 |
 | PE-19 | Nicht kommerziell. Repository wird öffentlich auf GitHub, Nachbau erlaubt, Weiterverkauf und kommerzielle Nutzung verboten → nicht-kommerzielle Quelltext-Lizenz (Wahl: Q-05). Abhängigkeiten nur mit freizügigen Lizenzen (MIT, Apache-2.0, BSD, ISC). | Wunsch des Nutzers | Nutzer am 2026-10-25 |
-| PE-20 | Lizenz PolyForm Noncommercial 1.0.0 (`LICENSE` im Repo-Wurzelverzeichnis). Keine Rechtsberatung (D12b). | für Software formuliert, verbietet kommerzielle Nutzung | Nutzer am 2026-10-25 |
+| PE-20 | Lizenz PolyForm Noncommercial 1.0.0 (`LICENSE` im Repo-Wurzelverzeichnis). Keine Rechtsberatung (D12b). | für Software formuliert, verbietet kommerzielle Nutzung | Nutzer am 2026-10-25; Lizenzangaben (`package.json`, README) bestätigt am 2026-10-28 |
 | PE-21 | Prototyp ohne Designer: Tailwind CSS + shadcn/ui; Grundsätze: neutrale Grautöne, eine Akzentfarbe, viel Weißraum, Schrift Inter, Hell-/Dunkelmodus, linke Seitenleiste, Tabellen und Karten, Diagramme in Akzentfarbe. Farben/Abstände nur über Tailwind-Theme/CSS-Variablen an einer Stelle, damit der Designer später zentral umstellen kann. Designer-Interview nach dem Prototyp. | Nutzer will erst Prototyp sehen | Nutzer am 2026-10-25 |
 | PE-22 | Öffentliches GitHub-Repo `CemDCoding/appManager` ist angelegt und als `origin` eingetragen. `stage` = Installer-Test mit Testdaten, `master` = Release (optional GitHub Release mit `.exe`). Nie echte Daten im Repo. | – | Nutzer am 2026-10-25 |
 | PE-23 | Bis zu 5 Coder gleichzeitig. Freigabe: siehe PE-46. | Wunsch des Nutzers; Budget-Wächter bremst bei 30 % | Nutzer am 2026-10-25 |
@@ -1585,7 +1693,7 @@ flowchart LR
 | PE-50 | Rechenreihenfolge: Buchung → EUR mit Snapshot-Kurs (auf Cent) → Aufteilung auf Projekte (Größter-Rest) → Aggregation in EUR (exakt). Anzeige in anderer Währung: jede angezeigte Zahl einzeln aus EUR umgerechnet; Hinweis „umgerechnet“ in der Anzeige | Summen in EUR exakt; Anzeige folgt PE-13 | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-51 | Kennzahl „Fixkosten pro Monat“ = monatliches Äquivalent aller am Stichtag aktiven wiederkehrenden Ausgaben (täglich × 365/12, wöchentlich × 52/12, monatlich × 1, jährlich / 12, auf Cent gerundet). Nur Kennzahl, ändert die Buchung „wie gezahlt“ (PE-29) nicht | aussagekräftiger Monatswert | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-52 | Nutzer-Kennzahlen: Kosten pro Nutzer = Ausgaben im Zeitraum / Nutzerzuwachs im Zeitraum; Einnahmen pro zahlendem Nutzer = Einnahmen im Zeitraum / zahlende Nutzer am letzten Stichtag; Kampagnenanteil = Kampagnen-Nutzer im Zeitraum / Nutzerzuwachs, in Basispunkten (darf über 100 % liegen, UI kappt nicht). Nutzerzuwachs = letzter Stand bis Zeitraumende minus jüngster Stichtag vor Zeitraumbeginn; gibt es keinen, minus erster Stichtag im Zeitraum. Portfolio = Summe der Projekte. Zuwachs ≤ 0 → Kosten pro Nutzer und Kampagnenanteil `null` (Anzeige „–“). Division durch 0 → „–“ | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25; Präzisierung (Zuwachs, Portfolio, Basispunkte) bestätigt vom Nutzer am 2026-10-26 (Chat) |
-| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei). **Klarstellung Kostenlimit:** keine vorzeitige Entscheidung. Vor dem Stichtag ist der Status `offen`; `ratio` ist der verbrauchte Anteil des Limits. Nach dem Stichtag `erreicht` oder `verfehlt`; maßgeblich sind die Ausgaben im Monat des Stichtags (angenommen vom Planner), ohne Stichtag bleibt der Status `offen` (angenommen vom Planner). **Klarstellung Break-even:** Der Vergleich erfolgt auf Monatsebene wie PE-30. Ein nur erwarteter Break-even (Prognose) gilt nicht als erreicht und bleibt im Stichtagsmonat `offen` (angenommen vom Planner; der Wortlaut „Break-even-Monat“ wird als erreichter Monat gelesen). | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25; Klarstellung Kostenlimit bestätigt vom Nutzer am 2026-10-26 (Chat); Annahmen zu Stichtagsmonat, Ziel ohne Stichtag und erwartetem Break-even offen zur Bestätigung (§0) |
+| PE-53 | Ziele: Einnahmen-Ziel zählt Einnahmen von „ab“-Datum bis Stichtag; Break-even-Ziel erreicht, wenn Break-even-Monat ≤ Stichtag; Nutzer-Ziel = letzter Stand gesamt / Zielwert; Kostenlimit = Ausgaben im laufenden Monat ≤ Zielwert. Status: erreicht / offen / verfehlt (Stichtag vorbei). **Klarstellung Kostenlimit:** keine vorzeitige Entscheidung. Vor dem Stichtag ist der Status `offen`; `ratio` ist der verbrauchte Anteil des Limits. Nach dem Stichtag `erreicht` oder `verfehlt`; maßgeblich sind die Ausgaben im Monat des Stichtags, ohne Stichtag bleibt der Status `offen`. **Klarstellung Break-even:** Der Vergleich erfolgt auf Monatsebene wie PE-30. Ein nur erwarteter Break-even (Prognose) gilt nicht als erreicht und bleibt im Stichtagsmonat `offen` (der Wortlaut „Break-even-Monat“ wird als erreichter Monat gelesen). | testbare Definitionen | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25; Klarstellung Kostenlimit bestätigt vom Nutzer am 2026-10-26 (Chat); Annahmen zu Stichtagsmonat, Ziel ohne Stichtag und erwartetem Break-even bestätigt vom Nutzer am 2026-10-28 |
 | PE-54 | Kategorien, Plattformen und Formate: hinzufügen und ausblenden, nicht umbenennen oder löschen (alte Buchungen bleiben gültig) | Datenkonsistenz | angenommen vom Planner, bestätigt vom Nutzer am 2026-10-25 |
 | PE-55 | `@vitest/coverage-v8` (MIT) freigegeben, Abdeckung wird gemessen (`npm run test:coverage`) | Abnahmekriterium ≥ 95 % | Nutzer am 2026-10-25 |
 | PE-56 | Dev-Modus: Datenpfad nur über `APP_DATA_DIR` oder `<repo>/data-dev`; die gespeicherte Wahl (`userData/config.json`) gilt nur in der paketierten App. Verfeinert die Umsetzung von PE-18, ändert PE-18 nicht. | Review-Befunde AP-02/05/06/07: Dev-Läufe dürfen nie auf einen gewählten echten Datenordner zeigen (R2, RI-6) | Lead-Auftrag „Wellenabschluss M0“ am 2026-10-25; Nutzer am 2026-10-26 bestätigt |
@@ -1596,6 +1704,12 @@ flowchart LR
 | PE-61 | Aufräumen M1 (AP-29) und Branch-Abdeckung `fixedCosts` ≥ 95 % mit Config-Fix (AP-30) als M1 W4 eingeplant. Damit sind die Vorschläge zu Aufräum-Paket, Coverage-Include und Abdeckung aus der Liste „Vorgeschlagene Änderungen“ umgesetzt. | Befunde der M1-Reviews, niedrig, kein Blocker | Lead-Auftrag am 2026-10-26 |
 | PE-62 | AP-30 mit Branch-Abdeckung `fixedCosts.ts` 89,47 % (17/19) gemergt, obwohl Review Runde 1 formal „nicht bestanden“ ist: die zwei `?? 0`-Fallbacks (Zeilen 80, 86) sind unerreichbar. Folgepaket AP-31 entfernt sie als reine Refaktorierung ohne Verhaltensänderung (Rechenregeln PE-51 bleiben). PE-55 (≥ 95 %) gilt weiter. | Abnahmeziel PE-55 ohne Ausnahmeregel, keine Coverage-Tricks | Nutzer am 2026-10-26 (Chat) |
 | PE-63 | Budgetwerte (Zielwert, Obergrenze, Teamverbrauch) stehen nur in `.claude/ma-usage.json` (Felder `zielwert`, `obergrenze`, `team`). §7.2 und §14 nennen keine festen Werte. | Nutzerwunsch: eine Quelle für die Werte | Nutzer am 2026-10-26 (Chat) |
+| PE-64 | Aufräumpaket aus dem Vorschlag in §16 (Befunde M2/M3, AP-25 (1)–(6), AP-26, AP-27, AP-24 (a)–(c)) wird jetzt umgesetzt, ohne Kürzung. Aufgeteilt in AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) in M4 W2, vor M4-DEP; M4-DEP hängt an beiden. Grund: Umfang über L hinaus und Dateieigentum (§8). AP-33 ändert `e2e/flows.spec.ts` (Selektoren, Ausnahme zur OPS-Lane). | Nutzer-Entscheidung | Nutzer am 2026-10-28 (Chat) |
+| PE-65 | Datenordner-Wechsel: Backups entstehen im neuen Datenordner. Code-Prüfung: `DataService.open` (`src/main/storage/service.ts`) legt das Start-Backup im gewählten Ordner an, bevor er ihn aktiviert (aufgerufen aus `chooseAndSwitchDataDir`). Beim Wechsel entsteht kein Backup des bisherigen Ordners (offen: Q-11). Lücke: der Test „switches to another folder“ prüft kein Backup; AP-34 ergänzt ihn. Prüfpunkt im M4-DEP (H-04). | Nutzer-Hinweis zu H-04; Code-Prüfung durch Planner | Nutzer am 2026-10-28 (Chat); Prüfung Planner 2026-10-28 |
+| PE-66 | AP-25: Mehrdatei-Ersetzen bleibt nicht atomar. Bei Fehler Rollback aus einem frischen Backup. Kein Datenverlust, solange das Backup gelingt. Abweichung von §12 AP-25 akzeptiert. | Nutzer-Entscheidung | Nutzer am 2026-10-28 (Chat) |
+| PE-67 | AP-25: Export-ZIP bleibt unverschlüsselt (enthält Personendaten). **Vermerk:** Falls die App öffentlich zugänglich gemacht oder weitergegeben werden soll, MUSS vorher eine optionale Export-Verschlüsselung als eigenes Paket kommen (§5, §15 RI-14). | Nutzer-Entscheidung; R2 | Nutzer am 2026-10-28 (Chat) |
+| PE-68 | AP-24 (Nutzer-Entscheidung): (a) Zeitlimit für `printToPDF` und Speichern-Dialog, danach Fehler und Fenster schließen; (b) `period` mit Zusatzfeldern ablehnen statt strippen; (c) Obergrenze für den Zeitraum. Umgesetzt in AP-34. (d) Kanal `pdf:failed` verworfen (Vertragsänderung, nicht umgesetzt). Werte (angenommen vom Planner, Nutzer kann sie ändern): `printToPDF` 60 s, Speichern-Dialog 10 min (danach Export-Sperre frei, Ergebnis verworfen, nichts geschrieben), Zeitraum höchstens 50 Jahre. | Nutzer-Entscheidung; Werte Planner | Nutzer am 2026-10-28 (Chat); Werte angenommen vom Planner |
+| PE-69 | Das Zweiturteil (Anbieter-Brücke) im Review ist abgeschaltet; Review Runde 1 reicht. Betrifft nur die Agent-Dateien, nicht den Plan. | Betriebsentscheidung, bestätigt | Nutzer am 2026-10-28 (Chat) |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1611,16 +1725,14 @@ flowchart LR
 | Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | geklärt → PE-55 |
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
 | Q-09 | Einnahmen werden ohne Aktivitätsprüfung gebucht; PE-50 gilt nur für die Aufteilung von Ausgaben. Ist das gewollt? | W | §4, PE-08, PE-50 | ja, Einnahme gehört zum gewählten Projekt; bei Buchung außerhalb des Aktivzeitraums Hinweis anzeigen | geklärt → PE-58 (Nutzer am 2026-10-26) |
+| Q-10 | Befunde aus §18 ohne Eintrag im Umfang von AP-33/AP-34 aufnehmen? AP-22: NaN-Verhalten von `convert` in Diagrammen nicht belegt. AP-23: Einnahmenziel mit 0 gilt sofort als erreicht; Hinweis „Zielwerte in EUR“ im Label. AP-24: Kampagnentabelle zeigt im Projektbericht Gesamtkosten | O | §18, AP-33 | in ein Folgepaket nach M4-DEP, oder als bekannt verwerfen | offen (Nutzer) |
+| Q-11 | Soll der Datenordner-Wechsel zusätzlich ein Backup des bisherigen Ordners anlegen? Heute nur das Start-Backup im neuen Ordner (PE-65). | W | §4, PE-18, PE-65 | ja, vor dem Wechsel sichern; sonst bleibt der bisherige Stand nur im alten Ordner | offen (Nutzer) |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
-| Zweiturteil (Anbieter-Brücke) | Im Auftrag des Leads ist das Zweiturteil im Review abgeschaltet (Review Runde 1 reicht). Der Plan erwähnt es nicht. Vorschlag: Nutzer bestätigt die Abschaltung; nur die Agent-Dateien betreffen es. | Betriebsentscheidung, Bestätigung fehlt | Planner, Lead-Auftrag |
-| Aufräumpaket AP-33 (M2/M3-Befunde, Prio niedrig) | Neues Paket, nicht eingeplant, nicht gestartet. Vorschlag: Start nach M3-DEP, vor M4-DEP, oder nach M4-DEP. Inhalt: `LineChartSeries.tsx` sr-only-Spalte „Zeitpunkt“; Sparkline-Prop `color` begrenzen; ungenutzte i18n-Schlüssel in `features/people` (`open`, `ledgerErrors`) und `features/goals` (`usedLabel`, `done`, `delete`, `saveFailed`) entfernen; `campaigns` in AP-19 nur einmal laden; `features/campaigns/ProjectTab.tsx` Z. 57–58 erklären statt „–“; `StatsView.tsx`: `today` nicht mehr einmalig per `useMemo([])`, Ledger-Fehler der Projektansicht nur für das Projekt; Spaltenarrays memoisieren; Cross-Imports `features/*` → `pages/projects/*` (`LedgerWarnings`, `useProjectLedger`, `todayIso`) nach `components/` verschieben; Kommentar „pdf follow in AP-24“ in `src/main/ipc/handlers.ts` entfernen (Eigentum prüfen: `src/main/ipc/**` gehört AP-07); Doku-Absatz „Status sonst missed…“ in `src/core/README.md` klarer fassen. Eigentum je Datei vor dem Start prüfen. Ergänzt um M4-Befunde (Lead-Auftrag „Wellenabschluss M4 W1“, 2026-10-26): AP-25 (1) EOCD-Eintragszahl vor `loadAsync` prüfen; (2) Größenprüfung und Lesen trennen (TOCTOU, stat → readFile); (3) Export liest Dateien nach `store.idle()`, also außerhalb des Locks, und braucht einen konsistenten Snapshot; (4) bei fehlgeschlagenem Backup zeigt die UI den Text `importIo` („Backup liegt im Datenordner“), das stimmt nicht; (5) nach fehlgeschlagenem Rollback Caches neu laden und Knöpfe mit Ladezustand; (6) Backup-Liste in `pages/settings` (DataSection) nach Öffnen und Import aktualisieren. AP-26: `data-testid` für die Kennzahl-Karten, damit die E2E-Selektoren nicht fragil sind; `tsconfig*.json` (bisher nur AP-01 und AP-28) um `e2e/**` für den Typecheck erweitern, derzeit prüft nur ESLint `e2e/**`; `e2e/fixtures.ts` reicht die gesamte `process.env` weiter, auf die nötigen Variablen begrenzen. AP-27: Kommentar in `electron-builder.yml` („Datenordner außerhalb des Installationsordners“) korrigieren, weil er nicht stimmt, wenn der Nutzer den Datenordner in den Installationsordner legt; Hinweis dazu in `README.md` ergänzen. Akzeptiert ohne Paket: AP-26 prüft nicht, welchem Projekt die 33,34 zugeordnet werden. | Befunde aus AP-17–AP-27, kein Blocker | Planner, Lead-Auftrag |
-| AP-25 Ersetzen nicht atomar (Abweichung von §12 AP-25, Umsetzung 2) | Mehrdatei-Ersetzen ist nicht atomar; bei Fehler Rollback aus einem frischen Backup. Vorschlag: so akzeptieren (kein Datenverlust, solange das Backup gelingt) oder atomar über einen temporären Ordner und Umbenennen als Folgepaket. | §12 verlangt „atomar“; Datenverlust-Risiko, Entscheidung des Nutzers (§7.3) | Planner, Lead-Auftrag |
-| AP-25 Export-ZIP unverschlüsselt | Der Export enthält Personendaten (Personen, Zahlungen) unverschlüsselt; der Dialog warnt. Vorschlag: so belassen, oder optionale Verschlüsselung als eigenes Paket. | Datenschutz (R2), Entscheidung des Nutzers | Planner, Lead-Auftrag |
-| AP-24 Befunde zu Zeitlimit, Zeitraum und Validierung (Nutzer-Entscheidung) | Vorschlag: (a) Zeitlimit für `printToPDF` und Speichern-Dialog, danach Fehler und Fenster schließen; (b) `period` mit Zusatzfeldern ablehnen statt stillschweigend strippen; (c) Obergrenze für den Zeitraum im Bericht; (d) optional ein Kanal `pdf:failed` für sofortige Fehlermeldung statt 30 s Wartezeit. (d) ist eine Vertragsänderung in AP-02 (`src/shared/**`), nur mit Freigabe. | Review-Befunde AP-24 (niedrig, kein Blocker). Sicherheit und Verträge liegen beim Nutzer (§7.3) | Planner, Lead-Auftrag |
+| Keine offenen Vorschläge | Alle Punkte aus §16 (Zweiturteil, AP-25, AP-24, Aufräumpaket AP-33) sind am 2026-10-28 entschieden: PE-64 bis PE-69, PE-20, PE-53. Der Aufräumumfang steht in AP-33 und AP-34 (§12). | – | Planner, 2026-10-28 |
 
 ---
 
@@ -1637,24 +1749,28 @@ flowchart LR
 | F-07 Kampagnen | AP-16, AP-18 |
 | F-08 Währungen | AP-05, AP-10, AP-11 |
 | F-09 Statistiken | AP-09, AP-15, AP-16, AP-20, AP-21, AP-22 |
-| F-10 PDF | AP-24 |
+| F-10 PDF | AP-24, AP-34 (Zeitlimit, Validierung, Zeitraum; PE-68) |
 | F-11 Mitarbeiterverwaltung | AP-16, AP-17 |
 | F-12 Ziele/Startseite | AP-20, AP-23, AP-32 |
 | PE-53 Ziele, Kostenlimit erst nach Stichtag | AP-20, AP-23, AP-32 |
 | F-13 Nutzerzahlen | AP-16, AP-19 |
-| F-14 Datensicherung | AP-07, AP-11, AP-25 |
+| F-14 Datensicherung | AP-07, AP-11, AP-25, AP-34 (Backup im neuen Datenordner, PE-65) |
 | PE-47 Zweisprachigkeit | AP-04, AP-10, alle UI-Pakete |
 | PE-24 Rechengenauigkeit | AP-05, AP-06, AP-09, AP-16, AP-20, AP-26, AP-28, AP-30, AP-31 |
 | PE-26 Werbung ohne Doppelerfassung | AP-14, AP-18, AP-29 |
 | PE-55 Abdeckung ≥ 95 % (Rechenkern) | AP-01, AP-30, AP-31 |
-| §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24 |
-| §5 ZIP-Import | AP-25 |
+| §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24, AP-34 |
+| §5 ZIP-Import | AP-25, AP-34 (Befunde (1)–(3)) |
+| §5 Vermerk Export-Verschlüsselung (PE-67) | kein Paket, Vermerk; Pflichtpaket vor Weitergabe (RI-14) |
+| PE-64 Aufräumpaket (Befunde M2–M4) | AP-33, AP-34 |
+| PE-65 Datenordner-Wechsel erzeugt Backup im neuen Ordner | AP-34 (Test), M4-DEP (H-04) |
+| PE-68 PDF-Härtung (Zeitlimit, Validierung, Zeitraum) | AP-34 |
 | R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
 | R2 DSGVO | AP-02, AP-07, AP-08, AP-17, Review |
 | R3 Impressum | entfällt (keine Webseite), Hinweis in README: AP-27 |
 | R4 Secrets | alle (Review); App ohne Secrets |
 | R5 Rollen | §7.3, alle |
-| R6 Prompt-Injection / OWASP | AP-03, AP-07, AP-25, Review „Verdächtige Inhalte“ |
+| R6 Prompt-Injection / OWASP | AP-03, AP-07, AP-25, AP-34, Review „Verdächtige Inhalte“ |
 | Abnahme G3 | M4-DEP, AP-26 |
 
 ---
@@ -1726,3 +1842,9 @@ flowchart LR
 | 2026-10-26 | Erkenntnis AP-25: Import übernimmt nur die 10 Collection-Dateien und `manifest.json`. Grenze 50 MB für die ZIP-Datei und als Budget für entpackte Daten (gestreamt; Abbruch bei ca. 50 MB nach 0,3 s gemessen). Kanäle in `src/main/transfer/index.ts` (`setupTransfer`), nicht in `ipc/handlers.ts`. Mehrdatei-Ersetzen nicht atomar, Rollback aus frischem Backup (Abweichung, §16). Niedrige Befunde (1)–(6) in AP-33 (§16). Export-ZIP unverschlüsselt mit Personendaten (§16) | Review Runde 1 bestanden | AP-25, AP-33 (Vorschlag), §16 | Lead-Merge |
 | 2026-10-26 | Erkenntnis AP-26: PDF-Export (AP-24) wird real erzeugt; die Datei ist gültig (`%PDF`) und nicht leer. Die Prüflücke aus AP-24 für die Dateierzeugung ist damit geschlossen; die Optik bleibt Sichtprüfung im M4-DEP. Ablauf 2 prüft nicht, welchem Projekt die 33,34 zugeordnet werden (akzeptiert, kein Paket). Kennzahl-Karten ohne Test-IDs (fragile Selektoren, AP-33). `tsconfig*.json` schließt `e2e/**` nicht ein (nur ESLint prüft sie, AP-33). `e2e/fixtures.ts` reicht die gesamte `process.env` weiter (niedrig, AP-33) | Review Runde 1 bestanden | AP-26, AP-24, AP-33 (Vorschlag), M4-DEP | Lead-Merge |
 | 2026-10-26 | Erkenntnis AP-27: `npm run dist` und der NSIS-Vorschlag `D:\appManager` sind nicht real geprüft; das passiert im M4-DEP. `customInit` in `build/installer.nsh`; bei Problemen Alternative `preInit`. Kommentar in `electron-builder.yml` („Datenordner außerhalb des Installationsordners“) stimmt nicht, wenn der Nutzer den Datenordner in den Installationsordner legt; die README erwähnt das nicht (AP-33). Lizenzangaben (`package.json` `license`, README) vom Nutzer bestätigen (PE-20) | Review Runde 1 bestanden | AP-27, M4-DEP, AP-33 (Vorschlag) | Nutzer offen |
+| 2026-10-28 | Nutzer-Entscheidungen (Chat): AP-33 (Aufräumen) jetzt umgesetzt, aufgeteilt in AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus), beide M4 W2 vor M4-DEP (PE-64). AP-24 (a)–(c) in AP-34, (d) verworfen (PE-68). AP-25 nicht atomares Ersetzen akzeptiert (PE-66). Export-ZIP unverschlüsselt belassen, Pflicht-Vermerk (PE-67). Zweiturteil abgeschaltet bestätigt (PE-69). PE-53-Annahmen bestätigt (PE-53). Lizenzangaben bestätigt (PE-20). H-04: Datenordner `D:\appManagerDaten` (PE-65). Vorschlag „Vorgeschlagene Änderungen“ aufgelöst | Nutzer-Entscheidung im Chat | AP-33, AP-34, AP-24, AP-25, PE-20, PE-53, §8–§17 | Nutzer am 2026-10-28 (Chat) |
+| 2026-10-28 | Pflegeauftrag: AP-33 und AP-34 mit Dateieigentum angelegt; Eigentum je Datei gegen §8 geprüft. §8 ergänzt (tsconfig.node.json `e2e/**`, `ipc/handlers.ts` Kommentar, storage-Test, transfer, pdf, e2e, README, core README, renderer). Akzeptiert ohne Paket (aus dem Vorschlag): AP-26 prüft nicht, welchem Projekt die 33,34 zugeordnet werden. §9 (M4 W2 parallel, W3 M4-DEP), §9.2, §10, §11 (Nachtrag), §12, §13 (H-04), §14 (M4 5 Pakete, 8,75 h; Gesamt 34, 55 h, 13–17 Fenster), §15 (RI-14), §16, §17 angepasst. Modelle: AP-33 sonnet (UI), AP-34 opus (Sicherheit). Lagebericht ersetzt | Pflegeauftrag (Nutzer, Chat) | AP-33, AP-34, §0, §5, §8–§17 | Nutzer am 2026-10-28 (Chat) |
+| 2026-10-28 | Erkenntnis H-04 (Code-Prüfung, nur lesen): Der Wechsel des Datenordners ruft `DataService.open` auf (`src/main/storage/service.ts`), der das Start-Backup im neuen Ordner anlegt, bevor er ihn aktiviert (Aufruf aus `chooseAndSwitchDataDir` in `src/main/index.ts`). Ein Backup des bisherigen Ordners entsteht nicht. Schlägt das Backup fehl, wird nur protokolliert und der Wechsel läuft weiter. Der Test „switches to another folder“ prüft kein Backup im neuen Ordner: Ergänzung in AP-34. Offen: Q-11 | Nutzer-Hinweis zu H-04 | AP-34, M4-DEP, H-04 | Planner |
+| 2026-10-28 | Erkenntnis AP-24 (Code-Prüfung): `printToPDF` und Speichern-Dialog laufen ohne Zeitlimit (`src/main/pdf/exporter.ts`). `PdfExportInputSchema` (`src/shared/ipc.ts`) ist nicht strikt; `period` verliert Zusatzfelder stillschweigend, die Prüfung auf unbekannte Felder gilt nur oben (`src/main/pdf/params.ts`). Keine Obergrenze für den Zeitraum. Bestätigt die Befunde aus AP-24 | Befunde bestätigt | AP-34 | Planner |
+| 2026-10-28 | Erkenntnis AP-27 (Code-Prüfung): Der Kommentar in `electron-builder.yml` Z. 19 lautet „Uninstall never touches the data folder (it lives outside the install folder)“. Er gilt nur, wenn der Datenordner außerhalb des Installationsordners liegt. Korrektur in AP-34 | Befund bestätigt | AP-34 | Planner |
+| 2026-10-28 | Erkenntnis Eigentum: `docs/design/` existiert nicht, daher Design-Review für AP-33 und AP-34 nein (PE-21). `src/renderer/pages/settings/DataSection.tsx` (AP-11) und `e2e/flows.spec.ts` (AP-26) liegen nach `fertig` bei AP-33 | Eigentumsprüfung | AP-33 | Planner |
