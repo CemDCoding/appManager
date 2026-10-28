@@ -114,4 +114,71 @@ describe('DataService', () => {
     expect(await readdir(join(root, 'b', 'backups', backups[0]!))).toContain('projects.json')
     expect(await service.listBackups()).toHaveLength(1)
   })
+
+  describe('backup of the previous folder (PE-70)', () => {
+    it('backs up the previous folder before switching', async () => {
+      const a = join(root, 'a')
+      const b = join(root, 'b')
+      const now = clock()
+      // b already holds invented data, so it gets its own start backup.
+      const other = new DataService({ now, newId: testId })
+      await other.open(b)
+      await other.store.create('projects', projectInput('Folder B App'))
+
+      const service = new DataService({ now, newId: testId })
+      await service.open(a)
+      await service.store.create('persons', personInput())
+      await service.open(b)
+      expect(service.dir).toBe(b)
+      const old = await readdir(join(a, 'backups'))
+      expect(old).toHaveLength(1)
+      expect(await readdir(join(a, 'backups', old[0]!))).toContain('persons.json')
+      expect(await readdir(join(b, 'backups'))).toHaveLength(1)
+    })
+
+    it('aborts the switch without changes if the backup fails', async () => {
+      const a = join(root, 'a')
+      const b = join(root, 'b')
+      const service = new DataService({ now: clock(), newId: testId })
+      await service.open(a)
+      await service.store.create('persons', personInput())
+      // A file named "backups" blocks the backup folder.
+      await writeFile(join(a, 'backups'), 'blocker', 'utf8')
+      let called = false
+      await expect(
+        service.open(b, async () => {
+          called = true
+        })
+      ).rejects.toMatchObject({ code: 'IO' })
+      expect(called).toBe(false)
+      expect(service.dir).toBe(a)
+      expect(await readdir(root)).not.toContain('b')
+      expect(await service.store.list('persons')).toHaveLength(1)
+    })
+
+    it('rotates old backups in the previous folder', async () => {
+      const a = join(root, 'a')
+      const b = join(root, 'b')
+      const service = new DataService({ now: clock(), newId: testId, keepBackups: 2 })
+      await service.open(a)
+      await service.store.create('persons', personInput())
+      for (let i = 0; i < 3; i++) {
+        await service.open(b)
+        await service.open(a)
+      }
+      // 6 backups were made in a (3 before leaving, 3 on start), 2 remain.
+      expect(await readdir(join(a, 'backups'))).toHaveLength(2)
+    })
+
+    it('makes no extra backup when the same folder is opened again', async () => {
+      const a = join(root, 'a')
+      const service = new DataService({ now: clock(), newId: testId })
+      await service.open(a)
+      await service.store.create('persons', personInput())
+      // Same folder, different spelling (trailing separator): compared resolved.
+      await service.open(`${a}/`)
+      // Only the start backup of the reopen, no backup of the "previous" folder.
+      expect(await readdir(join(a, 'backups'))).toHaveLength(1)
+    })
+  })
 })
