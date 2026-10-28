@@ -17,8 +17,7 @@ import {
 import { localToday } from '@/features/bookings/booking-logic'
 import { useCollection, useDisplayCurrency, useEntityMutation } from '@/hooks'
 import { useT } from '@/i18n'
-import { LedgerWarnings } from '@/pages/projects/LedgerWarnings'
-import { useProjectLedger } from '@/pages/projects/useProjectLedger'
+import { LedgerWarnings, useProjectLedger } from '@/components/ledger'
 
 export { PersonDetailPage } from './PersonDetailPage'
 

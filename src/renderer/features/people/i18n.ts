@@ -18,7 +18,6 @@ export const peopleDict = defineDictionary(
     filterAll: 'Alle',
     empty: 'Noch keine Personen. Lege die erste Person an.',
     emptyFiltered: 'Keine Personen mit diesem Status.',
-    open: 'Öffnen',
     formName: 'Name oder Kürzel',
     formRole: 'Rolle',
     formStatus: 'Status',
@@ -49,8 +48,7 @@ export const peopleDict = defineDictionary(
     noPayments: 'Keine Zahlungen im Zeitraum.',
     noPaymentsProject: 'Noch keine Zahlungen an Personen in diesem Projekt.',
     deletedPerson: 'gelöschte Person',
-    projectTabHint: 'Zahlungen an Personen in diesem Projekt (Anteil des Projekts).',
-    ledgerErrors: '{count} Buchung(en) konnten nicht umgerechnet werden und fehlen in den Summen.'
+    projectTabHint: 'Zahlungen an Personen in diesem Projekt (Anteil des Projekts).'
   },
   {
     title: 'People',
@@ -68,7 +66,6 @@ export const peopleDict = defineDictionary(
     filterAll: 'All',
     empty: 'No people yet. Add the first person.',
     emptyFiltered: 'No people with this status.',
-    open: 'Open',
     formName: 'Name or initials',
     formRole: 'Role',
     formStatus: 'Status',
@@ -98,8 +95,7 @@ export const peopleDict = defineDictionary(
     noPayments: 'No payments in this period.',
     noPaymentsProject: 'No payments to people in this project yet.',
     deletedPerson: 'deleted person',
-    projectTabHint: 'Payments to people in this project (the project share).',
-    ledgerErrors: '{count} booking(s) could not be converted and are missing from the totals.'
+    projectTabHint: 'Payments to people in this project (the project share).'
   }
 )
 

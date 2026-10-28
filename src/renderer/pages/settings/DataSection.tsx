@@ -3,6 +3,7 @@ import { ENTITY_COLLECTION_NAMES } from '@shared/collections'
 import type { BackupInfo, IpcError } from '@shared/ipc'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog, FieldMessage } from '@/components/forms'
+import { onDataReplaced } from '@/features/transfer/transfer-logic'
 import { ipcErrorText } from '@/hooks'
 import { useFormat, useT } from '@/i18n'
 import { ipcErrorDict } from '@/i18n/shared-keys'
@@ -58,8 +59,15 @@ export function DataSection() {
     void fetchData().then((data) => {
       if (!cancelled) apply(data)
     })
+    // Ein Import (Bereich „Export/Import“) legt ein Backup an: Liste danach neu laden.
+    const unsubscribe = onDataReplaced(() => {
+      void fetchData().then((data) => {
+        if (!cancelled) apply(data)
+      })
+    })
     return () => {
       cancelled = true
+      unsubscribe()
     }
   }, [apply])
 

@@ -21,8 +21,7 @@ import { personPayments, type PaymentRow } from '@/features/people/people-logic'
 import { useCollection, useDisplayCurrency, useEntityMutation } from '@/hooks'
 import { useFormat, useT } from '@/i18n'
 import { projectDetailPath } from '@/pages/projects/paths'
-import { LedgerWarnings } from '@/pages/projects/LedgerWarnings'
-import { useProjectLedger } from '@/pages/projects/useProjectLedger'
+import { LedgerWarnings, useProjectLedger } from '@/components/ledger'
 
 /** Beginn der Gesamtbetrachtung („gesamt“ = ab hier bis heute). */
 const TOTAL_FROM = '2000-01-01'

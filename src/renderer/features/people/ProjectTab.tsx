@@ -8,8 +8,7 @@ import {
   type DataColumn,
   type Period
 } from '@/components/data'
-import { LedgerWarnings } from '@/pages/projects/LedgerWarnings'
-import { useProjectLedger } from '@/pages/projects/useProjectLedger'
+import { LedgerWarnings, useProjectLedger } from '@/components/ledger'
 import { useCollection, useDisplayCurrency } from '@/hooks'
 import { useT } from '@/i18n'
 import { localToday } from '../bookings/booking-logic'

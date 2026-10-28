@@ -43,7 +43,7 @@ test('flow 2: 100 EUR license on all projects splits 33,34 / 33,33 / 33,33', asy
   for (const name of names) {
     await gotoNav(page, 'Projekte')
     await page.getByRole('link', { name, exact: true }).click()
-    const value = kpiCard(page, 'Ausgaben').locator('.tabular-nums')
+    const value = kpiCard(page, 'Ausgaben').getByTestId('kpi-value')
     await expect(value).toHaveText(/\d/)
     shown.push((await value.innerText()).replace(/\s/g, ' ').trim())
   }
@@ -75,9 +75,9 @@ test('flow 3: income + expense -> home balance; real PDF export', async ({
   await expect(expenseDialog).toBeHidden()
 
   await gotoNav(page, 'Start')
-  await expect(kpiCard(page, 'Einnahmen').locator('.tabular-nums')).toHaveText(euro('500,00'))
-  await expect(kpiCard(page, 'Ausgaben').locator('.tabular-nums')).toHaveText(euro('120,00'))
-  await expect(kpiCard(page, 'Saldo').locator('.tabular-nums')).toHaveText(euro('380,00'))
+  await expect(kpiCard(page, 'Einnahmen').getByTestId('kpi-value')).toHaveText(euro('500,00'))
+  await expect(kpiCard(page, 'Ausgaben').getByTestId('kpi-value')).toHaveText(euro('120,00'))
+  await expect(kpiCard(page, 'Saldo').getByTestId('kpi-value')).toHaveText(euro('380,00'))
 
   // Speichern-Dialog per Playwright stubben (kein Test-Hook in der App).
   const pdfPath = join(tempDir, 'bericht.pdf')

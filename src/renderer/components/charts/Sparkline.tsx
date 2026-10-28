@@ -3,6 +3,10 @@ import { cn } from '@/lib/utils'
 import { buildSparklinePoints } from './chart-logic'
 import type { ChartSize } from './ChartFrame'
 
+/** Erlaubte Linienfarben: nur Theme-Variablen aus `globals.css` (PE-21). */
+export type SparklineColor =
+  'var(--primary)' | 'var(--destructive)' | 'var(--foreground)' | 'var(--muted-foreground)'
+
 export interface SparklineProps {
   values: readonly number[]
   /** Beschriftung für Screenreader (Pflicht), z. B. „Nutzer, letzte 30 Tage“. */
@@ -11,8 +15,8 @@ export interface SparklineProps {
   static?: boolean
   /** Größe in Pixel, Standard 96 × 28. */
   size?: ChartSize
-  /** Farbe als CSS-Variable, Standard `var(--primary)`. */
-  color?: string
+  /** Farbe als Theme-Variable, Standard `var(--primary)`. */
+  color?: SparklineColor
   className?: string
 }
 

@@ -24,7 +24,17 @@ export const transferDict = defineDictionary(
     exportInvalid:
       'Mindestens eine Datendatei ist ungültig und kann nicht exportiert werden. Stelle zuerst ein Backup wieder her.',
     importIo:
-      'Die Dateien konnten nicht ersetzt werden. Der vorherige Stand wurde nach Möglichkeit beibehalten; ein Backup liegt im Datenordner.',
+      'Beim Import ist ein Dateifehler aufgetreten. Prüfe die Daten und stelle bei Bedarf ein Backup wieder her.',
+    importReadFailed: 'Die ZIP-Datei konnte nicht gelesen werden. Es wurde nichts geändert.',
+    importBackupFailed:
+      'Vor dem Import konnte kein Backup angelegt werden. Der Import wurde abgebrochen, es wurde nichts geändert.',
+    importWriteFailed:
+      'Die neuen Daten konnten nicht geschrieben werden. Es wurde nichts geändert.',
+    importRolledBack:
+      'Die Dateien konnten nicht ersetzt werden. Der vorherige Stand wurde wiederhergestellt.',
+    importRollbackFailed:
+      'Die Dateien konnten nicht ersetzt werden, und der vorherige Stand ließ sich nicht vollständig wiederherstellen. Prüfe die Daten und stelle das neueste Backup wieder her.',
+    running: 'Läuft …',
     busy: 'Ein Export oder Import läuft bereits.'
   },
   {
@@ -49,7 +59,15 @@ export const transferDict = defineDictionary(
     exportInvalid:
       'At least one data file is invalid and cannot be exported. Restore a backup first.',
     importIo:
-      'The files could not be replaced. The previous state was kept where possible; a backup is in the data folder.',
+      'A file error occurred during the import. Check the data and restore a backup if needed.',
+    importReadFailed: 'The ZIP file could not be read. Nothing was changed.',
+    importBackupFailed:
+      'No backup could be created before the import. The import was cancelled; nothing was changed.',
+    importWriteFailed: 'The new data could not be written. Nothing was changed.',
+    importRolledBack: 'The files could not be replaced. The previous state was restored.',
+    importRollbackFailed:
+      'The files could not be replaced and the previous state could not be fully restored. Check the data and restore the latest backup.',
+    running: 'Running …',
     busy: 'An export or import is already running.'
   }
 )

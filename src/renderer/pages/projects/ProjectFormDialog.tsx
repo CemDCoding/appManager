@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
 import { CategorySelect, DateInput, FieldMessage } from '@/components/forms'
+import { todayIso } from '@/components/ledger'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -25,7 +26,6 @@ import {
   emptyForm,
   formFromProject,
   suggestEndDate,
-  todayIso,
   toProjectInput,
   validateForm,
   type FieldError,

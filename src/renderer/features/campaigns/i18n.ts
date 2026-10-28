@@ -56,6 +56,7 @@ export const campaignsDict = defineDictionary(
     tabEmpty: 'Diesem Projekt sind keine Kampagnen zugeordnet.',
     tabCaption: 'Kampagnen des Projekts (anteilige Kosten und Nutzer)',
     tabHint: 'Kosten und Nutzer sind anteilig nach der Aufteilung der Kampagne.',
+    tabCostUnconvertible: 'nicht umrechenbar (Kurs prüfen)',
     empty: 'Noch keine Kampagnen.'
   },
   {
@@ -112,6 +113,7 @@ export const campaignsDict = defineDictionary(
     tabEmpty: 'No campaigns are assigned to this project.',
     tabCaption: 'Campaigns of this project (shares of cost and users)',
     tabHint: 'Cost and users are proportional to the campaign’s allocation.',
+    tabCostUnconvertible: 'cannot be converted (check the rate)',
     empty: 'No campaigns yet.'
   }
 )
