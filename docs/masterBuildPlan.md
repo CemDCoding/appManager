@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-28 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 36 Arbeitspaketen (~57 h Agent-Zeit).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 37 Arbeitspaketen (~59 h Agent-Zeit, inkl. AP-38).
 
 ---
 
@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-28 · M4 W2 und W2b abgeschlossen. Alle Pakete M0–M4 sind gemergt (AP-01–AP-36 in `dev`, HEAD 3e21909, gepusht); Lead-Merge, Reviews Runde 1 bestanden.
-- **Fertig:** AP-01–AP-36, M0-DEP, M1-DEP · **Bereit (Nutzer):** M2-DEP, M3-DEP, M4-DEP · **Offen:** H-04, H-05, H-06.
-- **Unterbrochen oder laufend:** keine Coder-Arbeit offen. Worktrees und Branches der gemergten Pakete aufräumen: Lead (§9.1 Schritt 7). Designer-Interview läuft (Nutzer, `docs/design/`); Brief noch nicht freigegeben, UI-Pakete ohne Design-Review.
-- **Erkenntnisse:** Datenordner-Wechsel: Start-Backup im neuen Ordner (PE-65), Backup des alten Ordners vor dem Wechsel, bei Fehler Abbruch (PE-70, Q-12 geklärt). Abbruch zeigt „Der bisherige Datenordner bleibt aktiv“ (PE-71, bestätigt). Niedrige Befunde als Vorschlag AP-37 in §16 (Prio niedrig, nicht eingeplant). Details §18.
-- **Nächster Schritt:** Nutzer: M4-DEP (Installer auf `D:`, Datenordner `D:\appManagerDaten` wählen, Prüfpunkte Backup alt/neu und Abbruch-Hinweis, Abnahme G3). Parallel H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`). AP-37 nur auf Entscheidung des Nutzers.
-- **Offene Nutzerpunkte:** H-04 (Datenordner anlegen, im M4-DEP wählen); H-05 Designer-Gespräch (fällig nach M1-DEP); H-06 (Smoke-Tests M2–M4, Merges); AP-37 und Q-10 (niedrige Befunde, Nutzer entscheidet).
+- **Stand:** 2026-10-28 · M4 W2 und W2b abgeschlossen. Alle Pakete AP-01–AP-36 sind in `dev` gemergt (HEAD 3e21909, gepusht). Pflegeauftrag: Abhängigkeits-Update AP-38 eingeplant (M4 W3).
+- **Fertig:** AP-01–AP-36, M0-DEP, M1-DEP · **Bereit:** AP-38 (M4 W3, OPS, opus, Opus-Grund Sicherheit), M2-DEP, M3-DEP (Nutzer) · **Offen:** M4-DEP (W4, hängt an AP-38), H-04, H-05, H-06.
+- **Unterbrochen oder laufend:** keine Coder-Arbeit. Worktrees und Branches der gemergten Pakete aufräumen: Lead (§9.1 Schritt 7). Designer-Interview läuft (Nutzer, `docs/design/`, unversioniert); UI-Pakete ohne Design-Review. **Hauptcheckout steht auf `stage`:** Der Plan-Commit des Pflegeauftrags 2026-10-28 wartet auf `dev`.
+- **Erkenntnisse:** Die npm-Warnungen (`inflight`, `glob@7`, `rimraf@2`, `boolean`) stammen aus dem Build-Werkzeug (alle `dev: true`), Ketten in §18 (2026-10-28). `npm audit` und `npm view` hat der Planner nicht ausgeführt (Regel 3, Datenabfluss); der Lead führt sie lesend vor dem Auftrag an den Coder aus. Datenordner-Wechsel: PE-65, PE-70, PE-71. Niedrige Befunde weiter als Vorschlag AP-37 in §16 (nicht eingeplant).
+- **Nächster Schritt:** Lead: `npm audit` und `npm view electron-builder versions` (nur lesen), Ergebnis in den Auftrag an AP-38; Start, sobald `dev` ausgecheckt ist. Danach Nutzer: M4-DEP (W4). Reihenfolge der Smoke-Tests: Q-13.
+- **Offene Nutzerpunkte:** PE-72 und Q-13 (Reihenfolge AP-38 und Smoke-Tests M2/M3); H-04 (Datenordner, im M4-DEP wählen); H-05 Designer-Gespräch; H-06 (Smoke-Tests M2–M4, Merges); AP-37 und Q-10 (niedrige Befunde, Nutzer entscheidet).
 
 ### Rollen und Dokumente
 
@@ -75,7 +75,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 9 | Meilensteine und Wellen | fertig | – | G2 ✔ |
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
-| 12 | Arbeitspakete | fertig (M0–M4, alle Pakete gemergt) | – | G2 ✔ (M0–M4) |
+| 12 | Arbeitspakete | fertig (M0–M4 gemergt; Nachtrag AP-38, M4 W3) | – | G2 ✔ (M0–M4) |
 | 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-04, H-05, H-06 offen) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
@@ -380,9 +380,9 @@ flowchart TD
 
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
-| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version, description, license), AP-28 (`tsconfig.web.json`, `.env.example`), AP-30 (`vitest.config.ts`, nur Coverage-Include) und AP-34 (`tsconfig.node.json`: `e2e/**` in den Typecheck) | M0 W1, M1 W1, M1 W4, M4 W1, M4 W2 |
+| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version, description, license), AP-28 (`tsconfig.web.json`, `.env.example`), AP-30 (`vitest.config.ts`, nur Coverage-Include) und AP-34 (`tsconfig.node.json`: `e2e/**` in den Typecheck) und AP-38 (nur Versionsanhebungen in `package.json` und Lockfile; Ausnahme zu Grundregel 5, PE-72) | M0 W1, M1 W1, M1 W4, M4 W1, M4 W2, M4 W3 |
 | `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`), AP-31 (`aggregate/fixedCosts.ts`, nach Merge von AP-30) und AP-32 (`goals/`, nach Merge von AP-20) | M1 W1 (AP-28), M1 W4 (AP-31), M3 W2 (AP-32) |
-| `electron-builder.yml` | AP-01, später AP-27; AP-34 nur Kommentar Z. 19 | M0 W1, M4 W1, M4 W2 |
+| `electron-builder.yml` | AP-01, später AP-27; AP-34 nur Kommentar Z. 19; AP-38 nur, wenn eine neue Version eine Konfigurationsänderung verlangt | M0 W1, M4 W1, M4 W2, M4 W3 |
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
 | `src/preload/index.ts` | AP-01 → AP-07 | M0 W1, W3 |
@@ -411,7 +411,7 @@ flowchart TD
 | M1 | Prototyp | Buchungs-Engine, UI-Baukasten, Einstellungen/Kurse, Projekte, Dienste, Ausgaben/Einnahmen, einfache Übersicht | Kernfluss erfassen → Übersicht stimmt; danach Designer-Gespräch (H-05) |
 | M2 | Menschen & Marketing | Kennzahlen-Kern, Mitarbeiterverwaltung, Kampagnen, Nutzerzahlen | Personen, Kampagnen, Nutzerstände erfassbar mit Kennzahlen |
 | M3 | Auswertung | Prognose/Break-even/Ziel-Kern, Diagramme, Statistikseite, Startseite mit Zielen, PDF | Statistiken und PDF stimmen mit App überein |
-| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36) | Release-Installer auf `D:`, Abnahme G3 |
+| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36), Abhängigkeits-Update (AP-38) | Release-Installer auf `D:`, Abnahme G3 |
 
 ### 9.1 Ablauf einer Welle
 
@@ -518,7 +518,8 @@ flowchart TD
 | W1 | AP-25, AP-26, AP-27 |
 | W2 | AP-33 (UI, Aufräumen) und AP-34 (MAIN/OPS, Härtung), parallel, Eigentum disjunkt (§8). Nach dem zweiten Merge `npm run typecheck` und `npm run test:e2e` (AP-34 bindet `e2e/**` in den Typecheck ein) |
 | W2b | AP-35 (MAIN, Alt-Backup vor dem Ordnerwechsel, nach AP-34) und AP-36 (UI, Hinweis, nach AP-33), parallel, Eigentum disjunkt |
-| W3 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 bis AP-36 |
+| W3 | AP-38 (OPS, Abhängigkeits-Update, Deprecation-Warnungen und npm audit; Nachtrag 2026-10-28, allein in der Welle) |
+| W4 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 bis AP-36 und AP-38 |
 
 ##### M4-DEP – Deployment [Mensch]
 
@@ -530,6 +531,7 @@ flowchart TD
   - [ ] PDF-Export aus der installierten App erzeugt eine gültige Datei; Optik per Sichtprüfung (AP-26 prüft nur die Dateierzeugung)
   - [ ] Datenordner wechseln: `D:\appManagerDaten` in der installierten App wählen (H-04). Danach liegt im bisherigen Ordner ein Backup (`backups/`, neuer Zeitstempel) und im neuen Ordner ein Backup, falls dort schon Daten liegen; ein leerer Ordner bekommt kein Backup (PE-65, PE-70)
   - [ ] Abbruch-Hinweis: Wechsel mit absichtlich scheiternder Sicherung (Testweg wie AP-35, nur mit einem Testordner, nie mit den echten Daten) zeigt in den Einstellungen „Der bisherige Datenordner bleibt aktiv“; der alte Ordner bleibt aktiv und es wird nichts gespeichert (PE-70, PE-71)
+  - [ ] Installer nach AP-38 neu gebaut (`npm ci`, `npm run dist`) und installiert; App startet (Build-Werkzeug geändert, PE-72)
   - [ ] Abnahmekriterien §1 abgehakt
 
 ---
@@ -582,7 +584,8 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-34 | Härtung MAIN/OPS (PDF-Zeitlimit und Validierung, ZIP-Befunde, Konfiguration, Doku) | M4 | MAIN+OPS+CORE | W2 | AP-07, AP-24–AP-27, AP-32 | L | opus | c2 | fertig |
 | AP-35 | Backup des alten Datenordners vor dem Wechsel (PE-70) | M4 | MAIN | W2b | AP-07, AP-34 | M | opus | c1 | fertig |
 | AP-36 | Hinweis bei abgebrochenem Ordnerwechsel (PE-71) | M4 | UI | W2b | AP-33 | S | haiku | c1 | fertig |
-| M4-DEP | Release und Abnahme | M4 | HUM | W3 | AP-25–AP-27, AP-33–AP-36 | H | – | Nutzer | bereit |
+| AP-38 | Abhängigkeiten aktualisieren (Deprecation-Warnungen, npm audit) | M4 | OPS | W3 | AP-27, AP-34 | M | opus | – | bereit |
+| M4-DEP | Release und Abnahme | M4 | HUM | W4 | AP-25–AP-27, AP-33–AP-36, AP-38 | H | – | Nutzer | offen |
 
 ---
 
@@ -622,6 +625,7 @@ flowchart LR
     AP34["AP-34"]
     AP35["AP-35"]
     AP36["AP-36"]
+    AP38["AP-38"]
   end
   AP05 & AP06 --> AP09
   AP02 & AP07 --> AP28
@@ -635,6 +639,7 @@ flowchart LR
   AP24 --> AP34
   AP34 --> AP35
   AP33 --> AP36
+  AP27 & AP34 --> AP38
 ```
 
 **Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
@@ -644,6 +649,8 @@ flowchart LR
 **Nachtrag 2026-10-28 (Pflegeauftrag):** AP-33 (UI, sonnet) und AP-34 (MAIN/OPS, opus) bilden M4 W2 und laufen parallel; ihr Dateieigentum ist disjunkt (§8). AP-33 hängt an fertigen UI- und M2/M3-Paketen, AP-34 an AP-07, AP-24–AP-27 und AP-32. M4-DEP (W3) hängt an AP-33 bis AP-36 (siehe Pflegeauftrag 2 unten).
 
 **Nachtrag 2026-10-28 (Pflegeauftrag 2):** AP-35 (MAIN, opus) hängt an AP-34 und AP-07 (Eigentum `storage/service.ts` und dessen Test, erst nach dem AP-34-Merge). AP-36 (UI, haiku) hängt an AP-33 (Eigentum `DataSection.tsx`, erst nach dem AP-33-Merge). Beide laufen in W2b parallel; ihr Eigentum ist disjunkt.
+
+**Nachtrag 2026-10-28 (Pflegeauftrag 3):** AP-38 (OPS, opus) hängt nur an AP-27 und AP-34 (beide `fertig`) und bildet M4 W3 allein, weil es `package.json` und das Lockfile ändert (Ausnahme zu §8 Grundregel 5, PE-72). M4-DEP (W4) hängt an AP-38, weil der Installer mit dem neuen Build-Werkzeug geprüft wird. M2-DEP und M3-DEP haben keine Kante zu AP-38 (Reihenfolge: Q-13).
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1640,6 +1647,43 @@ flowchart LR
 
 ---
 
+#### AP-38 – Abhängigkeiten aktualisieren (Deprecation-Warnungen, npm audit)
+
+- **Meilenstein, Lane, Welle:** M4 · OPS · W3 (Nachtrag 2026-10-28, allein in der Welle, vor M4-DEP). ID AP-38, weil AP-37 als Vorschlag in §16 belegt ist.
+- **Ziel:** Die Warnungen aus `npm ci` beseitigen: `inflight@1.0.6`, `glob@7.2.3`, `rimraf@2.6.3`, `boolean@3.2.0`. Bekannte Lücken aus `npm audit` in Produktionsabhängigkeiten schließen. Alle vier Pakete sind `dev: true` (Build-Werkzeug, nicht im Installer). Die Ketten stehen in §18 (2026-10-28).
+- **Pflichtlektüre:** PE-19 (Lizenzen), PE-32 (freigegebene Abhängigkeiten), PE-72, §3 (Checks), §7.3 (neue Abhängigkeit melden), §8 Grundregel 5 (Ausnahme), `package.json`, `package-lock.json`, `electron-builder.yml`
+- **Abhängigkeiten:** AP-27, AP-34 (beide `fertig`)
+- **Parallel möglich mit:** keine (die Welle enthält nur dieses Paket)
+- **Dateien (Eigentum):** `package.json` (nur Versionszeilen und `overrides`), `package-lock.json`, `electron-builder.yml` (nur, wenn eine neue Version eine Konfigurationsänderung verlangt). **Ausnahme zu §8 Grundregel 5 (PE-72):** Das Paket ändert `package.json` und das Lockfile nach dem Start von M4. Keine andere Datei.
+- **Nicht anfassen:** `src/**`, `e2e/**`, `build/**`, `docs/**`, `.npmrc`. `electron` bleibt auf 45.0.0. Außer `electron-builder` bleibt jede direkte Versionsangabe unverändert.
+- **Freigegebene Abhängigkeiten:** Nur Versionsanhebungen freigegebener Pakete (PE-32), vor allem `electron-builder` (weiter exakt gepinnt). Keine neuen direkten Pakete. Jeder neue oder geänderte Lockfile-Eintrag hat eine Lizenz aus MIT, Apache-2.0, BSD oder ISC (PE-19, Feld `license`). Ein Paket mit anderer Lizenz oder ein neu eingeführtes Paket ist Eskalation (§7.3).
+- **Umsetzung:**
+  0. Der Lead gibt `npm audit` und `npm view electron-builder versions` (nur lesen) vorab in den Auftrag. Der Planner hat beides nicht ausgeführt.
+  1. Ketten prüfen (lesend): `npm ls inflight glob rimraf boolean --all`. Befund: `@electron/asar@3.4.1` ist von `app-builder-lib@26.18.0` exakt gepinnt und zieht `glob@7`, das wiederum `inflight` zieht. `electron-builder-squirrel-windows` ist Peer von `app-builder-lib` (Ziel ist `nsis`, Squirrel wird nicht genutzt) und zieht `electron-winstaller` → `temp@0.9.4` → `rimraf@2.6.3`. `global-agent` (optionale Abhängigkeit von `@electron/get@3.1.0` unter `app-builder-lib`) zieht `boolean` und `roarr`.
+  2. Die kleinste `electron-builder`-Version finden, bei der die Ketten verschwinden. Versionen nur über `npm view` ermitteln, nicht raten. Danach `npm install` mit der exakten Version. Kein `npm update` über alle Pakete.
+  3. Bleibt eine Warnung, ist ein `overrides`-Eintrag nur für diesen Pfad zulässig, wenn `npm run dist` und `npm test` zeigen, dass das überschriebene Paket kompatibel ist. Begründung im Commit-Body. `temp` verlangt `rimraf` in `~2.6.2`, ein Override dort ist nur mit Test vertretbar. `.npmrc`-Schalter (z. B. `legacy-peer-deps`) werden nicht geändert; das entscheidet der Nutzer.
+  4. `npm ci` (Neuinstallation) ausführen und `npm ls --omit=dev inflight glob rimraf boolean` prüfen. Verbleibende Warnungen mit Pfad und Grund im Bericht nennen.
+  5. `npm audit` und `npm audit --omit=dev` auswerten (lesend), Ergebnis im Bericht.
+  6. Lizenzen aller geänderten oder neuen Lockfile-Einträge gegen PE-19 prüfen.
+  7. Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run test:e2e`, danach `npm run dist` (Installer in `release/`). Den Installer nicht installieren; das macht der Nutzer im M4-DEP.
+  8. Gibt es keine Version ohne Warnung und ist ein Override nicht sauber testbar, meldet der Coder `blockiert` (§7.3).
+- **Schnittstellen:** –
+- **Akzeptanzkriterien:**
+  - `npm ci` ohne die vier Warnungen, oder mit einem im Bericht begründeten Rest (nur `dev`, Pfad und Grund genannt).
+  - `npm ls --omit=dev` enthält keines der vier Pakete.
+  - `npm audit --omit=dev` ohne hohe oder kritische Befunde. Befunde nur in Dev-Abhängigkeiten stehen im Bericht.
+  - `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run test:e2e` grün.
+  - `npm run dist` erzeugt den Installer in `release/`.
+  - Diff von `package.json`: nur Versionszeilen (und ggf. `overrides`), keine neuen direkten Pakete, `electron` unverändert. Alle neuen Lizenzen nach PE-19.
+- **Tests:** keine neuen Tests. Die bestehenden Checks sind das Regressionsnetz. Installation und Start prüft der Nutzer im M4-DEP.
+- **Review-Schwerpunkte:** Diff von `package.json` und Lockfile (nur Versionen, keine neuen Pakete), Lizenzen (PE-19), Begründung jedes `overrides`, Auswertung von `npm audit`, Produktionsabhängigkeiten unverändert (`npm ls --omit=dev`).
+- **Design-Review:** nein
+- **Doku-Pflichten:** keine. Begründung im Commit-Body nach Git-Schema.
+- **Aufwand:** M · **Modell:** opus · **Effort:** high
+- **Opus-Grund:** Sicherheit (bekannte Lücken in Abhängigkeiten, R6; Entscheidung über Versionen und `overrides`)
+- **Kürzbar bei Budgetnot:** nein
+- **Commit-Typ:** `chore(AP-38): update build tooling to drop deprecated deps`
+
 ## 13. Menschliche Schritte
 
 | ID | Schritt | Ab wann nötig | Blockiert | Erledigt |
@@ -1662,8 +1706,8 @@ flowchart LR
 | M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 5 (2 opus) | 9,75 h | 2–3 |
-| M4 | 7 (3 opus) | 11 h | 3–4 |
-| **Gesamt** | **36** | **57,25 h** + Reviews | **14–18** |
+| M4 | 8 (4 opus) | 12,5 h | 3–4 |
+| **Gesamt** | **37** | **58,75 h** + Reviews | **14–18** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
@@ -1672,6 +1716,8 @@ flowchart LR
 **Nachtrag 2026-10-28:** AP-33 (L, sonnet, 2,5 h) und AP-34 (L, opus, 2,5 h) sind in der M4-Zeile enthalten (M4 jetzt 8,75 h statt 3,75 h). Gesamt 55 h. Die Fensterzahl wird als 13–17 geschätzt; sie bleibt geschätzt, bis Messwerte aus M4 vorliegen.
 
 **Nachtrag 2026-10-28 (Pflegeauftrag 2):** AP-35 (M, opus, 1,5 h) und AP-36 (S, haiku, 0,75 h) kommen zur M4-Zeile dazu. M4 jetzt 11 h mit 7 Paketen (3 opus). Gesamt 36 Pakete, 57,25 h, geschätzt 14–18 Fenster.
+
+**Nachtrag 2026-10-28 (Pflegeauftrag 3):** AP-38 (OPS, opus, M, 1,5 h) ist in der M4-Zeile enthalten. M4 jetzt 12,5 h mit 8 Paketen (4 opus). Gesamt 37 Pakete, 58,75 h. Die Fensterschätzung 14–18 bleibt geschätzt, bis Messwerte vorliegen.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. Die Fensterzahlen wurden bei einem früheren Zielwert geschätzt; den aktuellen Wert liefert `.claude/ma-usage.json`. 5 parallele Coder (PE-23) erreichen den Zielwert schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1782,6 +1828,7 @@ flowchart LR
 | PE-69 | Das Zweiturteil (Anbieter-Brücke) im Review ist abgeschaltet; Review Runde 1 reicht. Betrifft nur die Agent-Dateien, nicht den Plan. | Betriebsentscheidung, bestätigt | Nutzer am 2026-10-28 (Chat) |
 | PE-70 | Datenordner-Wechsel: Vor dem Umschalten wird ein Backup des bisherigen aktiven Ordners angelegt (unter `backups/` im alten Ordner, dieselbe Regel wie das Start-Backup, Rotation letzte 10). Schlägt es fehl, bricht der Wechsel ab: der alte Ordner bleibt aktiv, nichts wird umgeschaltet, keine Einstellung gespeichert. Zusätzlich zum Start-Backup im neuen Ordner (PE-65). Umsetzung AP-35. | Q-11 (Vorschlag „Abbruch bei Fehler“ bestätigt); Q-12 (Abbruch auch, wenn das Alt-Backup scheitert) bestätigt | Nutzer am 2026-10-28 (Chat) |
 | PE-71 | Bei einem fehlgeschlagenen Ordnerwechsel zeigen die Einstellungen zusätzlich den Satz „Der bisherige Datenordner bleibt aktiv“. Der Fehlercode bleibt IO, kein neuer Vertrag (§4 unverändert). Umsetzung AP-36 (Folgepaket). | Der allgemeine IO-Text („Die Daten konnten nicht gelesen oder gespeichert werden“) ist für einen abgebrochenen Wechsel irreführend | Nutzer am 2026-10-28 (Chat, bestätigt) |
+| PE-72 | Abhängigkeits-Update als AP-38 (M4 W3, OPS, opus, Opus-Grund Sicherheit): behebt die npm-Warnungen `inflight`, `glob@7`, `rimraf@2`, `boolean` (alle aus dem Build-Werkzeug, `dev: true`) und bekannte Lücken nach `npm audit`. Nur Versionsanhebungen freigegebener Pakete, keine neuen Pakete, Lizenzen nach PE-19, `electron` bleibt 45.0.0. Ausnahme zu §8 Grundregel 5 (`package.json` und Lockfile nach dem Start von M4). M4-DEP hängt an AP-38 (Installer neu prüfen). Die Einordnung als erstes Paket der nächsten Welle ist Vorschlag des Planners `(angenommen)`, Bestätigung über Q-13. | Nutzer-Hinweis am 2026-10-28 (npm ci-Warnungen, über den Lead); Analyse 2026-10-28 (`npm ls`, Lockfile); `npm audit` noch offen | Nutzer am 2026-10-28 (Auftrag über Lead) |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1800,6 +1847,7 @@ flowchart LR
 | Q-10 | Befunde aus §18 ohne Eintrag im Umfang von AP-33/AP-34 aufnehmen? AP-22: NaN-Verhalten von `convert` in Diagrammen nicht belegt. AP-23: Einnahmenziel mit 0 gilt sofort als erreicht; Hinweis „Zielwerte in EUR“ im Label. AP-24: Kampagnentabelle zeigt im Projektbericht Gesamtkosten | O | §18, AP-33 | in ein Folgepaket nach M4-DEP, oder als bekannt verwerfen | offen (Nutzer); Vorschlag AP-37 in „Vorgeschlagene Änderungen“ |
 | Q-11 | Soll der Datenordner-Wechsel zusätzlich ein Backup des bisherigen Ordners anlegen? Heute nur das Start-Backup im neuen Ordner (PE-65). | W | §4, PE-18, PE-65 | ja, vor dem Wechsel sichern; sonst bleibt der bisherige Stand nur im alten Ordner | geklärt → PE-70 (Nutzer am 2026-10-28, Chat) |
 | Q-12 | Darf der Wechsel stattfinden, wenn das Backup des alten Ordners scheitert (z. B. beschädigte Datei, fehlende Schreibrechte)? Ausweg bei Abbruch: der Nutzer kopiert Dateien von Hand. | W | PE-70, AP-35 | nein, Wechsel abbrechen (wie PE-70) | geklärt → PE-70 (Nutzer am 2026-10-28, Chat) |
+| Q-13 | Reihenfolge: Soll AP-38 vor den Smoke-Tests M2 und M3 laufen? AP-38 ändert nur das Build-Werkzeug, nicht die App-Funktionen; der Installer ändert sich aber. | W | §9.2 (M2-DEP, M3-DEP, M4-DEP), §10, PE-72 | AP-38 zuerst (Merge in `dev`, dann Installer neu bauen). Danach H-06: M2 und M3 als Funktionstests, M4-DEP als Installer-Test. M2 und M3 haben keine Kante zu AP-38, der Nutzer kann auch früher testen. | offen (Nutzer) |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
@@ -1846,6 +1894,7 @@ flowchart LR
 | R4 Secrets | alle (Review); App ohne Secrets |
 | R5 Rollen | §7.3, alle |
 | R6 Prompt-Injection / OWASP | AP-03, AP-07, AP-25, AP-34, Review „Verdächtige Inhalte“ |
+| R6 bekannte Lücken in Abhängigkeiten (PE-72), Lizenzen (PE-19) | AP-38, Review (Lockfile-Diff, `npm audit`, Lizenzen) |
 | Abnahme G3 | M4-DEP, AP-26 |
 
 ---
@@ -1932,3 +1981,5 @@ flowchart LR
 | 2026-10-28 | Erkenntnis AP-35: Wechsel A→B→A legt zwei Backups in A an (Rotation hält `keep`). Pfadvergleich unter Windows case-sensitiv (`D:\X` → `d:\x` legt ein unnötiges Backup an, harmlos). Test (c) trennt die Rotation nicht sauber (endet mit `open(a)`). Backup eines leeren Ordners entsteht nicht (`createBackup`-Verhalten aus AP-34) | Review-Befunde, kein Blocker | AP-35, AP-37 (Vorschlag) | Lead-Merge |
 | 2026-10-28 | Erkenntnis AP-36: Zusatztext erscheint auch bei INTERNAL-Fehler; alte Fehlermeldung bleibt nach späterem erfolgreichem Restore/Import stehen (niedrig); kein Unit-Test, Sichtprüfung im M4-DEP | Review-Befunde, kein Blocker | AP-36, AP-37 (Vorschlag), M4-DEP | Lead-Merge |
 | 2026-10-28 | Vorschlag AP-37 „Restbefunde M4 und Q-10“ in §16 eingetragen (Prio niedrig, nicht eingeplant). Enthält AP-33-, AP-34-, AP-35-, AP-36-Reste und Q-10. Nutzer entscheidet | Lead-Auftrag | §16, Q-10 | Nutzer offen |
+| 2026-10-28 | Pflegeauftrag (Lead, Nutzer-Anlass `npm ci`-Warnungen): Abhängigkeitsanalyse nur lesend. Befund: `inflight@1.0.6` und `glob@7.2.3` über `@electron/asar@3.4.1` (exakt von `app-builder-lib@26.18.0` gepinnt). `rimraf@2.6.3` über `temp@0.9.4` → `electron-winstaller@5.4.0`, das npm als Peer von `electron-builder-squirrel-windows` automatisch installiert (Ziel ist `nsis`, Squirrel ungenutzt). `boolean@3.2.0` über `global-agent` (optionale Abhängigkeit von `@electron/get@3.1.0` unter `app-builder-lib`) und `roarr`. Alle vier `dev: true`, nicht im Installer. `npm audit` und `npm view` nicht ausgeführt (Regel 3). Offen: Elternversion-Check und Audit durch den Lead | Analyse; Audit offen | AP-38, PE-72 | Nutzer-Anlass am 2026-10-28 (über Lead) |
+| 2026-10-28 | AP-38 „Abhängigkeiten aktualisieren (Deprecation-Warnungen, npm audit)“ angelegt (M4 W3, Lane OPS, M, opus, Opus-Grund Sicherheit), allein in der Welle. ID AP-38, weil AP-37 als Vorschlag belegt ist. M4-DEP auf W4, hängt an AP-38; Smoke-Test-Prüfpunkt im M4-DEP ergänzt. Ausnahme zu §8 Grundregel 5 vermerkt (PE-72). §0, §8, §9, §9.2, §10, §11, §12, §14, §16 (PE-72, Q-13), §17 angepasst. Plan-Commit noch offen, Hauptcheckout steht auf `stage` | Pflegeauftrag (Lead) | AP-38, M4-DEP, §0, §8–§17 | Nutzer-Anlass; Reihenfolge `(angenommen)`, Bestätigung über Q-13 |
