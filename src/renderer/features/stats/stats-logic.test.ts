@@ -343,4 +343,45 @@ describe('chart mapping', () => {
       { key: '__unallocated', label: 'none', cents: 4 }
     ])
   })
+
+  it('keeps NaN out of the chart data (missing rate, invalid value)', () => {
+    const bad = Number.MAX_SAFE_INTEGER + 2
+    const months = [
+      { month: '2026-01', incomeCents: 100, expenseCents: 40, balanceCents: 60 },
+      { month: '2026-02', incomeCents: bad, expenseCents: 40, balanceCents: 0 }
+    ]
+    const categories = [
+      { key: 'hosting', cents: 50 },
+      { key: 'ads', cents: bad }
+    ]
+    const fixed = [
+      { projectId: 'a', name: 'A', cents: 10 },
+      { projectId: null, name: null, cents: bad }
+    ]
+    const hasNaN = (values: readonly number[]) => values.some((v) => Number.isNaN(v))
+    for (const m of [chartMoney('USD', rates), chartMoney('CHF', rates)]) {
+      const points = toMonthlyPoints(months, m.convert)
+      const slices = toCategorySlices(categories, (k) => k, m.convert)
+      const fixedSlices = toFixedCostSlices(fixed, 'none', m.convert)
+      expect(hasNaN(points.flatMap((p) => [p.incomeCents, p.expenseCents]))).toBe(false)
+      expect(hasNaN(slices.map((s) => s.cents))).toBe(false)
+      expect(hasNaN(fixedSlices.map((s) => s.cents))).toBe(false)
+    }
+    // With a rate, an unconvertible value yields NaN and is left out.
+    const usd = chartMoney('USD', rates).convert
+    expect(toMonthlyPoints(months, usd).map((p) => p.month)).toEqual(['2026-01'])
+    expect(toCategorySlices(categories, (k) => k, usd).map((s) => s.key)).toEqual(['hosting'])
+    expect(toFixedCostSlices(fixed, 'none', usd).map((s) => s.key)).toEqual(['a'])
+    expect(
+      toCategorySlices(
+        categories,
+        (k) => k,
+        () => Number.NaN
+      )
+    ).toEqual([])
+    // Missing rate: fallback to EUR, valid values unchanged (no NaN from the rate).
+    expect(toMonthlyPoints(months.slice(0, 1), chartMoney('CHF', rates).convert)).toEqual([
+      { month: '2026-01', incomeCents: 100, expenseCents: 40 }
+    ])
+  })
 })
