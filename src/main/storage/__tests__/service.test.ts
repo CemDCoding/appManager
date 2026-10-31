@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { readdir, writeFile } from 'node:fs/promises'
+import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { listBackups } from '../backups'
 import { StorageError } from '../errors'
 import { DataService } from '../service'
 import { makeTempDir, personInput, projectInput, removeDir, testId } from './fixtures'
@@ -12,6 +13,11 @@ beforeEach(async () => {
 afterEach(async () => {
   await removeDir(root)
 })
+
+/** Inverts the letter case of every character (`D:\X` -> `d:\x`). */
+function swapCase(path: string): string {
+  return [...path].map((c) => (c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase())).join('')
+}
 
 function clock(): () => Date {
   let t = new Date(2026, 2, 1, 10, 0, 0).getTime()
@@ -158,16 +164,34 @@ describe('DataService', () => {
 
     it('rotates old backups in the previous folder', async () => {
       const a = join(root, 'a')
-      const b = join(root, 'b')
       const service = new DataService({ now: clock(), newId: testId, keepBackups: 2 })
       await service.open(a)
       await service.store.create('persons', personInput())
-      for (let i = 0; i < 3; i++) {
-        await service.open(b)
-        await service.open(a)
-      }
-      // 6 backups were made in a (3 before leaving, 3 on start), 2 remain.
-      expect(await readdir(join(a, 'backups'))).toHaveLength(2)
+      // Older backups in a: start backups of reopening the same folder (no switch).
+      await service.open(a)
+      await service.open(a)
+      await service.open(a)
+      const older = (await listBackups(a)).map((b) => b.name)
+      expect(older).toHaveLength(2)
+      await service.store.create('projects', projectInput('Before Leaving'))
+
+      // Only switches to new folders, never back to a.
+      await service.open(join(root, 'b'))
+      const afterB = (await listBackups(a)).map((b) => b.name)
+      expect(afterB).toHaveLength(2)
+      // Newest first: the backup made on leaving, then the newest older one.
+      expect(older).not.toContain(afterB[0])
+      expect(afterB[1]).toBe(older[0])
+      expect(afterB).not.toContain(older[1])
+      const left = JSON.parse(
+        await readFile(join(a, 'backups', afterB[0]!, 'projects.json'), 'utf8')
+      ) as { items: unknown[] }
+      expect(left.items).toHaveLength(1)
+
+      await service.open(join(root, 'c'))
+      expect(service.dir).toBe(join(root, 'c'))
+      // Leaving b (no data) does not touch the backups of a.
+      expect((await listBackups(a)).map((b) => b.name)).toEqual(afterB)
     })
 
     it('makes no extra backup when the same folder is opened again', async () => {
@@ -180,5 +204,22 @@ describe('DataService', () => {
       // Only the start backup of the reopen, no backup of the "previous" folder.
       expect(await readdir(join(a, 'backups'))).toHaveLength(1)
     })
+
+    it.skipIf(process.platform !== 'win32')(
+      'makes no extra backup when the same folder is opened with other casing (win32)',
+      async () => {
+        const a = join(root, 'Data')
+        const service = new DataService({ now: clock(), newId: testId })
+        await service.open(a)
+        await service.store.create('persons', personInput())
+        // Same folder on Windows, different letter case (incl. drive letter).
+        await service.open(swapCase(a))
+        expect(await readdir(join(a, 'backups'))).toHaveLength(1)
+
+        // A really different folder still gets the backup of the previous one.
+        await service.open(join(root, 'Other'))
+        expect(await readdir(join(a, 'backups'))).toHaveLength(2)
+      }
+    )
   })
 })

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { aggregate } from '@core/aggregate/aggregate'
 import { breakEven, forecast } from '@core/forecast/forecast'
 import { buildLedger } from '@core/ledger/ledger'
+import { campaignRanking } from '@core/metrics/metrics'
+import { projectCampaignShares } from '@/features/campaigns'
 import {
   ALL,
   campaign,
@@ -162,6 +164,48 @@ describe('buildReportModel – Portfolio', () => {
     expect(m2.projects.map((p) => p.projectId)).toEqual(['A', 'B', null])
     expect(m2.projects[2]).toMatchObject({ expenseCents: 700, breakEven: null })
     expect(m2.unallocatedCount).toBe(1)
+  })
+})
+
+describe('buildReportModel – Kampagnen (Projektanteil, PE-49)', () => {
+  // Ungerade Werte, damit die Aufteilung auf zwei Projekte einen Rest hat.
+  const c = {
+    ...campaign('c1', '2026-02-15', '2026-02-20', { cents: 2_001 }, ALL),
+    impressions: 1_000,
+    clicks: 30,
+    usersGained: 7,
+    rating: 4
+  }
+  const d = { ...data(), campaigns: [c] }
+  const forProject = (id: string) =>
+    buildReportModel(d, { scope: 'project', projectId: id, period: PERIOD }, TODAY).campaigns
+  const total = campaignRanking([c], 'costPerUser').items[0]!
+
+  it('zeigt im Projektbericht nur den Anteil; Summe über alle Projekte = Gesamt', () => {
+    const a = forProject('A')
+    const b = forProject('B')
+    expect(a).toHaveLength(1)
+    expect(b).toHaveLength(1)
+    // Wie der Kampagnen-Tab des Projekts.
+    for (const [rows, id] of [
+      [a, 'A'],
+      [b, 'B']
+    ] as const) {
+      const share = projectCampaignShares([c], d.projects, id)[0]!
+      expect(rows[0]).toMatchObject({ costEurCents: share.costEurCents, users: share.users })
+    }
+    expect(a[0]!.costEurCents).toBeLessThan(2_001)
+    expect(a[0]!.costEurCents + b[0]!.costEurCents).toBe(2_001)
+    expect(a[0]!.users + b[0]!.users).toBe(7)
+    // Verhältnisse und Bewertung bleiben die der ganzen Kampagne.
+    expect(a[0]!.kpis).toEqual(total.kpis)
+    expect(a[0]!.campaign.rating).toBe(4)
+  })
+
+  it('Portfolio unverändert: Werte der ganzen Kampagne', () => {
+    const m = buildReportModel(d, { scope: 'portfolio', period: PERIOD }, TODAY)
+    expect(m.campaigns).toEqual([{ ...total, costEurCents: 2_001, users: 7 }])
+    expect(m.errors.campaigns).toBe(0)
   })
 })
 

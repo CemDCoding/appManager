@@ -1,5 +1,5 @@
 /** Electron wiring of the ZIP export/import (AP-25). */
-import { readFile, stat, writeFile } from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
 import {
   dialog,
   type BrowserWindow,
@@ -47,12 +47,6 @@ export function setupTransfer(options: TransferSetupOptions): void {
         : await dialog.showOpenDialog(dialogOptions)
       return result.canceled ? null : (result.filePaths[0] ?? null)
     },
-    fileSize: async (path) => {
-      const info = await stat(path)
-      if (!info.isFile()) throw new Error('not a file')
-      return info.size
-    },
-    readFile: (path) => readFile(path),
     writeFile: (path, data) => writeFile(path, data)
   })
   registerTransferHandlers(options.ipcMain as unknown as IpcMainLike, {

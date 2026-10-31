@@ -352,36 +352,48 @@ export function chartMoney(displayCurrency: string, rates: readonly RateEntry[])
   }
 }
 
-/** Monatszeilen → `BarChartMonthly`-Daten. */
+/**
+ * Monatszeilen → `BarChartMonthly`-Daten. Monate mit nicht umrechenbarem Wert
+ * (NaN/∞) werden weggelassen, damit die Diagrammdaten nur gültige Zahlen enthalten.
+ */
 export function toMonthlyPoints(
   rows: readonly MonthRow[],
   convert: ChartMoney['convert']
 ): { month: string; incomeCents: number; expenseCents: number }[] {
-  return rows.map((r) => ({
-    month: r.month,
-    incomeCents: convert(r.incomeCents),
-    expenseCents: convert(r.expenseCents)
-  }))
+  return rows
+    .map((r) => ({
+      month: r.month,
+      incomeCents: convert(r.incomeCents),
+      expenseCents: convert(r.expenseCents)
+    }))
+    .filter((p) => Number.isFinite(p.incomeCents) && Number.isFinite(p.expenseCents))
 }
 
-/** Kategorien → `DonutChart`-Daten. */
+/** Kategorien → `DonutChart`-Daten (nicht umrechenbare Werte werden weggelassen). */
 export function toCategorySlices(
   rows: readonly CategoryRow[],
   label: (key: string) => string,
   convert: ChartMoney['convert']
 ): { key: string; label: string; cents: number }[] {
-  return rows.map((r) => ({ key: r.key, label: label(r.key), cents: convert(r.cents) }))
+  return rows
+    .map((r) => ({ key: r.key, label: label(r.key), cents: convert(r.cents) }))
+    .filter((s) => Number.isFinite(s.cents))
 }
 
-/** Fixkosten je Projekt → `DonutChart`-Daten (`unallocatedLabel` für die Zeile ohne Projekt). */
+/**
+ * Fixkosten je Projekt → `DonutChart`-Daten (`unallocatedLabel` für die Zeile ohne
+ * Projekt; nicht umrechenbare Werte werden weggelassen).
+ */
 export function toFixedCostSlices(
   rows: readonly FixedCostRow[],
   unallocatedLabel: string,
   convert: ChartMoney['convert']
 ): { key: string; label: string; cents: number }[] {
-  return rows.map((r) => ({
-    key: r.projectId ?? '__unallocated',
-    label: r.name ?? unallocatedLabel,
-    cents: convert(r.cents)
-  }))
+  return rows
+    .map((r) => ({
+      key: r.projectId ?? '__unallocated',
+      label: r.name ?? unallocatedLabel,
+      cents: convert(r.cents)
+    }))
+    .filter((s) => Number.isFinite(s.cents))
 }

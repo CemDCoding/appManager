@@ -43,7 +43,8 @@ export class DataService {
    * start backup (a failed backup is logged, the app still starts). While a
    * collection is invalid, old backups are not rotated away.
    *
-   * When switching away from an active folder (different resolved path), that
+   * When switching away from an active folder (different resolved path,
+   * case-insensitive on Windows), that
    * folder is backed up first, before anything else happens (PE-70). If this
    * backup fails, an IO error is thrown: the new folder is not created,
    * `beforeActivate` does not run and the previous folder stays active.
@@ -53,7 +54,11 @@ export class DataService {
    */
   async open(dir: string, beforeActivate?: () => Promise<void>): Promise<DataStore> {
     const current = this.active
-    if (current && resolve(current.dir) !== resolve(dir)) {
+    // Windows paths are case-insensitive: `D:\X` and `d:\x` are the same folder
+    // and need no backup of the "old" one. Other platforms compare exactly.
+    const normalize = (p: string): string =>
+      process.platform === 'win32' ? resolve(p).toLowerCase() : resolve(p)
+    if (current && normalize(current.dir) !== normalize(dir)) {
       // Pending writes land first, so the backup holds the latest state.
       await current.idle()
       try {
