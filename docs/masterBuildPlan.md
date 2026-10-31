@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-29 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 38 Arbeitspaketen (~59,5 h Agent-Zeit, inkl. AP-38 und AP-39).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 40 Arbeitspaketen (~64,5 h Agent-Zeit, inkl. AP-38, AP-39 sowie AP-37 und AP-40 als Restbefunde).
 
 ---
 
@@ -22,12 +22,12 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
-- **Stand:** 2026-10-31 · M4 W4 abgeschlossen. AP-39 ist ein Nicht-Ergebnis (kein Merge, `package.json` und Lockfile unverändert). Alle Pakete AP-01–AP-39 sind `fertig`. Hauptcheckout steht auf `dev`.
-- **Fertig:** AP-01–AP-36, AP-38, AP-39 (Nicht-Ergebnis), M0-DEP, M1-DEP · **Bereit:** M4-DEP (W4, Nutzer; Abhängigkeiten erfüllt, AP-39 keine Vorbedingung), M2-DEP, M3-DEP (Nutzer) · **Offen:** H-04, H-05, H-06.
+- **Stand:** 2026-10-31 · M4 W4 abgeschlossen. AP-39 ist ein Nicht-Ergebnis (kein Merge, `package.json` und Lockfile unverändert). Pakete AP-01–AP-39 sind `fertig`; AP-37 und AP-40 (Restbefunde, Nachtrag 2026-10-31) sind `bereit` (W4). Hauptcheckout steht auf `dev`.
+- **Fertig:** AP-01–AP-36, AP-38, AP-39 (Nicht-Ergebnis), M0-DEP, M1-DEP · **Bereit:** AP-37, AP-40 (W4, keine Vorbedingung für M4-DEP), M4-DEP (W4, Nutzer; Abhängigkeiten erfüllt, AP-39 keine Vorbedingung), M2-DEP, M3-DEP (Nutzer) · **Offen:** H-04, H-05, H-06.
 - **Unterbrochen oder laufend:** keine Coder-Arbeit. Worktree und Branch von AP-39 prüfen und ggf. entfernen: Lead (§9.1 Schritt 7). Designer-Interview laut letztem Stand nicht abgeschlossen (nicht geprüft); UI-Pakete ohne Design-Review.
 - **Erkenntnisse AP-39 (PE-74):** `electron-builder` 26.18.0 und 26.18.1 ziehen `glob@7` (über `@electron/asar@3.4.1`, exakt gepinnt) und `rimraf@2` (über `electron-winstaller`) weiter. Stabile 27.x gibt es nicht (nur alpha). 27.0.0-alpha.14 entfernt die Kette, bringt aber drei BlueOak-1.0.0-Pakete (PE-19 verletzt), nicht übernommen. Override nicht versucht. Warnung bleibt, PE-73 gilt (Nutzer, Option a). Details §18.
 - **Nächster Schritt:** Nutzer: M4-DEP [Mensch] (W4). Installer neu bauen (`npm ci`, `npm run dist`), installieren, Prüfpunkte §9.2. Smoke-Tests M2 und M3 (Q-13, geklärt: AP-38 zuerst) können danach oder vorher laufen. Wiedervorlage PE-74: neu prüfen, sobald electron-builder 27 stabil erscheint.
-- **Offene Nutzerpunkte:** H-04 (Datenordner, im M4-DEP wählen); H-05 Designer-Gespräch; H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`); AP-37 und Q-10 (niedrige Befunde, Nutzer entscheidet).
+- **Offene Nutzerpunkte:** H-04 (Datenordner, im M4-DEP wählen); H-05 Designer-Gespräch; H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`); Q-14 (Vertrag für Importfehler, AP-37 Umsetzung 4) und Q-15 (Zeilenenden, Prettier). Q-10 ist entschieden (PE-75). Designbrief `freigegeben` (2026-10-28), H-05 noch offen: Nutzer klärt, ob „Design übernehmen“ läuft.
 
 ### Rollen und Dokumente
 
@@ -75,7 +75,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 9 | Meilensteine und Wellen | fertig | – | G2 ✔ |
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
-| 12 | Arbeitspakete | fertig (M0–M4 gemergt; Nachtrag AP-38, M4 W3; AP-39, M4 W4 Nicht-Ergebnis, kein Merge) | – | G2 ✔ (M0–M4) |
+| 12 | Arbeitspakete | fertig (M0–M4 gemergt; Nachtrag AP-38, M4 W3; AP-39, M4 W4 Nicht-Ergebnis, kein Merge; Nachtrag AP-37 und AP-40, M4 W4, bereit) | – | G2 ✔ (M0–M4) |
 | 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-04, H-05, H-06 offen) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
@@ -386,8 +386,8 @@ flowchart TD
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
 | `src/preload/index.ts` | AP-01 → AP-07 | M0 W1, W3 |
-| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround). M4 W2 nur AP-34: `storage/__tests__/service.test.ts` (Test Backup im neuen Ordner, PE-65), `ipc/handlers.ts` (Kommentar Z. 50), `storage/store.ts` nur falls zwingend (Vermerk im Bericht). M4 W2b nur AP-35: `storage/service.ts` (Alt-Backup vor dem Wechsel, PE-70) und `storage/__tests__/service.test.ts` (nur neue Tests, nach dem AP-34-Merge) | M0 W3, M1 W1, M4 W2, M4 W2b |
-| `src/main/transfer/**` | AP-25; M4 W2: AP-34 (Befunde (1)–(3)) | M4 W1, M4 W2 |
+| `src/main/storage/**`, `src/main/ipc/**` | AP-07; Fix AP-28 (Code `IN_USE` statt Präfix-Workaround). M4 W2 nur AP-34: `storage/__tests__/service.test.ts` (Test Backup im neuen Ordner, PE-65), `ipc/handlers.ts` (Kommentar Z. 50), `storage/store.ts` nur falls zwingend (Vermerk im Bericht). M4 W2b nur AP-35: `storage/service.ts` (Alt-Backup vor dem Wechsel, PE-70) und `storage/__tests__/service.test.ts` (nur neue Tests, nach dem AP-34-Merge). M4 W4 nur AP-40: `storage/service.ts` (Pfadvergleich beim Ordnerwechsel unter Windows) und `storage/__tests__/service.test.ts` (Test (c), Test Schreibweise) | M0 W3, M1 W1, M4 W2, M4 W2b, M4 W4 |
+| `src/main/transfer/**` | AP-25; M4 W2: AP-34 (Befunde (1)–(3)); M4 W4: AP-40 (`index.ts`, `service.ts`: nicht genutzte Felder `fileSize`/`readFile`) | M4 W1, M4 W2, M4 W4 |
 | `src/main/pdf/**` | AP-24; M4 W2: AP-34 (Zeitlimit, Validierung, Zeitraum, PE-68) | M3 W2, M4 W2 |
 | `e2e/fixtures.ts`, `e2e/flows.spec.ts` | AP-26; M4 W2: AP-34 nur `fixtures.ts` (Umgebungsvariablen), AP-33 nur `flows.spec.ts` (Selektoren, Ausnahme zur OPS-Lane, PE-64) | M4 W1, M4 W2 |
 | `README.md` (Abschnitt „Datenordner und Backups“), `src/core/README.md` (Absatz unter der Tabelle im Abschnitt „Ziele (PE-53)“) | AP-27 (README), AP-32 (Abschnitt „Ziele“); M4 W2: AP-34; M4 W2b: AP-35 (ein Satz im Abschnitt „Datenordner und Backups“) | M4 W1, M3 W2, M4 W2, M4 W2b |
@@ -398,8 +398,8 @@ flowchart TD
 | `src/core/aggregate/fixedCosts.test.ts` und `src/core/aggregate/fixedCosts*.test.ts` (nur Tests) | AP-30 (fertig); AP-31 ergänzt nur Tests, bestehende unverändert, erst nach dem Merge von AP-30 | M1 W4 |
 | `src/core/aggregate/fixedCosts.ts` | AP-31 (Fallbacks entfernen, Verhalten gleich) | M1 W4 |
 | `src/core/goals/goals.ts`, `src/core/goals/goals*.test.ts`, Abschnitt „Ziele“ in `src/core/README.md` | AP-32 (Kostenlimit erst nach Stichtag); AP-20 hat den Ordner angelegt | M3 W2 |
-| `src/renderer/**` (Aufräumpaket, Dateiliste in §12 AP-33) | AP-33; Cross-Imports `pages/projects/*` → neuer Ordner `src/renderer/components/ledger/**` | M4 W2 |
-| `src/renderer/pages/settings/DataSection.tsx`, `src/renderer/pages/settings/i18n.ts` | AP-36 (erst nach dem Merge von AP-33) | M4 W2b |
+| `src/renderer/**` (Aufräumpaket, Dateiliste in §12 AP-33; Restbefunde in §12 AP-37 und AP-40) | AP-33; Cross-Imports `pages/projects/*` → neuer Ordner `src/renderer/components/ledger/**`; M4 W4: AP-37 (Dateiliste in §12), AP-40 (`features/stats/stats-logic.ts`, `pages/print/**`) | M4 W2, M4 W4 |
+| `src/renderer/pages/settings/DataSection.tsx`, `src/renderer/pages/settings/i18n.ts` | AP-36 (erst nach dem Merge von AP-33); AP-37 (Zusatz nur bei IO, Fehlerzustand zurücksetzen; nach AP-36) | M4 W2b, M4 W4 |
 
 ---
 
@@ -411,7 +411,7 @@ flowchart TD
 | M1 | Prototyp | Buchungs-Engine, UI-Baukasten, Einstellungen/Kurse, Projekte, Dienste, Ausgaben/Einnahmen, einfache Übersicht | Kernfluss erfassen → Übersicht stimmt; danach Designer-Gespräch (H-05) |
 | M2 | Menschen & Marketing | Kennzahlen-Kern, Mitarbeiterverwaltung, Kampagnen, Nutzerzahlen | Personen, Kampagnen, Nutzerstände erfassbar mit Kennzahlen |
 | M3 | Auswertung | Prognose/Break-even/Ziel-Kern, Diagramme, Statistikseite, Startseite mit Zielen, PDF | Statistiken und PDF stimmen mit App überein |
-| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36), Abhängigkeits-Update (AP-38), Glob-Kette (AP-39) | Release-Installer auf `D:`, Abnahme G3 |
+| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36), Abhängigkeits-Update (AP-38), Glob-Kette (AP-39), Restbefunde (AP-37, AP-40) | Release-Installer auf `D:`, Abnahme G3 |
 
 ### 9.1 Ablauf einer Welle
 
@@ -519,7 +519,7 @@ flowchart TD
 | W2 | AP-33 (UI, Aufräumen) und AP-34 (MAIN/OPS, Härtung), parallel, Eigentum disjunkt (§8). Nach dem zweiten Merge `npm run typecheck` und `npm run test:e2e` (AP-34 bindet `e2e/**` in den Typecheck ein) |
 | W2b | AP-35 (MAIN, Alt-Backup vor dem Ordnerwechsel, nach AP-34) und AP-36 (UI, Hinweis, nach AP-33), parallel, Eigentum disjunkt |
 | W3 | AP-38 (OPS, Abhängigkeits-Update, Deprecation-Warnungen und npm audit; Nachtrag 2026-10-28, allein in der Welle) |
-| W4 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 bis AP-36 und AP-38. AP-39 (OPS, Glob-Kette, sonnet; Nachtrag 2026-10-31) läuft im Coder-Bereich derselben Welle ohne gemeinsame Dateien mit M4-DEP und ist keine Vorbedingung für M4-DEP |
+| W4 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 bis AP-36 und AP-38. AP-39 (OPS, Glob-Kette, sonnet; Nachtrag 2026-10-31) läuft im Coder-Bereich derselben Welle ohne gemeinsame Dateien mit M4-DEP und ist keine Vorbedingung für M4-DEP. AP-37 und AP-40 (Restbefunde, sonnet; Nachtrag 2026-10-31) laufen ebenfalls in W4, ohne gemeinsame Dateien untereinander und mit M4-DEP; sie sind keine Vorbedingung für M4-DEP |
 
 ##### M4-DEP – Deployment [Mensch]
 
@@ -586,6 +586,8 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-36 | Hinweis bei abgebrochenem Ordnerwechsel (PE-71) | M4 | UI | W2b | AP-33 | S | haiku | c1 | fertig |
 | AP-38 | Abhängigkeiten aktualisieren (Deprecation-Warnungen, npm audit) | M4 | OPS | W3 | AP-27, AP-34 | M | opus | – | fertig |
 | AP-39 | Glob-Kette prüfen: electron-builder-Update ohne Override (`glob@7`) | M4 | OPS | W4 | AP-38 | S | sonnet | c1 | fertig (Nicht-Ergebnis, kein Merge) |
+| AP-37 | Restbefunde UI (AP-33, AP-36, AP-23; Q-10) | M4 | UI | W4 | AP-23, AP-33, AP-36 | L | sonnet | – | bereit |
+| AP-40 | Restbefunde MAIN und Berichte (AP-34, AP-35, AP-22, AP-24; Q-10) | M4 | MAIN+UI | W4 | AP-22, AP-24, AP-34, AP-35 | L | sonnet | – | bereit |
 | M4-DEP | Release und Abnahme | M4 | HUM | W4 | AP-25–AP-27, AP-33–AP-36, AP-38 | H | – | Nutzer | bereit |
 
 ---
@@ -628,6 +630,8 @@ flowchart LR
     AP36["AP-36"]
     AP38["AP-38"]
     AP39["AP-39"]
+    AP37["AP-37"]
+    AP40["AP-40"]
   end
   AP05 & AP06 --> AP09
   AP02 & AP07 --> AP28
@@ -643,6 +647,8 @@ flowchart LR
   AP33 --> AP36
   AP27 & AP34 --> AP38
   AP38 --> AP39
+  AP23 & AP33 & AP36 --> AP37
+  AP22 & AP24 & AP34 & AP35 --> AP40
 ```
 
 **Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
@@ -656,6 +662,8 @@ flowchart LR
 **Nachtrag 2026-10-28 (Pflegeauftrag 3):** AP-38 (OPS, opus) hängt nur an AP-27 und AP-34 (beide `fertig`) und bildet M4 W3 allein, weil es `package.json` und das Lockfile ändert (Ausnahme zu §8 Grundregel 5, PE-72). M4-DEP (W4) hängt an AP-38, weil der Installer mit dem neuen Build-Werkzeug geprüft wird. M2-DEP und M3-DEP haben keine Kante zu AP-38 (Reihenfolge: Q-13).
 
 **Nachtrag 2026-10-31 (Pflegeauftrag, AP-39):** AP-39 (OPS, sonnet) hängt nur an AP-38 (`fertig`) und bildet M4 W4 im Coder-Bereich allein. Es ändert `package.json` und das Lockfile erneut (Ausnahme zu §8 Grundregel 5, PE-74). AP-39 ist keine Vorbedingung für M4-DEP; keine Kante von AP-39 zu M4-DEP.
+
+**Nachtrag 2026-10-31 (Pflegeauftrag, AP-37 und AP-40):** AP-37 (UI, sonnet) hängt an AP-23, AP-33 und AP-36, AP-40 (MAIN und Berichte, sonnet) an AP-22, AP-24, AP-34 und AP-35 (alle `fertig`). Beide bilden M4 W4 parallel zu M4-DEP. Ihr Dateieigentum ist disjunkt (§8), und beide ändern weder `package.json`, das Lockfile, `electron-builder.yml` noch `build/**`. Keine Kante zu M4-DEP.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1728,6 +1736,97 @@ flowchart LR
 - **Kürzbar bei Budgetnot:** ja. Das Paket kann ohne Nachteil zurückgestellt werden; PE-73 bleibt gültig.
 - **Commit-Typ:** `chore(AP-39): update electron-builder to drop glob@7 chain` (nur bei Ergebnis mit Änderung)
 
+#### AP-37 – Restbefunde UI aus M4 W2/W2b und AP-23 (Q-10)
+
+- **Meilenstein, Lane, Welle:** M4 · UI · W4 (Nachtrag 2026-10-31, Pflegeauftrag). Umsetzung des Vorschlags AP-37 aus §16 (Nutzer-Entscheidung 2026-10-31 über Lead, PE-75). Geteilt in AP-37 (UI) und AP-40 (MAIN und Berichte), weil der Umfang über L läge.
+- **Ziel:** Die UI-Befunde aus den Reviews von AP-33, AP-36 und AP-23 beheben: fehlende Test-IDs, zu breite Fehlerzuordnung beim Import, Zusatztext beim Ordnerwechsel, Zielwert 0 bei Einnahmenzielen. Keine Änderung an Zahlen, Rechenregeln oder Verträgen.
+- **Pflichtlektüre:** PE-53, PE-58, PE-64, PE-70, PE-71, PE-75, §8 (Eigentum), §18 (Erkenntnisse AP-23, AP-33, AP-36), `docs/design/design-brief.md`, `docs/design/tokens.json` und `docs/design/export/tokens.css`, `docs/design/mockups/start.html`, `src/renderer/features/goals/goal-logic.ts`, `src/main/transfer/service.ts` (nur lesen: Meldungstexte)
+- **Abhängigkeiten:** AP-23, AP-33, AP-36 (alle `fertig`)
+- **Parallel möglich mit:** AP-40 (Eigentum disjunkt)
+- **Dateien (Eigentum):**
+  - `src/renderer/pages/home/index.tsx`, `src/renderer/pages/projects/ProjectDetailPage.tsx`, `src/renderer/pages/people/PersonDetailPage.tsx` (nur `testId` an den KpiCards)
+  - `src/renderer/features/transfer/transfer-logic.ts`, `transfer-logic.test.ts`
+  - `src/renderer/features/transfer/TransferSection.tsx` (nur, falls der Importfehler dort nach einem Erfolg stehen bleibt; Vermerk im Bericht)
+  - `src/renderer/pages/settings/DataSection.tsx`, `src/renderer/pages/settings/settings-logic.ts`, `settings-logic.test.ts`, `src/renderer/pages/settings/i18n.ts` (nur, falls ein Text hinzukommt)
+  - `src/renderer/features/goals/GoalDialog.tsx`, `goal-logic.ts`, `goal-logic.test.ts`, `src/renderer/features/goals/i18n.ts`
+- **Nicht anfassen:** `src/shared/**`, `src/main/**`, `src/preload/**`, `src/core/**`, `src/renderer/features/stats/**`, `src/renderer/pages/print/**`, `e2e/**`, `package.json`, `.prettierrc`, `docs/**`, übrige Seiten und Features
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. (AP-33 a) KpiCard-Testkennungen: Startseite, `ProjectDetailPage` und `PersonDetailPage` erhalten je Kennzahl eine stabile `testId` im Muster von `features/stats/StatsView.tsx` (`kpi-…`). Layout und Werte bleiben gleich.
+  2. (AP-33 b) Ungenutzte Schlüssel: Befund nicht mehr zutreffend. `ledgerErrors` und `fixedErrors` liegen nicht mehr in `pages/projects/i18n.ts`, sondern in `components/ledger/i18n.ts`, und sie sind belegt (`LedgerWarnings.tsx`). Per Suche prüfen, nichts ändern, Fund im Bericht festhalten.
+  3. (AP-33 c) Fehlerzuordnung eingrenzen: In `transfer-logic.ts` wird das Muster `could not be read` ersetzt durch `import: file could not be read` (Quelllesung des Imports, `src/main/transfer/service.ts`). Fehler am Backup-Ordner (`backups: folder could not be read` und `backups: <collection> could not be read` in `src/main/storage/backups.ts`) fallen auf den allgemeinen Importfehler (`importIo`, mit Neuladen). Die Muster bleiben Meldungstexte, main wird nicht geändert.
+  4. (AP-33, Befund (2)) Strukturierter Fehlercode statt Meldungstext: **nicht in diesem Paket.** Eine Unterscheidung über `IpcError.code` braucht neue Fehlercodes oder ein neues Feld in `src/shared/ipc.ts`. Das ist eine Vertragsänderung (§4) und offen als Q-14. `src/shared/**` bleibt unangetastet; der Coder nennt das im Bericht.
+  5. (AP-36, Befund 1) Zusatz zum Ordnerwechsel nur bei IO: In `DataSection.tsx` erscheint der Satz `dirSwitchAborted` nur, wenn der Fehler aus dem Wechsel stammt und `code === 'IO'`. Der Catch-Zweig beim Wechsel (`INTERNAL`, etwa Z. 88) zeigt ihn nicht. Die Entscheidung liegt in einer Hilfsfunktion in `settings-logic.ts` (mit Unit-Test).
+  6. (AP-36, Befund 2) Alte Fehlermeldung: Der Fehlerzustand des Ordnerbereichs (`error`, `switchFailed`) wird bei erfolgreichem Wechsel, erfolgreicher Wiederherstellung und erfolgreichem Import zurückgesetzt. Prüfen, ob der Importfehler in `TransferSection.tsx` nach einem Erfolg stehen bleibt; wenn ja, dort ebenso zurücksetzen.
+  7. (AP-23, Q-10) Einnahmenziel mit 0: Im Zielformular (`GoalDialog.tsx`) verlangt ein Einnahmenziel einen Zielwert größer 0. Dafür wird die vorhandene Prüfung `invalidTarget` genutzt. Neue Meldungstexte nur, falls nötig (de und en). Bestehende Ziele mit 0 bleiben unverändert und werden wie bisher berechnet (PE-53, `src/core/goals/**` unverändert). **(angenommen, PE-75 a)**
+  8. (AP-23, Q-10) Hinweis „Zielwerte in EUR“: Der Zusatz steht im Label des Geld-Zielfelds (de „Zielwerte in EUR“, en „Target values in EUR“, gleiche Schlüssel in beiden Sprachen). Der Wortlaut ist **(angenommen, PE-75 b)** und wird im Review bestätigt.
+- **Schnittstellen:** keine.
+- **Akzeptanzkriterien:**
+  - Umsetzung 1, 3, 5, 6, 7 und 8 sind umgesetzt. Umsetzung 2 ist per Suche belegt. Umsetzung 4 ist nicht umgesetzt und steht als Q-14 im Bericht.
+  - Der Zusatztext beim Ordnerwechsel erscheint nur bei IO aus dem Wechsel. INTERNAL-Fehler, Lade- und Backup-Fehler bleiben unverändert.
+  - Nach einem erfolgreichen Vorgang steht keine alte Fehlermeldung mehr im Ordnerbereich (Test oder Begründung im Bericht).
+  - Ein Einnahmenziel mit Zielwert 0 wird im Formular abgewiesen. Bestandsziele werden unverändert berechnet.
+  - Nur die Meldung `import: file could not be read` ergibt `importReadFailed`. Fehler am Backup-Ordner ergeben den allgemeinen Importtext.
+  - `npm run lint`, `npm run typecheck`, `npm test` grün; `npm run build && npm run test:e2e` grün.
+  - de und en haben gleiche Schlüssel (RI-10). Keine neuen Abhängigkeiten.
+- **Tests:**
+  - `transfer-logic.test.ts`: `import: file could not be read` → `importReadFailed`; `backups: folder could not be read` → `importIo` mit `changed: true`; bestehende Fälle bleiben grün.
+  - `settings-logic.test.ts`: Zusatz nur bei IO aus dem Wechsel (IO ja, INTERNAL nein, kein Wechsel nein).
+  - `goal-logic.test.ts`: Einnahmenziel mit 0 ist ungültig; die Berechnung eines Bestandsziels mit 0 bleibt gleich (Regressionsfall).
+  - Render und Hinweistexte: Sichtprüfung im M4-DEP (das Projekt hat keine Render-Tests).
+- **Review-Schwerpunkte:** Vollständigkeit der Umsetzung 1–8 mit Fundstellen im Bericht; Zusatztext wirklich nur bei IO aus dem Wechsel; keine Verhaltensänderung bei Zahlen, Rechenregeln oder anderen Fehlerlagen; Muster eng, keine neue Vertragsannahme; i18n de/en gleich (RI-10); Hinweistext lesbar in Hell und Dunkel, nur mit Tokens.
+- **Design-Review:** ja. Pflichtlektüre: `docs/design/design-brief.md` (Status freigegeben 2026-10-28), `docs/design/tokens.json` und `docs/design/export/tokens.css` (nur Tokens, keine eigenen Farben, Schriften oder Abstände), `docs/design/mockups/start.html` (Startseite, Umsetzung 1 und 8). Für die Einstellungen (Umsetzung 5–6) und das Zielformular gibt es kein Mockup; es gelten Brief und Tokens.
+- **Doku-Pflichten:** keine
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –
+- **Kürzbar bei Budgetnot:** ja (ausschließlich niedrige Befunde, PE-75; Nutzer-Entscheidung 2026-10-31: gebaut)
+- **Commit-Typ:** `fix(AP-37): finish remaining M4 review findings`
+
+#### AP-40 – Restbefunde MAIN und Berichte (AP-34, AP-35, AP-22, AP-24; Q-10)
+
+- **Meilenstein, Lane, Welle:** M4 · MAIN+UI · W4 (Nachtrag 2026-10-31, Pflegeauftrag). Zweiter Teil des Vorschlags AP-37 aus §16 (PE-75). ID AP-40, weil die Teilung auf AP-37 und AP-40 vom Lead so beauftragt ist.
+- **Ziel:** Die MAIN-Befunde aus AP-34 und AP-35 beheben (toter Code, Pfadvergleich unter Windows, Rotationstest) und die Q-10-Befunde zu AP-22 (NaN in Diagrammen) und AP-24 (Kampagnentabelle im Projektbericht). Keine Änderung an Verträgen, IPC-Kanälen oder Zahlenregeln.
+- **Pflichtlektüre:** PE-18, PE-24, PE-49, PE-65, PE-70, PE-75, §8 (Eigentum), §18 (Erkenntnisse AP-22, AP-24, AP-34, AP-35), `src/main/storage/service.ts`, `src/main/transfer/service.ts`, `src/renderer/features/stats/stats-logic.ts`, `src/renderer/pages/print/report-model.ts`, `docs/design/design-brief.md`, `docs/design/export/tokens.css`, `docs/design/mockups/projekt.html`
+- **Abhängigkeiten:** AP-22, AP-24, AP-34, AP-35 (alle `fertig`)
+- **Parallel möglich mit:** AP-37 (Eigentum disjunkt)
+- **Dateien (Eigentum):**
+  - `src/main/transfer/index.ts`, `src/main/transfer/service.ts` (nur die Felder `fileSize`/`readFile` und deren Übergabe), `src/main/transfer/__tests__/transfer.test.ts` (nur, falls es die Felder nutzt)
+  - `src/main/storage/service.ts` (nur `open`: Pfadvergleich), `src/main/storage/__tests__/service.test.ts` (nur Test (c) und der Test zur Schreibweise)
+  - `src/renderer/features/stats/stats-logic.ts`, `stats-logic.test.ts` (nur NaN-Schutz)
+  - `src/renderer/pages/print/report-model.ts`, `report-model.test.ts`, `src/renderer/pages/print/PrintReport.tsx` (nur Kampagnentabelle im Projektbericht und ggf. ihre Notiz)
+- **Nicht anfassen:** `src/shared/**`, `src/core/**`, `src/main/pdf/**`, `src/main/storage/store.ts`, `src/main/storage/backups.ts`, `src/main/index.ts`, `src/main/ipc/**`, `src/renderer/features/transfer/**`, `src/renderer/pages/settings/**`, `src/renderer/features/campaigns/**` (nur lesen: `projectCampaignShares`), `e2e/**`, `package.json`, `.prettierrc`, `.gitattributes`, `docs/**`
+- **Freigegebene Abhängigkeiten:** keine neuen
+- **Umsetzung:**
+  1. (AP-34, toter Code) `src/main/transfer/index.ts` übergibt die Felder `fileSize` und `readFile` (etwa Z. 50–55). In `service.ts` werden sie nicht mehr genutzt (Deklaration etwa Z. 31–33, `readFile` als `@deprecated` markiert). Vor dem Entfernen per Suche belegen, dann Deklarationen und Übergabe löschen. Keine Verhaltensänderung. Die Lesegrenze `readFileLimited` (AP-25/AP-34) bleibt unverändert.
+  2. (AP-35, Test (c)) Der Test „Rotation mit keepBackups: 2“ in `storage/__tests__/service.test.ts` endet mit `open(a)` und trennt die Rotation nicht sauber. Umbau: nur Wechsel zu neuen Ordnern. Prüfen: höchstens 2 Backups im Ordner, die neuesten bleiben erhalten. Der Test endet nicht mit einem Rückwechsel.
+  3. (AP-35, Pfadvergleich) In `DataService.open` wird der Vergleich „alter Ordner gleich neuer Ordner“ nach `path.resolve` unter Windows ohne Groß-/Kleinschreibung gemacht (nur auf `win32`; sonst unverändert). Dann legt `D:\X` → `d:\x` kein Alt-Backup an. Test (d) um diese Schreibweise erweitern; auf anderen Plattformen überspringen (`it.skipIf`).
+  4. (AP-35, A→B→A) Verhalten bleibt: Zwei Backups in A sind harmlos (Rotation hält `keep`). Kein Test, nur Vermerk im Bericht.
+  5. (AP-22, Q-10) NaN in Diagrammen belegen: Prüfen, ob die Umrechnung in `stats-logic.ts` (`convert` im Umrechnungsobjekt, ca. Z. 328–343, Verwendung in `chartMoney`, ca. Z. 362–385) bei fehlendem Kurs oder ungültigem Wert `NaN` liefert. Der Beleg ist ein Test. Liefert sie `NaN`: Diagrammdaten nur mit gültigen Zahlen füllen, ungültige Werte weglassen. Liefert sie keines: nur der Test bleibt, Ergebnis im Bericht.
+  6. (AP-24, Q-10) Kampagnentabelle im Projektbericht: Im Projektbericht zeigt die Tabelle (Kosten, Nutzer, CPC, Kosten pro Nutzer, CTR, Rating) nur den Anteil des Projekts. Die Berechnung folgt der Projekt-Kampagnen-Tab (`projectCampaignShares` aus `@/features/campaigns`, nur verwenden, nicht ändern). Das Portfolio bleibt unverändert. `src/core/**` bleibt unangetastet.
+  7. Die Notiz der Kampagnentabelle im Projektbericht (`campaignNote`) sagt, dass die Zahlen den Projektanteil zeigen. Schlüssel de und en gleich (RI-10). **(angenommen, PE-75 c)**
+  8. (AP-34, Befund (3) Prettier, nur Klärung) `git ls-files --eol` lesen. Befund: Arbeitskopie mit CRLF, Index mit LF (Stand 2026-10-31). Beheben nicht in diesem Paket, denn `.prettierrc` und `.gitattributes` gehören nicht zu diesem Paket (Q-15). Ergebnis im Bericht.
+- **Schnittstellen:** keine Änderung an IPC-Kanälen, Verträgen oder Fehlercodes.
+- **Akzeptanzkriterien:**
+  - `fileSize` und `readFile` sind in `src/main/transfer` nicht mehr vorhanden (Suche belegt). Die Transfer-Tests bleiben grün.
+  - Test (c) prüft die Rotation (höchstens `keep`, die neuesten bleiben). Test (d) mit anderer Schreibweise ist grün (win32).
+  - Ein Ordnerwechsel mit anderer Schreibweise desselben Ordners erzeugt kein Alt-Backup. Ein echter anderer Ordner erzeugt weiterhin eines.
+  - Diagrammdaten enthalten bei fehlendem Kurs kein `NaN` (Test).
+  - Projektbericht: Kampagnenkosten und -nutzer sind der Anteil des Projekts; über alle Projekte summiert ergibt das den Gesamtwert (Test mit zwei Projekten). Das Portfolio ist unverändert (Test).
+  - `npm run lint`, `npm run typecheck`, `npm test` grün; `npm run build && npm run test:e2e` grün.
+  - Keine Datei außerhalb des Eigentums. Keine neuen Abhängigkeiten.
+- **Tests:**
+  - `storage/__tests__/service.test.ts`: Test (c) neu aufgebaut; Test zur Schreibweise (win32, sonst übersprungen).
+  - `stats-logic.test.ts`: fehlender Kurs ergibt kein `NaN` in den Diagrammdaten.
+  - `report-model.test.ts`: Projektbericht mit zwei Projekten und einer Kampagne; Anteil je Projekt, Summe gleich Gesamt; Portfolio unverändert.
+  - `transfer.test.ts`: bestehende Tests grün nach dem Entfernen der Felder.
+- **Review-Schwerpunkte:** Datensicherung (Pfadvergleich: nie ein Alt-Backup verlieren; das Alt-Backup bleibt vor `mkdir`; Schreibweise nur auf win32), Rotation, Zahlen (Projektanteile summieren exakt, PE-24, PE-49), Portfolio ohne Verhaltensänderung, keine Pfade im Log (R2), toter Code wirklich ungenutzt (Suche).
+- **Design-Review:** ja. Pflichtlektüre: `docs/design/design-brief.md`, `docs/design/export/tokens.css` (Tokens, keine eigenen Farben, Schriften oder Abstände im Berichtslayout), `docs/design/mockups/projekt.html` (Projektansicht als Referenz für Tabellen und Notizen).
+- **Doku-Pflichten:** keine
+- **Aufwand:** L · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** –. Der Pfadvergleich betrifft die Datensicherung; die Änderung ist klein und wird im Review gezielt geprüft (Schwerpunkt Datenverlust).
+- **Kürzbar bei Budgetnot:** ja (ausschließlich niedrige Befunde; Nutzer-Entscheidung 2026-10-31: gebaut)
+- **Commit-Typ:** `fix(AP-40): clean up storage, transfer and report findings`
+
 ## 13. Menschliche Schritte
 
 | ID | Schritt | Ab wann nötig | Blockiert | Erledigt |
@@ -1750,8 +1849,8 @@ flowchart LR
 | M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 5 (2 opus) | 9,75 h | 2–3 |
-| M4 | 9 (4 opus) | 13,25 h | 3–4 |
-| **Gesamt** | **38** | **59,5 h** + Reviews | **14–18** |
+| M4 | 11 (4 opus) | 18,25 h | 4–5 |
+| **Gesamt** | **40** | **64,5 h** + Reviews | **15–19** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
@@ -1764,6 +1863,8 @@ flowchart LR
 **Nachtrag 2026-10-28 (Pflegeauftrag 3):** AP-38 (OPS, opus, M, 1,5 h) ist in der M4-Zeile enthalten. M4 jetzt 12,5 h mit 8 Paketen (4 opus). Gesamt 37 Pakete, 58,75 h. Die Fensterschätzung 14–18 bleibt geschätzt, bis Messwerte vorliegen.
 
 **Nachtrag 2026-10-31 (Pflegeauftrag, AP-39):** AP-39 (S, sonnet, 0,75 h) ist in der M4-Zeile enthalten. M4 jetzt 13,25 h mit 9 Paketen (4 opus). Gesamt 38 Pakete, 59,5 h. Die Fensterschätzung 14–18 bleibt geschätzt.
+
+**Nachtrag 2026-10-31 (Pflegeauftrag, AP-37 und AP-40):** AP-37 (L, sonnet, 2,5 h) und AP-40 (L, sonnet, 2,5 h) sind in der M4-Zeile enthalten. M4 jetzt 18,25 h mit 11 Paketen (4 opus). Gesamt 40 Pakete, 64,5 h. Die Fensterschätzung steigt auf 15–19 (geschätzt). Beide Pakete liegen am oberen Rand von L; überschreitet eines L, meldet der Coder das an den Lead.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. Die Fensterzahlen wurden bei einem früheren Zielwert geschätzt; den aktuellen Wert liefert `.claude/ma-usage.json`. 5 parallele Coder (PE-23) erreichen den Zielwert schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1877,6 +1978,7 @@ flowchart LR
 | PE-72 | Abhängigkeits-Update als AP-38 (M4 W3, OPS, opus, Opus-Grund Sicherheit): behebt die npm-Warnungen `inflight`, `glob@7`, `rimraf@2`, `boolean` (alle aus dem Build-Werkzeug, `dev: true`) und bekannte Lücken nach `npm audit`. Nur Versionsanhebungen freigegebener Pakete, keine neuen Pakete, Lizenzen nach PE-19, `electron` bleibt 45.0.0. Ausnahme zu §8 Grundregel 5 (`package.json` und Lockfile nach dem Start von M4). M4-DEP hängt an AP-38 (Installer neu prüfen). Die Einordnung als erstes Paket der nächsten Welle ist Vorschlag des Planners `(angenommen)`, Bestätigung über Q-13. | Nutzer-Hinweis am 2026-10-28 (npm ci-Warnungen, über den Lead); Analyse 2026-10-28 (`npm ls`, Lockfile); `npm audit` noch offen | Nutzer am 2026-10-28 (Auftrag über Lead) |
 | PE-73 | Umsetzung AP-38 (Nutzer-Entscheidung zu PE-72): Option 1 plus Signaturprüfung. Nur `boolean` behoben, per `overrides: {"global-agent": "4.1.6"}` (BSD-3-Clause). Dev-Rest bleibt, begründet: `glob@7.2.3` und `inflight@1.0.6` über `app-builder-lib` → `@electron/asar@3.4.1` (exakt gepinnt); `rimraf@2.6.3` über `electron-builder-squirrel-windows` → `electron-winstaller@5.4.0` → `temp@0.9.4` (verlangt `rimraf` ~2.6.2). Alle `dev: true`, nicht im Installer. Weitere Abhilfe bräuchte BlueOak-1.0.0 (nicht in PE-19) und neue Pakete (`glob` 13, `path-scurry`, `rimraf` 6): abgelehnt, PE-19 bleibt unverändert. `electron-builder` bleibt 26.18.0. Weggefallen: `boolean`, `roarr`, `detect-node`, `es6-error`, `json-stringify-safe`, `semver-compare`, `sprintf-js`. Geändert (alle Dev, Lizenzen nach PE-19): `global-agent` 3.0.0 → 4.1.6, `matcher` 3 → 4, `serialize-error` 7 → 8.1.0, `type-fest` 0.13.1 → 0.20.2. Keine neuen Pakete. Override entfällt, sobald electron-builder auf `@electron/get` ≥ 4 umstellt; dann Override entfernen und den Dev-Rest bei electron-builder 27 neu prüfen. Bestätigt PE-72 und schließt Q-13 | Nutzer-Entscheidung 2026-10-29 (über Lead); Ergebnis `npm audit` 0 Lücken, `npm audit signatures` 512/512 | AP-38, Q-13 | Nutzer am 2026-10-29 (über Lead) |
 | PE-74 | AP-39 (M4 W4, OPS, S, sonnet): Prüfung, ob eine neuere `electron-builder` die Kette `glob@7` (über `@electron/asar`) und `rimraf@2` (über `temp` → `electron-winstaller`) ohne Override entfernt. Vorrang vor einem Override: eine neue Version nur, wenn alle neuen Lizenzen nach PE-19 passen und keine neuen direkten Pakete nötig sind. Override auf `glob` oder `rimraf` nur mit Nachweis (`npm run dist` und `npm test` grün, Kompatibilität geprüft) und mit Freigabe des Nutzers über den Lead. Gelingt beides nicht, bleibt `glob` unverändert (Nicht-Ergebnis, PE-73 gilt weiter). Für AP-39 ändert das die Festlegung „`electron-builder` bleibt 26.18.0“ aus PE-73, sofern eine neuere Version die Kette ohne Override entfernt. Die gewählte Version gibt der Coder im Bericht zurück. **Ergebnis 2026-10-31 (Coder c1, Prüfung erfolgt, kein Übergang):** keine stabile electron-builder-27-Version (nur alpha 27.0.0-alpha.1…14); 26.18.0 und 26.18.1 ziehen die Kette weiter. Probe mit 27.0.0-alpha.14 entfernt sie, bringt aber drei BlueOak-1.0.0-Pakete (PE-19 verletzt) und wurde nicht übernommen. Override nicht versucht. Nutzer-Entscheidung am 2026-10-31 (über Lead): Option a, Warnung bleibt, PE-73 gilt weiter. Wiedervorlage, sobald electron-builder 27 stabil erscheint (dann BlueOak klären, e2e und `dist` prüfen; Details §18). | Nutzer-Wunsch (`npm ci`-Hinweis zu `glob`); Lead-Befund 2026-10-31 (vom Coder gegenzuprüfen) | Nutzer am 2026-10-31 (über Lead) |
+| PE-75 | AP-37 und AP-40 (Restbefunde aus M4 W2/W2b und Q-10, Vorschlag §16) werden gebaut. Umsetzungsregeln: (a) Einnahmenziel-Eingabe verlangt Zielwert > 0; Bestandsziele mit 0 bleiben unverändert (PE-53, Rechenkern unverändert). (b) Zusatz „Zielwerte in EUR“ im Label des Geld-Zielfelds. (c) Projektbericht: Kampagnentabelle zeigt den Projektanteil (PE-49), Portfolio unverändert. (d) Hinweis „Der bisherige Datenordner bleibt aktiv“ nur bei Fehlercode IO aus dem Wechsel (PE-71). (e) Pfadvergleich beim Ordnerwechsel unter Windows ohne Groß-/Kleinschreibung. Nicht umgesetzt und offen: strukturierter Fehlercode für Importfehler (Q-14, Vertrag §4), Zeilenenden und Prettier (Q-15). Q-10 ist damit entschieden. | Umfang „gebaut“ ist Nutzer-Entscheidung; die Einzelregeln (a)–(e) sind **(angenommen)** vom Planner, Bestätigung über den Review offen | Nutzer am 2026-10-31 (über Lead); Details angenommen vom Planner |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -1892,16 +1994,18 @@ flowchart LR
 | Q-08 | `@vitest/coverage-v8` (MIT) freigeben, damit die Abdeckung (Abnahme ≥ 95 %) gemessen werden kann? | W | §3, AP-01, G3 | ja | geklärt → PE-55 |
 | Q-07 | Nutzer nennt als Priorität: Mitarbeiterverwaltung, Startseite mit Zielen je Projekt, Nutzerzahlen und Statistiken je App. Pflicht oder optional? Was genau? | K | §2, §4 | siehe Runde 11 | geklärt → PE-36 bis PE-39 |
 | Q-09 | Einnahmen werden ohne Aktivitätsprüfung gebucht; PE-50 gilt nur für die Aufteilung von Ausgaben. Ist das gewollt? | W | §4, PE-08, PE-50 | ja, Einnahme gehört zum gewählten Projekt; bei Buchung außerhalb des Aktivzeitraums Hinweis anzeigen | geklärt → PE-58 (Nutzer am 2026-10-26) |
-| Q-10 | Befunde aus §18 ohne Eintrag im Umfang von AP-33/AP-34 aufnehmen? AP-22: NaN-Verhalten von `convert` in Diagrammen nicht belegt. AP-23: Einnahmenziel mit 0 gilt sofort als erreicht; Hinweis „Zielwerte in EUR“ im Label. AP-24: Kampagnentabelle zeigt im Projektbericht Gesamtkosten | O | §18, AP-33 | in ein Folgepaket nach M4-DEP, oder als bekannt verwerfen | offen (Nutzer); Vorschlag AP-37 in „Vorgeschlagene Änderungen“ |
+| Q-10 | Befunde aus §18 ohne Eintrag im Umfang von AP-33/AP-34 aufnehmen? AP-22: NaN-Verhalten von `convert` in Diagrammen nicht belegt. AP-23: Einnahmenziel mit 0 gilt sofort als erreicht; Hinweis „Zielwerte in EUR“ im Label. AP-24: Kampagnentabelle zeigt im Projektbericht Gesamtkosten | O | §18, AP-37, AP-40 | in ein Folgepaket nach M4-DEP, oder als bekannt verwerfen | geklärt → PE-75 (Nutzer am 2026-10-31, über Lead): Befunde in AP-37 (AP-23) und AP-40 (AP-22, AP-24) übernommen; NaN-Befund (AP-22) gilt erst nach Beleg in AP-40 Umsetzung 5 |
 | Q-11 | Soll der Datenordner-Wechsel zusätzlich ein Backup des bisherigen Ordners anlegen? Heute nur das Start-Backup im neuen Ordner (PE-65). | W | §4, PE-18, PE-65 | ja, vor dem Wechsel sichern; sonst bleibt der bisherige Stand nur im alten Ordner | geklärt → PE-70 (Nutzer am 2026-10-28, Chat) |
 | Q-12 | Darf der Wechsel stattfinden, wenn das Backup des alten Ordners scheitert (z. B. beschädigte Datei, fehlende Schreibrechte)? Ausweg bei Abbruch: der Nutzer kopiert Dateien von Hand. | W | PE-70, AP-35 | nein, Wechsel abbrechen (wie PE-70) | geklärt → PE-70 (Nutzer am 2026-10-28, Chat) |
 | Q-13 | Reihenfolge: Soll AP-38 vor den Smoke-Tests M2 und M3 laufen? AP-38 ändert nur das Build-Werkzeug, nicht die App-Funktionen; der Installer ändert sich aber. | W | §9.2 (M2-DEP, M3-DEP, M4-DEP), §10, PE-72 | AP-38 zuerst (Merge in `dev`, dann Installer neu bauen). Danach H-06: M2 und M3 als Funktionstests, M4-DEP als Installer-Test. M2 und M3 haben keine Kante zu AP-38, der Nutzer kann auch früher testen. | geklärt → PE-73 (Nutzer am 2026-10-29): AP-38 zuerst, Smoke-Tests danach |
+| Q-14 | Soll ein Importfehler (IO) einen eigenen strukturierten Grund über `IpcError` bekommen (Vertragsänderung in `src/shared/ipc.ts`, §4), statt die Unterfälle am Meldungstext zu erkennen (AP-33, Befund (2))? | W | §4, §12 AP-37 (Umsetzung 4), AP-33 | Nein: Meldungstext bleibt, Muster eng gefasst (AP-37 Umsetzung 3). Vertrag nur bei Bedarf, dann eigenes SH-Paket eine Welle früher | offen (Nutzer) |
+| Q-15 | Zeilenenden: Die Arbeitskopie hat CRLF, der Index LF (`git ls-files --eol`). `prettier --check` (§3-Check) meldet deshalb viele Dateien (AP-34, Befund (3)). Welche Regel gilt? | W | §3 (Checks), `.prettierrc` (AP-01), AP-40 Umsetzung 8 | LF im Repo: `.gitattributes` mit `* text=auto eol=lf` (neue Datei, eigenes OPS-Paket) und einmalige Normalisierung; Prettier-Einstellung abstimmen | offen (Nutzer) |
 
 ### Vorgeschlagene Änderungen (brauchen Freigabe des Nutzers)
 
 | Was | Änderung | Grund | Vorgeschlagen von |
 |---|---|---|---|
-| AP-37 „Restbefunde M4 und Q-10“ (Prio niedrig, nicht eingeplant, Nutzer entscheidet): (1) AP-33-Rest: `data-testid` für KpiCard fehlt auf Startseite, ProjectDetailPage und PersonDetailPage; ungenutzte Schlüssel `ledgerErrors`/`fixedErrors` in `pages/projects/i18n.ts`; Treffer „could not be read“ in `transfer-logic.ts` ist zu breit (trifft auch Fehler am backups-Ordner). (2) Fehlerzuordnung in `transfer-logic.ts` über strukturierten Fehlercode statt Meldungstext. (3) AP-34-Rest: `transfer/index.ts` übergibt veraltete Felder `fileSize`/`readFile` (toter Code, außerhalb des AP-34-Eigentums); `prettier --check` meldet viele Dateien (vermutlich CRLF), Klärung vor einem §3-Check. (4) AP-35-Test (c) trennt die Rotation nicht sauber (endet mit `open(a)`); Wechsel A→B→A legt zwei Backups in A an (harmlos, Rotation hält `keep`). (5) AP-36-Reste: Zusatztext erscheint auch bei INTERNAL-Fehler; alte Fehlermeldung bleibt nach späterem erfolgreichem Restore/Import stehen; kein Unit-Test. (6) Q-10: NaN-Verhalten von `convert` in Diagrammen (AP-22), Einnahmenziel mit 0 gilt sofort als erreicht und Hinweis „Zielwerte in EUR“ fehlt (AP-23), Kampagnentabelle im Projektbericht zeigt Gesamtkosten (AP-24). | Restbefunde aus M4 W2/W2b (AP-33–AP-36), Q-10 | Planner, 2026-10-28 (Lead-Auftrag „Wellenabschluss M4 W2/W2b“) |
+| **Übernommen am 2026-10-31 (über Lead, PE-75) als AP-37 und AP-40 (§12, §10). Offen bleiben Q-14 (Befund (2)) und Q-15 (Zeilenenden, Befund (3)). Befund (1b) trifft nicht mehr zu (Prüfung in AP-37).** AP-37 „Restbefunde M4 und Q-10“ (Vorschlag 2026-10-28, Prio niedrig): (1) AP-33-Rest: `data-testid` für KpiCard fehlt auf Startseite, ProjectDetailPage und PersonDetailPage; ungenutzte Schlüssel `ledgerErrors`/`fixedErrors` in `pages/projects/i18n.ts`; Treffer „could not be read“ in `transfer-logic.ts` ist zu breit (trifft auch Fehler am backups-Ordner). (2) Fehlerzuordnung in `transfer-logic.ts` über strukturierten Fehlercode statt Meldungstext. (3) AP-34-Rest: `transfer/index.ts` übergibt veraltete Felder `fileSize`/`readFile` (toter Code, außerhalb des AP-34-Eigentums); `prettier --check` meldet viele Dateien (vermutlich CRLF), Klärung vor einem §3-Check. (4) AP-35-Test (c) trennt die Rotation nicht sauber (endet mit `open(a)`); Wechsel A→B→A legt zwei Backups in A an (harmlos, Rotation hält `keep`). (5) AP-36-Reste: Zusatztext erscheint auch bei INTERNAL-Fehler; alte Fehlermeldung bleibt nach späterem erfolgreichem Restore/Import stehen; kein Unit-Test. (6) Q-10: NaN-Verhalten von `convert` in Diagrammen (AP-22), Einnahmenziel mit 0 gilt sofort als erreicht und Hinweis „Zielwerte in EUR“ fehlt (AP-23), Kampagnentabelle im Projektbericht zeigt Gesamtkosten (AP-24). | Restbefunde aus M4 W2/W2b (AP-33–AP-36), Q-10 | Planner, 2026-10-28 (Lead-Auftrag „Wellenabschluss M4 W2/W2b“) |
 
 ---
 
@@ -1917,10 +2021,10 @@ flowchart LR
 | F-06 KI-Abos/-Guthaben | AP-14 |
 | F-07 Kampagnen | AP-16, AP-18 |
 | F-08 Währungen | AP-05, AP-10, AP-11 |
-| F-09 Statistiken | AP-09, AP-15, AP-16, AP-20, AP-21, AP-22 |
-| F-10 PDF | AP-24, AP-34 (Zeitlimit, Validierung, Zeitraum; PE-68) |
+| F-09 Statistiken | AP-09, AP-15, AP-16, AP-20, AP-21, AP-22, AP-40 (NaN-Schutz, Q-10) |
+| F-10 PDF | AP-24, AP-34 (Zeitlimit, Validierung, Zeitraum; PE-68), AP-40 (Projektanteil Kampagnen, PE-75) |
 | F-11 Mitarbeiterverwaltung | AP-16, AP-17 |
-| F-12 Ziele/Startseite | AP-20, AP-23, AP-32 |
+| F-12 Ziele/Startseite | AP-20, AP-23, AP-32, AP-37 (Einnahmenziel > 0, Hinweis „Zielwerte in EUR“, PE-75) |
 | PE-53 Ziele, Kostenlimit erst nach Stichtag | AP-20, AP-23, AP-32 |
 | F-13 Nutzerzahlen | AP-16, AP-19 |
 | F-14 Datensicherung | AP-07, AP-11, AP-25, AP-34 (Backup im neuen Datenordner, PE-65), AP-35 (Backup im alten Ordner, PE-70) |
@@ -1931,10 +2035,11 @@ flowchart LR
 | §5 Electron-Härtung, Links, Validierung | AP-02, AP-03, AP-07, AP-24, AP-34 |
 | §5 ZIP-Import | AP-25, AP-34 (Befunde (1)–(3)) |
 | §5 Vermerk Export-Verschlüsselung (PE-67) | kein Paket, Vermerk; Pflichtpaket vor Weitergabe (RI-14) |
-| PE-64 Aufräumpaket (Befunde M2–M4) | AP-33, AP-34 |
+| PE-64 Aufräumpaket (Befunde M2–M4) | AP-33, AP-34, AP-37, AP-40 (Restbefunde, PE-75) |
 | PE-65 Datenordner-Wechsel erzeugt Backup im neuen Ordner | AP-34 (Test), M4-DEP (H-04) |
-| PE-70 Backup des alten Ordners vor dem Wechsel, Abbruch bei Fehler | AP-35 (Test), M4-DEP (H-04) |
-| PE-71 Hinweis bei abgebrochenem Ordnerwechsel | AP-36 |
+| PE-70 Backup des alten Ordners vor dem Wechsel, Abbruch bei Fehler | AP-35 (Test), AP-40 (Pfadvergleich, Test (c)), M4-DEP (H-04) |
+| PE-71 Hinweis bei abgebrochenem Ordnerwechsel | AP-36, AP-37 (nur bei IO, Zurücksetzen der Fehlermeldung) |
+| PE-75 Restbefunde (Q-10, §18) | AP-37, AP-40 (Q-14 und Q-15 offen) |
 | PE-68 PDF-Härtung (Zeitlimit, Validierung, Zeitraum) | AP-34 |
 | R1 Recht (Lizenz) | H-01, AP-27, Review (Lizenzen der Abhängigkeiten) |
 | R2 DSGVO | AP-02, AP-07, AP-08, AP-17, Review |
@@ -2036,4 +2141,9 @@ flowchart LR
 | 2026-10-29 | Nutzer-Entscheidungen: PE-73 (Umsetzung AP-38, Option 1 plus Signaturprüfung); Q-13 geklärt (AP-38 vor den Smoke-Tests). §10, §16, §0 angepasst | Nutzer-Entscheidung über Lead | PE-72, PE-73, Q-13, AP-38 | Nutzer am 2026-10-29 |
 | 2026-10-31 | Pflegeauftrag (Lead, Nutzer-Wunsch `npm ci`-Hinweis zu `glob`): AP-39 „Glob-Kette prüfen: electron-builder-Update ohne Override“ angelegt (M4 W4, OPS, S, sonnet; §10 `bereit`, Abhängigkeit AP-38 `fertig`, keine Vorbedingung für M4-DEP). Eigentum `package.json` und Lockfile wie AP-38 (Ausnahme zu §8 Grundregel 5, PE-74). PE-74 eingetragen; PE-73 („electron-builder bleibt 26.18.0“) gilt für AP-39 nur, bis die Prüfung ein Ergebnis hat. Vorschlag an den Nutzer: neue `electron-builder`-Version und ggf. Override nach Befund vom Coder im Bericht zurückgeben, Freigabe durch den Nutzer. Hinweis: Die Abhängigkeitsvorschläge stehen hier in §18, nicht in §6 (Deployment); §3 unverändert. §0, §8, §9, §9.2, §10–§12, §14, §16, §17 angepasst | Pflegeauftrag (Lead) | AP-39, PE-73, PE-74, §0, §8–§17 | Nutzer am 2026-10-31 (über Lead) |
 | 2026-10-31 | Wellenabschluss M4 W4: AP-39 auf `fertig` als Nicht-Ergebnis (Coder c1, kein Merge; `package.json` und Lockfile in `dev` unverändert). PE-74 Prüfung abgeschlossen: kein Übergang. Nutzer-Entscheidung Option a: Warnung bleibt, PE-73 gilt weiter. §0 Lagebericht ersetzt, nächster Schritt M4-DEP [Mensch]; §10, §16 (PE-74), Abdeckung unverändert | Lead-Auftrag „Wellenabschluss M4 W4“ | AP-39, PE-73, PE-74, §0, §10 | Nutzer am 2026-10-31 (über Lead) |
+| 2026-10-31 | Pflegeauftrag (Nutzer über Lead, Q-10 entschieden): Vorschlag AP-37 aus §16 übernommen und in zwei Pakete geteilt. AP-37 (UI, sonnet, L; Befunde AP-23, AP-33, AP-36) und AP-40 (MAIN und Berichte, sonnet, L; Befunde AP-34, AP-35, AP-22, AP-24). Beide in M4 W4, Status `bereit`, parallel, Eigentum disjunkt, keine Vorbedingung für M4-DEP, keine neuen Abhängigkeiten. PE-75 (Regeln (a)–(e) angenommen vom Planner). Q-10 geklärt. Neu offen: Q-14 (strukturierter Importfehler, Vertrag) und Q-15 (Zeilenenden, Prettier). §0, §8, §9, §9.2, §10, §11, §12, §14, §16, §17 angepasst | Pflegeauftrag (Lead, über Nutzer-Entscheidung) | AP-37, AP-40, PE-75, Q-10, Q-14, Q-15, M4-DEP (unverändert) | Nutzer am 2026-10-31 (über Lead) |
+| 2026-10-31 | Erkenntnis Befund AP-33 (1b): `ledgerErrors` und `fixedErrors` liegen nicht mehr in `pages/projects/i18n.ts`, sondern in `components/ledger/i18n.ts`, und sind belegt. Befund nicht mehr zutreffend, AP-37 prüft nur. Befund AP-33 (1c): das Muster `could not be read` in `transfer-logic.ts` trifft auch Fehler am Backup-Ordner (`src/main/storage/backups.ts`); eng gefasst auf `import: file could not be read` (`src/main/transfer/service.ts`). Befund AP-33 (2) braucht einen Vertrag (`IpcError`, `src/shared/ipc.ts`), daher Q-14 | Code-Prüfung Planner (nur lesen) | AP-37, Q-14 | Planner |
+| 2026-10-31 | Erkenntnis AP-36 (Code-Prüfung): Der Zusatztext hängt an `switchFailed`. Dieses Flag wird auch im Catch-Zweig des Wechsels gesetzt, dort mit `INTERNAL` (`src/renderer/pages/settings/DataSection.tsx`, ca. Z. 88). Die alte Fehlermeldung bleibt stehen, weil `error` nach einem Erfolg nicht zurückgesetzt wird | Code-Prüfung Planner (nur lesen) | AP-37 | Planner |
+| 2026-10-31 | Erkenntnis Zeilenenden (Prettier-Befund AP-34): `git ls-files --eol` zeigt Arbeitskopie `w/crlf` und Index `i/lf` (z. B. `src/main/transfer/index.ts`, `docs/masterBuildPlan.md`). `.gitattributes` fehlt. `.prettierrc` ist OPS-Eigentum. Lösung erst nach Q-15 | Code-Prüfung Planner (nur lesen) | AP-40, Q-15 | Planner |
+| 2026-10-31 | Erkenntnis Design: `docs/design/design-brief.md` hat Status `freigegeben` (2026-10-28), Tokens und Mockups liegen vor. PE-21 und die Angaben „Design-Review nein“ in §12 (AP-33, AP-34–AP-36) sind damit überholt. AP-37 und AP-40 haben Design-Review ja. „Design übernehmen“ ist noch nicht gelaufen (kein PE-Eintrag), und H-05 steht offen. Nicht Teil dieses Auftrags | Erkenntnis Planner | AP-37, AP-40, H-05, §3 | Nutzer offen |
 | 2026-10-31 | Erkenntnis AP-39 (Coder c1, Gegenprüfung des Lead-Befunds bestätigt): `glob@7.2.3` über `electron-builder@26.18.0` → `app-builder-lib` → `@electron/asar@3.4.1` (exakt gepinnt) und über `electron-builder-squirrel-windows` → `electron-winstaller@5.4.0` → `temp@0.9.4` → `rimraf@2.6.3`; `inflight@1.0.6` hängt an `glob@7`. Alles `dev`, `npm ls --omit=dev` leer. 26.18.1 (v26-Tag) pinnt weiter `@electron/asar` 3.4.1, Kette bleibt. Probe 27.0.0-alpha.14 (verworfen): Kette komplett weg, `@electron/asar` 4.3.1 → `glob@13.0.6`; lint, typecheck, test 724/724, build, `dist` grün; `npm audit --omit=dev` 0 Befunde; e2e nicht gelaufen; Lockfile-Diff +571/−1207 (u. a. neue `@aws-sdk/*`, `@smithy/*`); drei neue Pakete unter BlueOak-1.0.0 (`glob` 13.0.6, `path-scurry` 2.0.2, `lru-cache` 11.5.3), nicht PE-19-konform. Override auf `glob`/`rimraf` nicht versucht (`temp` verlangt `rimraf` ~2.6.2, `glob` 14 bricht die API). Nebenbefund: frisches `npm ci` meldet zusätzlich eine install-scripts-Warnung für `electron-winstaller@5.4.0` (`select-7z-arch.js`); entfällt erst mit der 27er-Linie. Wiedervorlage: electron-builder 27 stabil, dann Lizenz BlueOak klären und e2e/`dist` prüfen | Coder-Bericht c1 (Pflegeauftrag Lead) | AP-39, PE-73, PE-74, §16 | Coder-Bericht |
