@@ -1,15 +1,44 @@
 import { describe, expect, it } from 'vitest'
 import {
   addCustomEntry,
+  dataErrorAfterLoad,
   newCustomKey,
   parseCurrencyCode,
   parseRateInput,
   setEntryHidden,
+  showDirSwitchAborted,
   todayIso,
   validateRateEntry
 } from './settings-logic'
 
 const empty = { custom: [], hiddenDefaults: [] }
+
+describe('showDirSwitchAborted (AP-37, PE-75 d)', () => {
+  const io = { code: 'IO', message: 'x' } as const
+  const internal = { code: 'INTERNAL', message: '' } as const
+  it('shows the note only for an IO error from the switch', () => {
+    expect(showDirSwitchAborted({ error: io, fromSwitch: true })).toBe(true)
+  })
+  it('hides the note for INTERNAL, load errors and no error', () => {
+    expect(showDirSwitchAborted({ error: internal, fromSwitch: true })).toBe(false)
+    expect(showDirSwitchAborted({ error: io, fromSwitch: false })).toBe(false)
+    expect(showDirSwitchAborted({ error: null, fromSwitch: true })).toBe(false)
+  })
+})
+
+describe('dataErrorAfterLoad (AP-37)', () => {
+  const dirErr = { code: 'IO', message: 'dir' } as const
+  const backupErr = { code: 'IO', message: 'backups' } as const
+  it('clears an old message after a successful reload', () => {
+    expect(dataErrorAfterLoad(null, null)).toEqual({ error: null, fromSwitch: false })
+  })
+  it('keeps load errors, backups error wins, never marked as switch error', () => {
+    expect(dataErrorAfterLoad(dirErr, null)).toEqual({ error: dirErr, fromSwitch: false })
+    expect(dataErrorAfterLoad(null, backupErr)).toEqual({ error: backupErr, fromSwitch: false })
+    expect(dataErrorAfterLoad(dirErr, backupErr)).toEqual({ error: backupErr, fromSwitch: false })
+    expect(showDirSwitchAborted(dataErrorAfterLoad(dirErr, null))).toBe(false)
+  })
+})
 
 describe('parseCurrencyCode', () => {
   it('normalizes case and whitespace', () => {

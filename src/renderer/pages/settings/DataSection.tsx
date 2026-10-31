@@ -9,8 +9,10 @@ import { useFormat, useT } from '@/i18n'
 import { ipcErrorDict } from '@/i18n/shared-keys'
 import { invalidateCollections, settingsStore } from '@/state/stores'
 import { settingsDict } from './i18n'
+import { dataErrorAfterLoad, showDirSwitchAborted, type DataErrorState } from './settings-logic'
 
 const INTERNAL_ERROR: IpcError = { code: 'INTERNAL', message: '' }
+const NO_ERROR: DataErrorState = { error: null, fromSwitch: false }
 
 interface DataSnapshot {
   dir: { ok: true; path: string | null } | { ok: false; error: IpcError }
@@ -40,18 +42,21 @@ export function DataSection() {
   const format = useFormat()
   const [dir, setDir] = useState<string | null>(null)
   const [backups, setBackups] = useState<BackupInfo[]>([])
-  const [error, setError] = useState<IpcError | null>(null)
+  const [errorState, setErrorState] = useState<DataErrorState>(NO_ERROR)
   const [info, setInfo] = useState<string | null>(null)
-  const [switchFailed, setSwitchFailed] = useState(false)
   const [restoreName, setRestoreName] = useState<string | null>(null)
   const [restoreError, setRestoreError] = useState<string | null>(null)
 
+  // Jedes Neuladen (nach Wechsel, Wiederherstellung, Import) ersetzt eine alte Meldung.
   const apply = useCallback((data: DataSnapshot) => {
-    if (!data.dir.ok || !data.backups.ok) setSwitchFailed(false)
     if (data.dir.ok) setDir(data.dir.path)
-    else setError(data.dir.error)
     if (data.backups.ok) setBackups(data.backups.list)
-    else setError(data.backups.error)
+    setErrorState(
+      dataErrorAfterLoad(
+        data.dir.ok ? null : data.dir.error,
+        data.backups.ok ? null : data.backups.error
+      )
+    )
   }, [])
 
   const load = useCallback(async () => apply(await fetchData()), [apply])
@@ -75,18 +80,14 @@ export function DataSection() {
 
   const choose = async () => {
     setInfo(null)
-    setError(null)
-    setSwitchFailed(false)
+    setErrorState(NO_ERROR)
     try {
       const res = await window.api.dataDir.choose()
-      if (!res.ok) {
-        setError(res.error)
-        setSwitchFailed(true)
-      } else setInfo(res.data.path === null ? ts('dirCancelled') : ts('dirChosen'))
+      if (!res.ok) setErrorState({ error: res.error, fromSwitch: true })
+      else setInfo(res.data.path === null ? ts('dirCancelled') : ts('dirChosen'))
       if (res.ok && res.data.path !== null) await load()
     } catch {
-      setError({ code: 'INTERNAL', message: '' })
-      setSwitchFailed(true)
+      setErrorState({ error: INTERNAL_ERROR, fromSwitch: true })
     }
   }
 
@@ -132,9 +133,9 @@ export function DataSection() {
         </Button>
       </div>
       <FieldMessage>{ts('restartHint')}</FieldMessage>
-      <FieldMessage error>{ipcErrorText(error, tErr)}</FieldMessage>
+      <FieldMessage error>{ipcErrorText(errorState.error, tErr)}</FieldMessage>
       <FieldMessage error>
-        {error !== null && switchFailed ? ts('dirSwitchAborted') : null}
+        {showDirSwitchAborted(errorState) ? ts('dirSwitchAborted') : null}
       </FieldMessage>
       <FieldMessage>{info}</FieldMessage>
 

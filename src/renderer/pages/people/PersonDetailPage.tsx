@@ -194,11 +194,13 @@ export function PersonDetailPage() {
       <PeriodPicker value={period} onChange={setPeriod} />
       <div className="grid gap-4 sm:grid-cols-2">
         <KpiCard
+          testId="kpi-person-total"
           title={tp('kpiTotal')}
           eurCents={total?.totalCents ?? 0}
           loading={loading || !total}
         />
         <KpiCard
+          testId="kpi-person-period"
           title={tp('kpiPeriod')}
           eurCents={inPeriod?.totalCents ?? 0}
           loading={loading || !inPeriod}
