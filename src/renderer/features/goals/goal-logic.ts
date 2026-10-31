@@ -75,7 +75,11 @@ export function validateGoalDraft(
   if (needsTarget(draft.kind)) {
     if (isMoneyKind(draft.kind)) {
       const parsed = parseAmountToCents(draft.target, language)
-      if (parsed.ok) targetValue = parsed.value
+      // Einnahmenziel braucht einen Zielwert > 0 (PE-75 a); Bestandsziele mit 0 bleiben
+      // unverändert und werden im Kern wie bisher berechnet.
+      if (parsed.ok && !(draft.kind === 'revenue' && parsed.value <= 0)) {
+        targetValue = parsed.value
+      }
     } else {
       const text = draft.target.trim()
       const n = /^\d{1,15}$/.test(text) ? Number(text) : NaN

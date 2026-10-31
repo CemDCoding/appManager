@@ -104,6 +104,29 @@ describe('validateGoalDraft', () => {
     ).toEqual({ ok: false, issues: ['invalidFrom'] })
   })
 
+  it('rejects a revenue target of 0 (AP-37, PE-75 a)', () => {
+    for (const target of ['0', '0,00', ' 0 ']) {
+      expect(
+        validateGoalDraft({ ...emptyGoalDraft(), title: 'R', target }, 'de')
+      ).toEqual({ ok: false, issues: ['invalidTarget'] })
+    }
+    expect(
+      validateGoalDraft({ ...emptyGoalDraft(), title: 'R', target: '0,01' }, 'de')
+    ).toMatchObject({ ok: true, value: { targetValue: 1 } })
+  })
+
+  it('keeps 0 allowed for other kinds (unchanged)', () => {
+    const d = { ...emptyGoalDraft(), title: 'T', target: '0' }
+    expect(validateGoalDraft({ ...d, kind: 'users' }, 'de')).toMatchObject({
+      ok: true,
+      value: { targetValue: 0 }
+    })
+    expect(validateGoalDraft({ ...d, kind: 'costLimit' }, 'de')).toMatchObject({
+      ok: true,
+      value: { targetValue: 0 }
+    })
+  })
+
   it('round-trips a goal through the draft', () => {
     const g = goal('costLimit', { targetValue: 5_050, dueDate: '2026-11-30' })
     const res = validateGoalDraft(draftFromGoal(g, 'de'), 'de')
@@ -201,6 +224,15 @@ describe('buildGoalView – other kinds', () => {
     expect(missed?.groups[0]?.rows[0]?.progress.status).toBe('missed')
     const done = buildGoalView(data([goal('revenue', { targetValue: 20_000 })]), TODAY)
     expect(done?.groups[0]?.rows[0]?.progress.status).toBe('achieved')
+  })
+
+  it('still computes an existing revenue goal with target 0 as before (regression, PE-75 a)', () => {
+    const view = buildGoalView(data([goal('revenue', { targetValue: 0 })]), TODAY)
+    expect(view?.groups[0]?.rows[0]?.progress).toMatchObject({
+      value: 20_000,
+      target: 0,
+      status: 'achieved'
+    })
   })
 
   it('adds the break-even month and checks free goals', () => {

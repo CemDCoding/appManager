@@ -77,6 +77,25 @@ describe('transferOutcome', () => {
     expect(ioError('something else')).toMatchObject({ key: 'importIo', changed: true })
   })
 
+  it('maps only the import source read error to importReadFailed (AP-37)', () => {
+    expect(ioError('import: file could not be read')).toEqual({
+      kind: 'error',
+      key: 'importReadFailed',
+      code: 'IO',
+      changed: false
+    })
+    expect(ioError('backups: folder could not be read')).toEqual({
+      kind: 'error',
+      key: 'importIo',
+      code: 'IO',
+      changed: true
+    })
+    expect(ioError('backups: projects could not be read')).toMatchObject({
+      key: 'importIo',
+      changed: true
+    })
+  })
+
   it('no import error text claims a backup in the data folder', () => {
     for (const lang of ['de', 'en'] as const) {
       const d = transferDict[lang]

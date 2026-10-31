@@ -172,24 +172,32 @@ function OverviewTab({
     <div className="grid gap-4">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
+          testId="kpi-income"
           title={tp('kpiIncome')}
           eurCents={total.incomeCents}
           loading={!ready}
           hint={tp('periodHint')}
         />
         <KpiCard
+          testId="kpi-expenses"
           title={tp('kpiExpense')}
           eurCents={total.expenseCents}
           loading={!ready}
           hint={tp('periodHint')}
         />
         <KpiCard
+          testId="kpi-balance"
           title={tp('kpiBalance')}
           eurCents={total.balanceCents}
           loading={!ready}
           hint={tp('periodHint')}
         />
-        <KpiCard title={tp('kpiFixed')} eurCents={fixed} hint={tp('kpiFixedHint')} />
+        <KpiCard
+          testId="kpi-fixed-costs"
+          title={tp('kpiFixed')}
+          eurCents={fixed}
+          hint={tp('kpiFixedHint')}
+        />
       </div>
       <Card>
         <CardHeader>
