@@ -16,10 +16,10 @@ import {
   type MonthValues,
   type NamedAmount,
   type ProjectComparisonRow,
+  type ReportCampaign,
   type ReportModel
 } from './report-model'
 import { ReportTable } from './ReportTable'
-import type { RankedCampaign } from '@core/metrics/metrics'
 
 /** Feste Diagrammgröße für A4 (Inhaltsbreite ca. 700 px bei 96 dpi). */
 const CHART_SIZE = { width: 680, height: 240 } as const
@@ -183,39 +183,39 @@ function Report({ model, input }: { model: ReportModel; input: PdfExportInput })
       { header: t('amount'), cell: (r: NamedAmount) => money(r.cents), align: 'right' }
     ] as const
   const campaignColumns = [
-    { header: t('campaign'), cell: (r: RankedCampaign) => r.campaign.name },
+    { header: t('campaign'), cell: (r: ReportCampaign) => r.campaign.name },
     {
       header: t('platform'),
-      cell: (r: RankedCampaign) =>
+      cell: (r: ReportCampaign) =>
         listLabel('campaignPlatforms', r.campaign.platform, settings?.campaignPlatforms, language)
     },
     {
       header: t('campaignCost'),
-      cell: (r: RankedCampaign) => money(r.kpis.costEurCents),
+      cell: (r: ReportCampaign) => money(r.costEurCents),
       align: 'right'
     },
     {
       header: t('cpc'),
-      cell: (r: RankedCampaign) => nullable(r.kpis.cpcCents),
+      cell: (r: ReportCampaign) => nullable(r.kpis.cpcCents),
       align: 'right'
     },
     {
       header: t('costPerUser'),
-      cell: (r: RankedCampaign) => nullable(r.kpis.costPerUserCents),
+      cell: (r: ReportCampaign) => nullable(r.kpis.costPerUserCents),
       align: 'right'
     },
     {
       header: t('ctr'),
-      cell: (r: RankedCampaign) =>
+      cell: (r: ReportCampaign) =>
         r.kpis.ctrBasisPoints === null ? t('dash') : fmt.percent(r.kpis.ctrBasisPoints / 10_000, 2),
       align: 'right'
     },
     {
       header: t('usersGained'),
-      cell: (r: RankedCampaign) => fmt.number(r.campaign.usersGained),
+      cell: (r: ReportCampaign) => fmt.number(r.users),
       align: 'right'
     },
-    { header: t('rating'), cell: (r: RankedCampaign) => String(r.campaign.rating), align: 'right' }
+    { header: t('rating'), cell: (r: ReportCampaign) => String(r.campaign.rating), align: 'right' }
   ] as const
   const projectColumns = [
     {
