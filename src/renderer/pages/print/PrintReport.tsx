@@ -190,7 +190,7 @@ function Report({ model, input }: { model: ReportModel; input: PdfExportInput })
         listLabel('campaignPlatforms', r.campaign.platform, settings?.campaignPlatforms, language)
     },
     {
-      header: t('campaignCost'),
+      header: model.scope === 'project' ? t('campaignCostShare') : t('campaignCost'),
       cell: (r: ReportCampaign) => money(r.costEurCents),
       align: 'right'
     },
@@ -404,7 +404,10 @@ function Report({ model, input }: { model: ReportModel; input: PdfExportInput })
         </>
       )}
 
-      <Section title={t('campaigns')} note={t('campaignNote')}>
+      <Section
+        title={t('campaigns')}
+        note={model.scope === 'project' ? t('campaignNoteProject') : t('campaignNote')}
+      >
         <ReportTable
           caption={t('campaigns')}
           columns={campaignColumns}
