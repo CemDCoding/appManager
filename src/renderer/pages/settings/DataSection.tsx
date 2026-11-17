@@ -35,29 +35,6 @@ async function fetchData(): Promise<DataSnapshot> {
   }
 }
 
-const INTERNAL_ERROR: IpcError = { code: 'INTERNAL', message: '' }
-
-interface DataSnapshot {
-  dir: { ok: true; path: string | null } | { ok: false; error: IpcError }
-  backups: { ok: true; list: BackupInfo[] } | { ok: false; error: IpcError }
-}
-
-/** Lädt Datenordner und Backup-Liste; Ausnahmen werden zu einem INTERNAL-Fehler. */
-async function fetchData(): Promise<DataSnapshot> {
-  try {
-    const [d, b] = await Promise.all([window.api.dataDir.get(), window.api.backup.list()])
-    return {
-      dir: d.ok ? { ok: true, path: d.data.path } : { ok: false, error: d.error },
-      backups: b.ok ? { ok: true, list: b.data } : { ok: false, error: b.error }
-    }
-  } catch {
-    return {
-      dir: { ok: false, error: INTERNAL_ERROR },
-      backups: { ok: false, error: INTERNAL_ERROR }
-    }
-  }
-}
-
 /** Datenordner und Backups. Pfade kommen nur aus dem Main-Prozess, der Renderer sendet keine. */
 export function DataSection() {
   const ts = useT(settingsDict)
@@ -67,7 +44,6 @@ export function DataSection() {
   const [backups, setBackups] = useState<BackupInfo[]>([])
   const [errorState, setErrorState] = useState<DataErrorState>(NO_ERROR)
   const [info, setInfo] = useState<string | null>(null)
-  const [switchFailed, setSwitchFailed] = useState(false)
   const [restoreName, setRestoreName] = useState<string | null>(null)
   const [restoreError, setRestoreError] = useState<string | null>(null)
 
