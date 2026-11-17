@@ -12,7 +12,7 @@ Grundlage der Regeln: MultiAgent/entscheidungen.md
 **Stand:** 2026-10-29 · **Planversion:** 1 · **Gepflegt von:** ma-planner · **Gesteuert von:** ma-lead · **Nutzer:** Cem Dogan
 
 appManager ist eine lokale Windows-Desktop-App (Electron + React + TypeScript, Deutsch/Englisch), mit der ein einzelner Nutzer Ausgaben und Einnahmen seiner privaten Projekte (Apps, Webseiten, Steam-Spiele …) erfasst, exakt auf Projekte aufteilt und auswertet: Dienste, Personen, KI-Kosten, Kampagnen, Nutzerzahlen, Ziele, Statistiken und PDF-Berichte. Daten liegen in lokalen JSON-Dateien außerhalb des Repos. Öffentliches Repo unter PolyForm Noncommercial.
-Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 40 Arbeitspaketen (~64,5 h Agent-Zeit, inkl. AP-38, AP-39 sowie AP-37 und AP-40 als Restbefunde).
+Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing, M3 Auswertung, M4 Release) mit 41 Arbeitspaketen (~66 h Agent-Zeit, inkl. AP-38, AP-39 sowie AP-37 und AP-40 als Restbefunde und AP-41 als Nachtrag).
 
 ---
 
@@ -23,9 +23,9 @@ Der Plan hat 5 Meilensteine (M0 Fundament, M1 Prototyp, M2 Menschen & Marketing,
 <!-- Übergabe an einen neuen Lead, der den bisherigen Chat nicht kennt. Der Planner ersetzt ihn bei jedem „Wellenabschluss“. Höchstens 10 Zeilen. -->
 
 - **Stand:** 2026-10-31 · M4 W4 abgeschlossen. AP-01–AP-40 sind `fertig` (AP-39 Nicht-Ergebnis, kein Merge; AP-37 und AP-40 in `dev` gemergt, Review und Design-Review Runde 1 bestanden). Hauptcheckout auf `dev` (612b048), keine Worktrees oder `agent/*`-Branches offen (geprüft).
-- **Fertig:** AP-01–AP-40 (AP-39 Nicht-Ergebnis), M0-DEP, M1-DEP · **Bereit (Nutzer):** M4-DEP (W4), M2-DEP, M3-DEP · **Coder-Pakete bereit:** keine · **Offen:** H-04, H-05, H-06.
+- **Fertig:** AP-01–AP-40 (AP-39 Nicht-Ergebnis), M0-DEP, M1-DEP · **Bereit (Nutzer):** M4-DEP (W4), M2-DEP, M3-DEP · **Coder-Pakete bereit:** AP-41 (Nachtrag 2026-11-17, M4 W5, sonnet) · **Offen:** H-04, H-05, H-06, H-08 (nach AP-41).
 - **Unterbrochen oder laufend:** keine Coder-Arbeit. Designer-Interview laut letztem Stand nicht abgeschlossen (nicht geprüft). „Design übernehmen“ ist nicht gelaufen: Renderer-Styles nutzen noch shadcn-Werte statt `tokens.css` (§18).
-- **Erkenntnisse W4 (Details §18):** Zielformular verlangt Zielwert > 0 für Einnahmenziele; Label „Zielwerte in EUR“ sprachlich holprig (Darstellung im M4-DEP prüfen). Projektbericht zeigt Projektanteil nur bei Kosten und Nutzern, Rest bleibt Kampagnenwert (Abweichung zu Umsetzung 6, Nutzer-Bestätigung offen, §16). NaN-Befund AP-22 belegt und behoben. `electron-builder` 26.x zieht `glob@7` weiter, Warnung bleibt (PE-73, PE-74, Wiedervorlage bei electron-builder 27 stabil).
+- **Erkenntnisse W4 (Details §18):** Zielformular verlangt Zielwert > 0 für Einnahmenziele; Label „Zielwerte in EUR“ sprachlich holprig (Darstellung im M4-DEP prüfen). Projektbericht zeigt Projektanteil nur bei Kosten und Nutzern, Rest bleibt Kampagnenwert (Abweichung zu Umsetzung 6, Nutzer-Bestätigung offen, §16). NaN-Befund AP-22 belegt und behoben. `electron-builder` 26.x zieht `glob@7` weiter, Warnung bleibt (PE-73, PE-74, Wiedervorlage bei electron-builder 27 stabil). Nachtrag 2026-11-17: AP-41 (PE-76, Head-Auftrag des Nutzers) versucht die npm-Warnungen zu beheben; Ausgang offen.
 - **Nächster Schritt:** Nutzer: M4-DEP [Mensch] (W4). Installer neu bauen (`npm ci`, `npm run dist`, Installationen im Hauptcheckout nur nacheinander), installieren, Prüfpunkte §9.2. Smoke-Tests M2 und M3 (Q-13, AP-38 zuerst erfüllt) danach oder vorher.
 - **Offene Nutzerpunkte:** H-04 (Datenordner, im M4-DEP wählen); H-05 Designer-Gespräch (Design übernehmen, Folgepaket §16); H-06 (Smoke-Tests M2–M4, Merges `dev` → `stage` → `master`); Q-14 (strukturierter Importfehler über `IpcError`, Standard: nein); Q-15 (Zeilenenden und Prettier, Standard: LF im Repo mit `.gitattributes`). Q-10 ist entschieden (PE-75).
 
@@ -75,8 +75,8 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 | 9 | Meilensteine und Wellen | fertig | – | G2 ✔ |
 | 10 | Statusübersicht | fertig | – | G2 ✔ |
 | 11 | Abhängigkeitsgraph | fertig | – | G2 ✔ |
-| 12 | Arbeitspakete | fertig (M0–M4 gemergt; Nachtrag AP-38, M4 W3; AP-39, M4 W4 Nicht-Ergebnis, kein Merge; Nachtrag AP-37 und AP-40, M4 W4, gemergt) | – | G2 ✔ (M0–M4) |
-| 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-04, H-05, H-06 offen) | G2 ✔ |
+| 12 | Arbeitspakete | fertig (M0–M4 gemergt; Nachtrag AP-38, M4 W3; AP-39, M4 W4 Nicht-Ergebnis, kein Merge; Nachtrag AP-37 und AP-40, M4 W4, gemergt; Nachtrag AP-41, M4 W5, `bereit`) | – | G2 ✔ (M0–M4) |
+| 13 | Menschliche Schritte | fertig | – (H-01, H-03, H-07 erledigt; H-04, H-05, H-06 offen; H-08 nach AP-41) | G2 ✔ |
 | 14 | Budget und Kürzungen | fertig (Schätzung) | – | G2 ✔ |
 | 15 | Risiken | fertig | – | G2 ✔ |
 | 16 | Planungsentscheidungen und offene Fragen | laufend | – | laufend |
@@ -191,6 +191,7 @@ Status: `leer` · `in Klärung` · `fertig` · `angenommen` (fertig, aber mit un
 - UI: `tailwindcss` (+ dessen offizielles Vite-/PostCSS-Plugin), shadcn/ui-Bausteine `@radix-ui/*`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, `@fontsource/inter`
 - Logik: `zod`, `date-fns`, `decimal.js`, `jszip`, `recharts`
 - Qualität: `vitest`, `@vitest/coverage-v8` (PE-55), `@playwright/test`, `eslint`, `typescript-eslint`, `eslint-plugin-react-hooks`, `prettier`, `@types/*` passend zu den freigegebenen Paketen
+- Ausnahme für AP-41 (PE-76, Head für den Nutzer, Kategorie abhängigkeit, 2026-11-17): Versionsanhebung `electron-builder` auf 26.18.1 und Override `@electron/asar` 4.3.1 (nur Build-Werkzeug). Lizenz BlueOak-1.0.0 nur für die transitiven Pakete `glob`, `path-scurry` und `lru-cache`; sonst gilt PE-19 unverändert.
 
 ---
 
@@ -380,9 +381,9 @@ flowchart TD
 
 | Gemeinsame Datei | Wer ändert sie | Wann |
 |---|---|---|
-| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version, description, license), AP-28 (`tsconfig.web.json`, `.env.example`), AP-30 (`vitest.config.ts`, nur Coverage-Include) und AP-34 (`tsconfig.node.json`: `e2e/**` in den Typecheck) und AP-38 (nur Versionsanhebungen in `package.json` und Lockfile; Ausnahme zu Grundregel 5, PE-72) und AP-39 (wie AP-38, nur `electron-builder` und ggf. ein begründeter Override; PE-74) | M0 W1, M1 W1, M1 W4, M4 W1, M4 W2, M4 W3, M4 W4 |
+| `package.json`, `package-lock.json`, `tsconfig*.json`, `electron.vite.config.ts`, `eslint.config.js`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `.env.example` | AP-01 (legt auch alle npm-Skripte inkl. `test:e2e` und `seed` an); danach nur AP-27 (Version, description, license), AP-28 (`tsconfig.web.json`, `.env.example`), AP-30 (`vitest.config.ts`, nur Coverage-Include) und AP-34 (`tsconfig.node.json`: `e2e/**` in den Typecheck) und AP-38 (nur Versionsanhebungen in `package.json` und Lockfile; Ausnahme zu Grundregel 5, PE-72) und AP-39 (wie AP-38, nur `electron-builder` und ggf. ein begründeter Override; PE-74) und AP-41 (wie AP-38, nur `electron-builder`, Override `@electron/asar` und ggf. die install-scripts-Entscheidung; PE-76; `.npmrc` nur dafür, falls dort vorgesehen) | M0 W1, M1 W1, M1 W4, M4 W1, M4 W2, M4 W3, M4 W4, M4 W5 |
 | `src/core/**` | kein gemeinsamer Barrel (`index.ts`); jedes Kernpaket besitzt eigene Unterordner, Importe über direkte Pfade; Fix an fremden Unterordnern nur AP-28 (`recurrence/`, `currency/`), AP-31 (`aggregate/fixedCosts.ts`, nach Merge von AP-30) und AP-32 (`goals/`, nach Merge von AP-20) | M1 W1 (AP-28), M1 W4 (AP-31), M3 W2 (AP-32) |
-| `electron-builder.yml` | AP-01, später AP-27; AP-34 nur Kommentar Z. 19; AP-38 und AP-39 nur, wenn eine neue Version eine Konfigurationsänderung verlangt | M0 W1, M4 W1, M4 W2, M4 W3, M4 W4 |
+| `electron-builder.yml` | AP-01, später AP-27; AP-34 nur Kommentar Z. 19; AP-38, AP-39 und AP-41 nur, wenn eine neue Version eine Konfigurationsänderung verlangt | M0 W1, M4 W1, M4 W2, M4 W3, M4 W4, M4 W5 |
 | `src/shared/**` | AP-02; Änderungen später nur über ein eigenes Vertragspaket (AP-28) | M0 W2, M1 W1 |
 | `src/main/index.ts` | AP-01 (minimal) → AP-03 (Fenster) → AP-07 (Speicher, IPC) → AP-24 (PDF-Kanal) → AP-25 (Export/Import) | je eine Welle |
 | `src/preload/index.ts` | AP-01 → AP-07 | M0 W1, W3 |
@@ -411,7 +412,7 @@ flowchart TD
 | M1 | Prototyp | Buchungs-Engine, UI-Baukasten, Einstellungen/Kurse, Projekte, Dienste, Ausgaben/Einnahmen, einfache Übersicht | Kernfluss erfassen → Übersicht stimmt; danach Designer-Gespräch (H-05) |
 | M2 | Menschen & Marketing | Kennzahlen-Kern, Mitarbeiterverwaltung, Kampagnen, Nutzerzahlen | Personen, Kampagnen, Nutzerstände erfassbar mit Kennzahlen |
 | M3 | Auswertung | Prognose/Break-even/Ziel-Kern, Diagramme, Statistikseite, Startseite mit Zielen, PDF | Statistiken und PDF stimmen mit App überein |
-| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36), Abhängigkeits-Update (AP-38), Glob-Kette (AP-39), Restbefunde (AP-37, AP-40) | Release-Installer auf `D:`, Abnahme G3 |
+| M4 | Release | Export/Import ZIP, E2E-Tests, Installer-Feinschliff, README, Aufräumpaket und Härtung (AP-33 bis AP-36), Abhängigkeits-Update (AP-38), Glob-Kette (AP-39), Restbefunde (AP-37, AP-40), npm-Warnungen (AP-41, Nachtrag) | Release-Installer auf `D:`, Abnahme G3 |
 
 ### 9.1 Ablauf einer Welle
 
@@ -520,6 +521,7 @@ flowchart TD
 | W2b | AP-35 (MAIN, Alt-Backup vor dem Ordnerwechsel, nach AP-34) und AP-36 (UI, Hinweis, nach AP-33), parallel, Eigentum disjunkt |
 | W3 | AP-38 (OPS, Abhängigkeits-Update, Deprecation-Warnungen und npm audit; Nachtrag 2026-10-28, allein in der Welle) |
 | W4 | M4-DEP [Mensch] (Release + Abnahme G3), erst nach AP-33 bis AP-36 und AP-38. AP-39 (OPS, Glob-Kette, sonnet; Nachtrag 2026-10-31) läuft im Coder-Bereich derselben Welle ohne gemeinsame Dateien mit M4-DEP und ist keine Vorbedingung für M4-DEP. AP-37 und AP-40 (Restbefunde, sonnet; Nachtrag 2026-10-31) laufen ebenfalls in W4, ohne gemeinsame Dateien untereinander und mit M4-DEP; sie sind keine Vorbedingung für M4-DEP |
+| W5 | AP-41 (OPS, npm-Warnungen, sonnet; Nachtrag 2026-11-17, Head-Auftrag des Nutzers, PE-76). Allein in der Welle, nach M4-DEP, keine Vorbedingung für M4-DEP. Die Installer-Prüfung danach ist H-08 |
 
 ##### M4-DEP – Deployment [Mensch]
 
@@ -590,6 +592,7 @@ Status: `offen` · `bereit` · `in Arbeit` · `Review` · `fertig` (gemergt in d
 | AP-39 | Glob-Kette prüfen: electron-builder-Update ohne Override (`glob@7`) | M4 | OPS | W4 | AP-38 | S | sonnet | c1 | fertig (Nicht-Ergebnis, kein Merge) |
 | AP-37 | Restbefunde UI (AP-33, AP-36, AP-23; Q-10) | M4 | UI | W4 | AP-23, AP-33, AP-36 | L | sonnet | c1 | fertig |
 | AP-40 | Restbefunde MAIN und Berichte (AP-34, AP-35, AP-22, AP-24; Q-10) | M4 | MAIN+UI | W4 | AP-22, AP-24, AP-34, AP-35 | L | sonnet | c2 | fertig |
+| AP-41 | npm-Warnungen beseitigen (electron-builder 26.18.1, Override `@electron/asar`, install-scripts; PE-76) | M4 | OPS | W5 | AP-38 | M | sonnet | – | bereit |
 | M4-DEP | Release und Abnahme | M4 | HUM | W4 | AP-25–AP-27, AP-33–AP-36, AP-38 | H | – | Nutzer | bereit |
 
 ---
@@ -634,6 +637,7 @@ flowchart LR
     AP39["AP-39"]
     AP37["AP-37"]
     AP40["AP-40"]
+    AP41["AP-41"]
   end
   AP05 & AP06 --> AP09
   AP02 & AP07 --> AP28
@@ -651,6 +655,7 @@ flowchart LR
   AP38 --> AP39
   AP23 & AP33 & AP36 --> AP37
   AP22 & AP24 & AP34 & AP35 --> AP40
+  AP38 --> AP41
 ```
 
 **Nachtrag 2026-10-26:** AP-29 und AP-30 bilden M1 W4 (nach M1-DEP, vor M2 W1). Ihr Dateieigentum ist disjunkt (UI bzw. Kern-Tests und `vitest.config.ts`), sie laufen daher parallel. AP-31 folgt AP-30 (Eigentum `aggregate/fixedCosts.ts`, Start nach dessen Merge). Seine Eigentumsmenge ist disjunkt zu AP-16 (`metrics/**`) und AP-21, daher darf es parallel zu M2 W1 laufen.
@@ -666,6 +671,8 @@ flowchart LR
 **Nachtrag 2026-10-31 (Pflegeauftrag, AP-39):** AP-39 (OPS, sonnet) hängt nur an AP-38 (`fertig`) und bildet M4 W4 im Coder-Bereich allein. Es ändert `package.json` und das Lockfile erneut (Ausnahme zu §8 Grundregel 5, PE-74). AP-39 ist keine Vorbedingung für M4-DEP; keine Kante von AP-39 zu M4-DEP.
 
 **Nachtrag 2026-10-31 (Pflegeauftrag, AP-37 und AP-40):** AP-37 (UI, sonnet) hängt an AP-23, AP-33 und AP-36, AP-40 (MAIN und Berichte, sonnet) an AP-22, AP-24, AP-34 und AP-35 (alle `fertig`). Beide bilden M4 W4 parallel zu M4-DEP. Ihr Dateieigentum ist disjunkt (§8), und beide ändern weder `package.json`, das Lockfile, `electron-builder.yml` noch `build/**`. Keine Kante zu M4-DEP.
+
+**Nachtrag 2026-11-17 (Head-Auftrag des Nutzers, AP-41):** AP-41 (OPS, sonnet) hängt nur an AP-38 (`fertig`) und bildet M4 W5 allein. Es ändert `package.json` und das Lockfile erneut (Ausnahme zu §8 Grundregel 5, PE-72, PE-76). AP-39 ist ein Nicht-Ergebnis ohne Merge und daher keine Kante. Keine Kante zu M4-DEP; AP-41 ist keine Vorbedingung dafür.
 
 **Welle M1 (Stand 2026-10-25):** AP-28 liegt in W1 neben AP-09. AP-10 startet danach als W1b, weil es die typisierten `window.api`-Kanäle aus AP-28 braucht (Vertrag eine Welle früher, Regel 2 in §8).
 
@@ -1829,6 +1836,57 @@ flowchart LR
 - **Kürzbar bei Budgetnot:** ja (ausschließlich niedrige Befunde; Nutzer-Entscheidung 2026-10-31: gebaut)
 - **Commit-Typ:** `fix(AP-40): clean up storage, transfer and report findings`
 
+#### AP-41 – npm-Warnungen beseitigen (Build-Werkzeug, Nachtrag Head-Auftrag)
+
+- **Meilenstein, Lane, Welle:** M4 · OPS · W5 (Nachtrag 2026-11-17, Auftrag des Nutzers über den Head, PE-76). Allein in der Welle, nach M4-DEP und ohne Kante zu M4-DEP. ID AP-41, nächste freie Nummer nach AP-40.
+- **Ziel:** Die Warnungen aus `npm ci` soweit lösbar beseitigen: `inflight@1.0.6`, `glob@7.2.3`, `rimraf@2.6.3` (alle `dev: true`, nicht im Installer). Die install-scripts-Warnung zu `electron-winstaller@5.4.0` entscheiden und festhalten. Die 14 moderaten `npm audit`-Befunde (nur Dev) auswerten; behoben werden sie nur, wenn das ohne Risiko und ohne neue Lizenz geht. Ausgangslage: AP-38 (PE-73) und AP-39 (Nicht-Ergebnis, PE-74) sind belegt. Die Ketten: `electron-builder@26.18.0` → `app-builder-lib` → `@electron/asar@3.4.1` (exakt gepinnt) → `glob@7.2.3` → `inflight`; `electron-builder-squirrel-windows` → `electron-winstaller@5.4.0` → `temp@0.9.4` → `rimraf@2.6.3` → `glob@7.2.3`.
+- **Pflichtlektüre:** PE-19 (inkl. Ausnahme), PE-32, PE-72, PE-73, PE-74, PE-76, §3 (Checks, freigegebene Abhängigkeiten), §7.3, §8 Grundregel 5 (Ausnahme), AP-38 und AP-39 (§12, §18 Einträge 2026-10-29 und 2026-10-31, insbesondere die Probe mit 27.0.0-alpha), `package.json`, `package-lock.json`, `electron-builder.yml`, `.npmrc` (nur lesen)
+- **Abhängigkeiten:** AP-38 (fertig). AP-39 ist ohne Merge; es gibt keinen Code-Stand dazu in `dev`, daher keine Kante.
+- **Parallel möglich mit:** keine (die Welle enthält nur dieses Paket)
+- **Dateien (Eigentum):**
+  - `package.json` (nur die Versionszeile von `electron-builder`, der Override `@electron/asar` und ggf. die install-scripts-Entscheidung)
+  - `package-lock.json`
+  - `electron-builder.yml` (nur, wenn die neue Version eine Konfigurationsänderung verlangt)
+  - `.npmrc` (nur für die install-scripts-Entscheidung, und nur, wenn die installierte npm-Version sie dort vorsieht; sonst unverändert)
+  - **Ausnahme zu §8 Grundregel 5 (PE-72, PE-74, PE-76):** wie AP-38 und AP-39. Keine andere Datei.
+- **Nicht anfassen:** `src/**`, `e2e/**`, `docs/**`, `build/**`, `.gitignore`, `.prettierrc`. `electron` bleibt auf 45.0.0. Kein `npm update` über alle Pakete.
+- **Freigegebene Abhängigkeiten (PE-32, PE-76):**
+  - Versionsanhebung `electron-builder` auf `26.18.1`, weiter exakt gepinnt. Die Version per `npm view` bestätigen, nicht raten.
+  - Override `@electron/asar` auf `4.3.1`. Dieser zieht transitiv `glob` 13.x, `path-scurry` und `lru-cache`.
+  - Lizenz-Ausnahme (PE-76): BlueOak-1.0.0 nur für genau `glob`, `path-scurry` und `lru-cache`.
+  - Alle anderen neuen oder geänderten Einträge: MIT, Apache-2.0, BSD oder ISC (PE-19, Feld `license`).
+  - Keine neuen direkten Pakete. `rimraf` 6 ist nicht freigegeben (PE-73 gilt dafür weiter).
+- **Umsetzung:**
+  0. Vorab-Abfragen (nur lesen) gehören in den Auftrag des Leads: `npm view electron-builder@26.18.1 dependencies` und `npm view @electron/asar@4.3.1 dependencies license`. Der Planner hat sie nicht ausgeführt. Versionen und Lizenzen immer per `npm view` belegen.
+  1. Ausgangslage lesend belegen: `npm ls glob inflight rimraf --all`, `npm ls --omit=dev` als Vergleichsstand für den Bericht. Den Befund aus AP-39 (`@electron/asar@3.4.1` exakt gepinnt) gegenprüfen.
+  2. Stufe 1: `npm install electron-builder@26.18.1 --save-exact`. Kein `npm update` über alle Pakete. Die Stufe bleibt nur, wenn sie für Stufe 2 nötig ist oder alle Checks aus Umsetzung 4 grün sind.
+  3. Stufe 2: Override `"@electron/asar": "4.3.1"` in `overrides` von `package.json`, dann `npm install`. Danach `npm ls glob inflight --all` prüfen. Alle neuen Lockfile-Einträge auf ihre Lizenz prüfen (`npm view <paket>@<version> license`). Eine BlueOak-Lizenz außerhalb von `glob`, `path-scurry` und `lru-cache` (z. B. bei einem transitiven Paket) ist Stopp: Stufe 2 zurücknehmen und den Befund an den Lead melden (§7.3).
+  4. Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run test:e2e`, danach `npm run dist` (Installer in `release/`). Den Installer nicht installieren; das macht der Nutzer (H-08). Ein Schritt gilt nur mit grünen Checks und grünem `dist`. Scheitert ein Schritt, wird genau dieser Schritt zurückgenommen (Stufe 2 zuerst, dann Stufe 1) und der Bericht nennt die Ursache. Checks umgehen ist kein Weg. Keine Vorabversion (`27.0.0-alpha`) committen.
+  5. Kette `rimraf`/`temp` separat prüfen: `npm ls rimraf temp electron-winstaller --all`. `temp@0.9.4` verlangt `rimraf` in `~2.6.2`; ein Override auf `rimraf` 6 bricht diese Range und ist nicht freigegeben. Ein Override auf eine andere 2.6.x-Version bringt keine Warnung weg. Eine Entfernung der Kette ist nur mit Nachweis zulässig (`npm run dist` grün, Installer-Ziel `nsis` bleibt, keine Änderung an `legacy-peer-deps` oder anderen `.npmrc`-Schaltern, AP-38). Ist das nicht sauber machbar, ist `rimraf@2.6.3` ein Nicht-Ergebnis mit Pfad und Grund im Bericht.
+  6. install-scripts-Warnung zu `electron-winstaller@5.4.0` (`select-7z-arch.js`): Zuerst prüfen, ob das Paket mit der Kette aus Umsetzung 5 entfällt. Bleibt es, eine bewusste Entscheidung treffen: Der Build läuft ohne das Skript (Ziel `nsis`), also sperren; sonst erlauben. Die Konfiguration wird über die Stelle festgehalten, die die installierte npm-Version dafür vorsieht. Vorher per `npm help` bzw. `npm install-scripts` prüfen, nicht raten. Der Grund steht im Commit-Body und im Bericht. Ein Skript, das erlaubt wird, braucht den Beleg, dass `npm run dist` damit grün ist.
+  7. `npm ci` (Neuinstallation, nicht parallel zu anderen `npm`-Läufen im selben Worktree) ausführen. Danach `npm ls --omit=dev glob rimraf inflight` prüfen und den Befund mit dem Ausgangsstand aus Umsetzung 1 vergleichen. Verbleibende Warnungen mit Pfad und Grund im Bericht nennen.
+  8. `npm audit`, `npm audit --omit=dev` und `npm audit signatures` auswerten (lesend). Die 14 moderaten Dev-Befunde im Bericht nennen; beheben nur, wenn ohne Risiko und ohne neue Lizenz.
+  9. Bericht: alte und neue Versionen von `electron-builder`, `@electron/asar`, `glob`, `path-scurry`, `lru-cache`; entfernte und neue Pakete mit Lizenz; `npm ls`, `npm ci`-Warnungen vorher und nachher; Audit; Checks; Ergebnis von `npm run dist`; install-scripts-Entscheidung; Nicht-Ergebnisse mit Pfad und Grund.
+  10. Erwartung (nicht belegt, vom Coder zu prüfen): Mit dem Override fallen `glob@7`, `inflight` und `@electron/asar@3.4.1` weg. Die Kette über `electron-winstaller` bleibt wahrscheinlich, weil die Probe aus AP-39 die Kette erst mit der 27er-Linie entfernt hat. Dann bleiben `rimraf@2.6.3` und die install-scripts-Warnung als Nicht-Ergebnis, bis electron-builder 27 stabil ist (PE-74, PE-76).
+- **Schnittstellen:** –
+- **Akzeptanzkriterien:**
+  - `npm ci` ohne die Warnungen zu `inflight@1.0.6` und `glob@7.2.3`. Die Warnung zu `rimraf@2.6.3` ist entfernt, oder das Nicht-Ergebnis steht im Bericht mit Pfad und Grund (Teilergebnis zulässig).
+  - Die install-scripts-Warnung zu `electron-winstaller@5.4.0` ist entschieden und belegt: entfallen mit Beleg, oder bewusst erlaubt/gesperrt, festgehalten in der vorgesehenen Konfiguration, und `npm run dist` ist mit dieser Entscheidung grün.
+  - `npm ls --omit=dev glob rimraf inflight` ist leer. Die Produktionsabhängigkeiten sind unverändert: `npm ls --omit=dev` vorher und nachher stimmt überein (Vergleich im Bericht).
+  - `npm audit --omit=dev` ohne hohe oder kritische Befunde. Die 14 moderaten Dev-Befunde stehen im Bericht.
+  - Diff von `package.json`: nur die Versionszeile von `electron-builder`, `overrides` (`@electron/asar`; `global-agent` unverändert, außer der Bericht belegt, dass er überflüssig ist), keine neuen direkten Pakete, `electron` unverändert.
+  - Jeder neue oder geänderte Lockfile-Eintrag hat eine Lizenz nach PE-19 bzw. PE-76. BlueOak-1.0.0 nur bei `glob`, `path-scurry` und `lru-cache`.
+  - `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run test:e2e` grün; `npm run dist` erzeugt den Installer in `release/`. Ohne grünes `dist` kein Override (Umsetzung 4).
+  - Der Commit enthält keine Datei außerhalb des Eigentums (`git diff --stat`) und keine Vorabversion.
+- **Tests:** keine neuen Tests. Die bestehenden Checks sind das Regressionsnetz. Installation und Start prüft der Nutzer (H-08).
+- **Review-Schwerpunkte:** Lockfile-Diff (Versionen, Lizenz jedes neuen Eintrags, BlueOak nur bei den drei Paketen), Override (Begründung, Beleg über `dist`), install-scripts-Entscheidung, `npm ls --omit=dev` vorher und nachher, Auswertung von `npm audit`, Eigentum (`git diff --stat`).
+- **Design-Review:** nein
+- **Doku-Pflichten:** keine. Begründung im Commit-Body nach Git-Schema.
+- **Aufwand:** M · **Modell:** sonnet · **Effort:** high
+- **Opus-Grund:** – (Sonnet-Vorgabe des Auftrags; der Sicherheitsbezug R6 wird über die Akzeptanzkriterien und den Review gesichert)
+- **Kürzbar bei Budgetnot:** nein (Nutzerauftrag über den Head, 2026-11-17)
+- **Commit-Typ:** `chore(AP-41): remove npm deprecation warnings from build tooling`
+
 ## 13. Menschliche Schritte
 
 | ID | Schritt | Ab wann nötig | Blockiert | Erledigt |
@@ -1840,6 +1898,7 @@ flowchart LR
 | H-04 | Datenordner `D:\appManagerDaten` anlegen (außerhalb des Projekts) und in der installierten App wählen; Prüfpunkte im M4-DEP: Backup im alten Ordner und (falls Daten) im neuen Ordner, Abbruch-Hinweis (PE-65, PE-70, PE-71) | M4-DEP (oder sobald produktiv genutzt) | G3 | ☐ |
 | H-05 | Designer-Gespräch nach M1: `start-agent.ps1 -Project "D:\Private Projekte\appManager" -Role designer`; danach beauftragt der Lead den Planner mit „Design übernehmen“ | nach M1-DEP | Design-Pakete (folgen) | ☐ |
 | H-06 | Smoke-Tests M0–M4 laut §9 und Merges `dev` → `stage` → `master` | je Meilenstein | nächster Meilenstein | ☐ teilweise: Smoke-Tests M0 und M1 bestanden (2026-10-26); Smoke-Tests M2, M3, M4 offen (M2-DEP, M3-DEP, M4-DEP); Merges `dev` → `stage` → `master` für M0 bis M4 noch offen (Anleitung §9.2, PE-42). Auf GitHub steht `stage` auf dem dev-Stand 205f5c3 |
+| H-08 | Nach dem Merge von AP-41: `npm ci`, `npm run dist`, Installer aus `release/` installieren, App starten und Datenordner öffnen (wie nach AP-38, PE-76). Ohne Befund kein Blocker für den Merge `stage` → `master` | nach AP-41-Merge | Release-Abnahme (G3) | ☐ |
 
 ---
 
@@ -1851,8 +1910,8 @@ flowchart LR
 | M1 | 11 (1 opus) | 15,75 h | 3–4 |
 | M2 | 5 (1 opus) | 7,5 h | 2 |
 | M3 | 5 (2 opus) | 9,75 h | 2–3 |
-| M4 | 11 (4 opus) | 18,25 h | 4–5 |
-| **Gesamt** | **40** | **64,5 h** + Reviews | **15–19** |
+| M4 | 12 (4 opus) | 19,75 h | 4–5 |
+| **Gesamt** | **41** | **66 h** + Reviews | **15–19** |
 
 **Zeit des Nutzers:** H-01/H-07 sofort (~15 min), 5 Smoke-Tests à ~15–30 min inkl. Installer-Bau, Designer-Gespräch (~1 h), Abnahme-Rechenbeispiel (~30 min) → gesamt ca. 4–5 h.
 
@@ -1867,6 +1926,8 @@ flowchart LR
 **Nachtrag 2026-10-31 (Pflegeauftrag, AP-39):** AP-39 (S, sonnet, 0,75 h) ist in der M4-Zeile enthalten. M4 jetzt 13,25 h mit 9 Paketen (4 opus). Gesamt 38 Pakete, 59,5 h. Die Fensterschätzung 14–18 bleibt geschätzt.
 
 **Nachtrag 2026-10-31 (Pflegeauftrag, AP-37 und AP-40):** AP-37 (L, sonnet, 2,5 h) und AP-40 (L, sonnet, 2,5 h) sind in der M4-Zeile enthalten. M4 jetzt 18,25 h mit 11 Paketen (4 opus). Gesamt 40 Pakete, 64,5 h. Die Fensterschätzung steigt auf 15–19 (geschätzt). Beide Pakete liegen am oberen Rand von L; überschreitet eines L, meldet der Coder das an den Lead.
+
+**Nachtrag 2026-11-17 (Head-Auftrag, AP-41):** AP-41 (OPS, M, sonnet, 1,5 h) ist in der M4-Zeile enthalten. M4 jetzt 19,75 h mit 12 Paketen (4 opus). Gesamt 41 Pakete, 66 h. Die Fensterschätzung 15–19 bleibt geschätzt; AP-41 liegt innerhalb der Spanne.
 
 **Ehrliche Einschätzung:** Die Fensterzahl ist geschätzt, weil noch keine Erfahrungswerte vorliegen; Opus-Pakete im Rechenkern verbrauchen deutlich mehr als Sonnet-Pakete. Die Fensterzahlen wurden bei einem früheren Zielwert geschätzt; den aktuellen Wert liefert `.claude/ma-usage.json`. 5 parallele Coder (PE-23) erreichen den Zielwert schnell, danach pausiert das Team bis zum Reset (PE-46). Nach M0 schätzt der Planner neu (Auftrag „Wellenabschluss“); diese Neuschätzung ist offen, weil der Auftrag keine Messwerte zum Fensterverbrauch M0 enthält. Der Lead liefert sie beim nächsten Wellenabschluss nach. Design-Pakete nach H-05 kommen zusätzlich.
 
@@ -1925,7 +1986,7 @@ flowchart LR
 | PE-16 | Statistiken: Einnahmen/Ausgaben/Saldo nach Zeitraum, Monatsverlauf, Ausgaben nach Kategorie, Projekt-Ranking, laufende Fixkosten, Kampagnen-Ranking, 12-Monats-Prognose der Fixkosten, Break-even je Projekt | Nutzer am 2026-10-25 | Nutzer am 2026-10-25 |
 | PE-17 | (ersetzt durch PE-18) ~~Datenordner im Projekt~~. Weiter gültig (bestätigt): eine Datei pro Entitätstyp mit Schema-Version, atomares Schreiben, Backup beim Start (letzte 10), Export/Import als ZIP | – | Nutzer am 2026-10-25 |
 | PE-18 | Datenpfad ist in der App einstellbar. Echte Daten liegen in einem externen Ordner auf `D:`, den nur der Nutzer anlegt und den kein Agent liest. Agents dürfen im Projekt einen Testdaten-Ordner `data-dev/` (gitignored) mit erfundenen Daten anlegen (Seed-Skript). Installation nur auf Laufwerk `D:` (Installer mit wählbarem Zielordner, Vorschlag auf `D:`). | R2, Agents sollen echte Daten nicht sehen | Nutzer am 2026-10-25 |
-| PE-19 | Nicht kommerziell. Repository wird öffentlich auf GitHub, Nachbau erlaubt, Weiterverkauf und kommerzielle Nutzung verboten → nicht-kommerzielle Quelltext-Lizenz (Wahl: Q-05). Abhängigkeiten nur mit freizügigen Lizenzen (MIT, Apache-2.0, BSD, ISC). | Wunsch des Nutzers | Nutzer am 2026-10-25 |
+| PE-19 | Nicht kommerziell. Repository wird öffentlich auf GitHub, Nachbau erlaubt, Weiterverkauf und kommerzielle Nutzung verboten → nicht-kommerzielle Quelltext-Lizenz (Wahl: Q-05). Abhängigkeiten nur mit freizügigen Lizenzen (MIT, Apache-2.0, BSD, ISC). **Ausnahme für AP-41:** BlueOak-1.0.0 nur für `glob`, `path-scurry` und `lru-cache` (PE-76). | Wunsch des Nutzers | Nutzer am 2026-10-25 |
 | PE-20 | Lizenz PolyForm Noncommercial 1.0.0 (`LICENSE` im Repo-Wurzelverzeichnis). Keine Rechtsberatung (D12b). | für Software formuliert, verbietet kommerzielle Nutzung | Nutzer am 2026-10-25; Lizenzangaben (`package.json`, README) bestätigt am 2026-10-28 |
 | PE-21 | Prototyp ohne Designer: Tailwind CSS + shadcn/ui; Grundsätze: neutrale Grautöne, eine Akzentfarbe, viel Weißraum, Schrift Inter, Hell-/Dunkelmodus, linke Seitenleiste, Tabellen und Karten, Diagramme in Akzentfarbe. Farben/Abstände nur über Tailwind-Theme/CSS-Variablen an einer Stelle, damit der Designer später zentral umstellen kann. Designer-Interview nach dem Prototyp. | Nutzer will erst Prototyp sehen | Nutzer am 2026-10-25 |
 | PE-22 | Öffentliches GitHub-Repo `CemDCoding/appManager` ist angelegt und als `origin` eingetragen. `stage` = Installer-Test mit Testdaten, `master` = Release (optional GitHub Release mit `.exe`). Nie echte Daten im Repo. | – | Nutzer am 2026-10-25 |
@@ -1978,9 +2039,10 @@ flowchart LR
 | PE-70 | Datenordner-Wechsel: Vor dem Umschalten wird ein Backup des bisherigen aktiven Ordners angelegt (unter `backups/` im alten Ordner, dieselbe Regel wie das Start-Backup, Rotation letzte 10). Schlägt es fehl, bricht der Wechsel ab: der alte Ordner bleibt aktiv, nichts wird umgeschaltet, keine Einstellung gespeichert. Zusätzlich zum Start-Backup im neuen Ordner (PE-65). Umsetzung AP-35. | Q-11 (Vorschlag „Abbruch bei Fehler“ bestätigt); Q-12 (Abbruch auch, wenn das Alt-Backup scheitert) bestätigt | Nutzer am 2026-10-28 (Chat) |
 | PE-71 | Bei einem fehlgeschlagenen Ordnerwechsel zeigen die Einstellungen zusätzlich den Satz „Der bisherige Datenordner bleibt aktiv“. Der Fehlercode bleibt IO, kein neuer Vertrag (§4 unverändert). Umsetzung AP-36 (Folgepaket). | Der allgemeine IO-Text („Die Daten konnten nicht gelesen oder gespeichert werden“) ist für einen abgebrochenen Wechsel irreführend | Nutzer am 2026-10-28 (Chat, bestätigt) |
 | PE-72 | Abhängigkeits-Update als AP-38 (M4 W3, OPS, opus, Opus-Grund Sicherheit): behebt die npm-Warnungen `inflight`, `glob@7`, `rimraf@2`, `boolean` (alle aus dem Build-Werkzeug, `dev: true`) und bekannte Lücken nach `npm audit`. Nur Versionsanhebungen freigegebener Pakete, keine neuen Pakete, Lizenzen nach PE-19, `electron` bleibt 45.0.0. Ausnahme zu §8 Grundregel 5 (`package.json` und Lockfile nach dem Start von M4). M4-DEP hängt an AP-38 (Installer neu prüfen). Die Einordnung als erstes Paket der nächsten Welle ist Vorschlag des Planners `(angenommen)`, Bestätigung über Q-13. | Nutzer-Hinweis am 2026-10-28 (npm ci-Warnungen, über den Lead); Analyse 2026-10-28 (`npm ls`, Lockfile); `npm audit` noch offen | Nutzer am 2026-10-28 (Auftrag über Lead) |
-| PE-73 | Umsetzung AP-38 (Nutzer-Entscheidung zu PE-72): Option 1 plus Signaturprüfung. Nur `boolean` behoben, per `overrides: {"global-agent": "4.1.6"}` (BSD-3-Clause). Dev-Rest bleibt, begründet: `glob@7.2.3` und `inflight@1.0.6` über `app-builder-lib` → `@electron/asar@3.4.1` (exakt gepinnt); `rimraf@2.6.3` über `electron-builder-squirrel-windows` → `electron-winstaller@5.4.0` → `temp@0.9.4` (verlangt `rimraf` ~2.6.2). Alle `dev: true`, nicht im Installer. Weitere Abhilfe bräuchte BlueOak-1.0.0 (nicht in PE-19) und neue Pakete (`glob` 13, `path-scurry`, `rimraf` 6): abgelehnt, PE-19 bleibt unverändert. `electron-builder` bleibt 26.18.0. Weggefallen: `boolean`, `roarr`, `detect-node`, `es6-error`, `json-stringify-safe`, `semver-compare`, `sprintf-js`. Geändert (alle Dev, Lizenzen nach PE-19): `global-agent` 3.0.0 → 4.1.6, `matcher` 3 → 4, `serialize-error` 7 → 8.1.0, `type-fest` 0.13.1 → 0.20.2. Keine neuen Pakete. Override entfällt, sobald electron-builder auf `@electron/get` ≥ 4 umstellt; dann Override entfernen und den Dev-Rest bei electron-builder 27 neu prüfen. Bestätigt PE-72 und schließt Q-13 | Nutzer-Entscheidung 2026-10-29 (über Lead); Ergebnis `npm audit` 0 Lücken, `npm audit signatures` 512/512 | AP-38, Q-13 | Nutzer am 2026-10-29 (über Lead) |
-| PE-74 | AP-39 (M4 W4, OPS, S, sonnet): Prüfung, ob eine neuere `electron-builder` die Kette `glob@7` (über `@electron/asar`) und `rimraf@2` (über `temp` → `electron-winstaller`) ohne Override entfernt. Vorrang vor einem Override: eine neue Version nur, wenn alle neuen Lizenzen nach PE-19 passen und keine neuen direkten Pakete nötig sind. Override auf `glob` oder `rimraf` nur mit Nachweis (`npm run dist` und `npm test` grün, Kompatibilität geprüft) und mit Freigabe des Nutzers über den Lead. Gelingt beides nicht, bleibt `glob` unverändert (Nicht-Ergebnis, PE-73 gilt weiter). Für AP-39 ändert das die Festlegung „`electron-builder` bleibt 26.18.0“ aus PE-73, sofern eine neuere Version die Kette ohne Override entfernt. Die gewählte Version gibt der Coder im Bericht zurück. **Ergebnis 2026-10-31 (Coder c1, Prüfung erfolgt, kein Übergang):** keine stabile electron-builder-27-Version (nur alpha 27.0.0-alpha.1…14); 26.18.0 und 26.18.1 ziehen die Kette weiter. Probe mit 27.0.0-alpha.14 entfernt sie, bringt aber drei BlueOak-1.0.0-Pakete (PE-19 verletzt) und wurde nicht übernommen. Override nicht versucht. Nutzer-Entscheidung am 2026-10-31 (über Lead): Option a, Warnung bleibt, PE-73 gilt weiter. Wiedervorlage, sobald electron-builder 27 stabil erscheint (dann BlueOak klären, e2e und `dist` prüfen; Details §18). | Nutzer-Wunsch (`npm ci`-Hinweis zu `glob`); Lead-Befund 2026-10-31 (vom Coder gegenzuprüfen) | Nutzer am 2026-10-31 (über Lead) |
+| PE-73 | Umsetzung AP-38 (Nutzer-Entscheidung zu PE-72): Option 1 plus Signaturprüfung. Nur `boolean` behoben, per `overrides: {"global-agent": "4.1.6"}` (BSD-3-Clause). Dev-Rest bleibt, begründet: `glob@7.2.3` und `inflight@1.0.6` über `app-builder-lib` → `@electron/asar@3.4.1` (exakt gepinnt); `rimraf@2.6.3` über `electron-builder-squirrel-windows` → `electron-winstaller@5.4.0` → `temp@0.9.4` (verlangt `rimraf` ~2.6.2). Alle `dev: true`, nicht im Installer. Weitere Abhilfe bräuchte BlueOak-1.0.0 (nicht in PE-19) und neue Pakete (`glob` 13, `path-scurry`, `rimraf` 6): abgelehnt, PE-19 bleibt unverändert. Für `glob`, `path-scurry` und `lru-cache` ersetzt durch PE-76 (2026-11-17); `rimraf` 6 bleibt abgelehnt. ~~`electron-builder` bleibt 26.18.0.~~ (ersetzt durch PE-76, 2026-11-17). Weggefallen: `boolean`, `roarr`, `detect-node`, `es6-error`, `json-stringify-safe`, `semver-compare`, `sprintf-js`. Geändert (alle Dev, Lizenzen nach PE-19): `global-agent` 3.0.0 → 4.1.6, `matcher` 3 → 4, `serialize-error` 7 → 8.1.0, `type-fest` 0.13.1 → 0.20.2. Keine neuen Pakete. Override entfällt, sobald electron-builder auf `@electron/get` ≥ 4 umstellt; dann Override entfernen und den Dev-Rest bei electron-builder 27 neu prüfen. Bestätigt PE-72 und schließt Q-13 | Nutzer-Entscheidung 2026-10-29 (über Lead); Ergebnis `npm audit` 0 Lücken, `npm audit signatures` 512/512 | AP-38, Q-13 | Nutzer am 2026-10-29 (über Lead) |
+| PE-74 | AP-39 (M4 W4, OPS, S, sonnet): Prüfung, ob eine neuere `electron-builder` die Kette `glob@7` (über `@electron/asar`) und `rimraf@2` (über `temp` → `electron-winstaller`) ohne Override entfernt. Vorrang vor einem Override: eine neue Version nur, wenn alle neuen Lizenzen nach PE-19 passen und keine neuen direkten Pakete nötig sind. Override auf `glob` oder `rimraf` nur mit Nachweis (`npm run dist` und `npm test` grün, Kompatibilität geprüft) und mit Freigabe des Nutzers über den Lead. Gelingt beides nicht, bleibt `glob` unverändert (Nicht-Ergebnis, PE-73 gilt weiter). Das Nicht-Ergebnis ist nur insoweit durch PE-76 (AP-41) ersetzt. Für AP-39 ändert das die Festlegung „`electron-builder` bleibt 26.18.0“ aus PE-73, sofern eine neuere Version die Kette ohne Override entfernt. Die gewählte Version gibt der Coder im Bericht zurück. **Ergebnis 2026-10-31 (Coder c1, Prüfung erfolgt, kein Übergang):** keine stabile electron-builder-27-Version (nur alpha 27.0.0-alpha.1…14); 26.18.0 und 26.18.1 ziehen die Kette weiter. Probe mit 27.0.0-alpha.14 entfernt sie, bringt aber drei BlueOak-1.0.0-Pakete (PE-19 verletzt) und wurde nicht übernommen. Override nicht versucht. Nutzer-Entscheidung am 2026-10-31 (über Lead): Option a, Warnung bleibt, PE-73 gilt weiter. Wiedervorlage, sobald electron-builder 27 stabil erscheint (dann BlueOak klären, e2e und `dist` prüfen; Details §18). | Nutzer-Wunsch (`npm ci`-Hinweis zu `glob`); Lead-Befund 2026-10-31 (vom Coder gegenzuprüfen) | Nutzer am 2026-10-31 (über Lead) |
 | PE-75 | AP-37 und AP-40 (Restbefunde aus M4 W2/W2b und Q-10, Vorschlag §16) werden gebaut. Umsetzungsregeln: (a) Einnahmenziel-Eingabe verlangt Zielwert > 0; Bestandsziele mit 0 bleiben unverändert (PE-53, Rechenkern unverändert). (b) Zusatz „Zielwerte in EUR“ im Label des Geld-Zielfelds. (c) Projektbericht: Kampagnentabelle zeigt den Projektanteil (PE-49), Portfolio unverändert. (d) Hinweis „Der bisherige Datenordner bleibt aktiv“ nur bei Fehlercode IO aus dem Wechsel (PE-71). (e) Pfadvergleich beim Ordnerwechsel unter Windows ohne Groß-/Kleinschreibung. Nicht umgesetzt und offen: strukturierter Fehlercode für Importfehler (Q-14, Vertrag §4), Zeilenenden und Prettier (Q-15). Q-10 ist damit entschieden. | Umfang „gebaut“ ist Nutzer-Entscheidung; die Einzelregeln (a)–(e) sind **(angenommen)** vom Planner, Bestätigung über den Review offen | Nutzer am 2026-10-31 (über Lead); Details angenommen vom Planner |
+| PE-76 | AP-41 (Nachtrag, M4 W5, OPS, M, sonnet): Die npm-Warnungen aus `npm ci` werden soweit lösbar beseitigt. (a) Ausnahme zu PE-19 für genau diesen Schritt: Lizenz BlueOak-1.0.0 (permissiv, OSI-anerkannt) ist für `glob`, `path-scurry` und `lru-cache` freigegeben; jede andere Lizenz bleibt nach PE-19 verboten. (b) `electron-builder` wird auf 26.18.1 (exakt gepinnt) angehoben. Das ersetzt die Festlegung „`electron-builder` bleibt 26.18.0“ aus PE-73. (c) Override `@electron/asar` auf 4.3.1 (zieht `glob` 13.x, `path-scurry`, `lru-cache`). (d) Jeder Schritt gilt nur mit grünen Checks und grünem `npm run dist`; scheitert ein Schritt, wird genau er zurückgenommen, Nicht-Ergebnis ist zulässig. Keine Vorabversion (`27.0.0-alpha`). (e) Die `rimraf`/`temp`-Kette und die install-scripts-Warnung zu `electron-winstaller` werden getrennt entschieden; ohne Nachweis kein Override auf `rimraf`. (f) Das ersetzt das Nicht-Ergebnis aus PE-74 nur insoweit, wie AP-41 es verlangt. PE-74 bleibt als Historie. | Nutzerauftrag „der appManager muss diese warnings fixen“ (wörtlich über den Head); Abweichung von PE-19 nur für drei Pakete | Head für den Nutzer, Kategorie abhängigkeit, 2026-11-17 |
 | PE-32 | Freigegebene Abhängigkeiten laut §3 | vom Planner vorgeschlagen, alle MIT/Apache-2.0/ISC | Nutzer am 2026-10-25 |
 
 ### Offene Fragen
@@ -2050,7 +2112,7 @@ flowchart LR
 | R4 Secrets | alle (Review); App ohne Secrets |
 | R5 Rollen | §7.3, alle |
 | R6 Prompt-Injection / OWASP | AP-03, AP-07, AP-25, AP-34, Review „Verdächtige Inhalte“ |
-| R6 bekannte Lücken in Abhängigkeiten (PE-72, PE-73, PE-74), Lizenzen (PE-19) | AP-38, AP-39 (Glob-Kette, PE-74), Review (Lockfile-Diff, `npm audit`, Lizenzen) |
+| R6 bekannte Lücken in Abhängigkeiten (PE-72, PE-73, PE-74, PE-76), Lizenzen (PE-19, Ausnahme PE-76) | AP-38, AP-39 (Glob-Kette, PE-74), AP-41 (npm-Warnungen, PE-76), Review (Lockfile-Diff, `npm audit`, Lizenzen) |
 | Abnahme G3 | M4-DEP, AP-26 |
 
 ---
@@ -2160,3 +2222,4 @@ flowchart LR
 | 2026-10-31 | Erkenntnis Zeilenenden (Q-15, lesend geprüft): Index LF, Arbeitskopie CRLF, keine `.gitattributes`. `prettier --check` meldet deshalb alle Dateien; lokal nur mit `--end-of-line auto` aussagekräftig. Behebung offen (Q-15) | Coder-Bericht c2, Planner-Prüfung | AP-40, Q-15 | Planner |
 | 2026-10-31 | Erkenntnis Design (Designer, kein Coder-Fehler): Renderer-Styles nutzen noch shadcn-Standardwerte statt `export/tokens.css` („Design übernehmen“ nicht gelaufen). `FieldMessage` ohne ⚠-Symbol laut Brief. Berichts- und Druckkomponenten im Design-System nicht geregelt (Anteils- vs. Gesamtwerte kennzeichnen). Gehört in „Design übernehmen“ (H-05), Punkt (g) in §16 | Designer-Befund | H-05, §16 | Designer |
 | 2026-10-31 | Betrieb: Zwei parallele `npm ci` im Hauptcheckout kollidieren (ENOTEMPTY). Installationen im Hauptcheckout nur nacheinander | Lead-Befund | Betrieb, M4-DEP | Lead-Auftrag |
+| 2026-11-17 | Pflegeauftrag (Head-Modus, Nutzerauftrag wörtlich: „der appManager muss diese warnings fixen“): AP-41 „npm-Warnungen beseitigen“ angelegt (M4 W5, OPS, M, sonnet; §10 `bereit`, Abhängigkeit AP-38 `fertig`, Nachtrag nach M4-DEP, keine Kante zu M4-DEP). PE-76 eingetragen: Ausnahme BlueOak-1.0.0 nur für `glob`, `path-scurry`, `lru-cache`; ersetzt „electron-builder bleibt 26.18.0“ aus PE-73 und das Nicht-Ergebnis aus PE-74 insoweit. PE-19 um die Ausnahme ergänzt. §0, §3, §8, §9, §9.2, §10–§14, §16, §17 (R6-Zeile), §18 angepasst. H-08 (Installer nach AP-41) angelegt. Erwartung (nicht belegt): Mit dem Override fallen `glob@7` und `inflight`; die `electron-winstaller`-Kette mit `rimraf@2.6.3` bleibt wahrscheinlich. M4-DEP-Status unverändert `bereit`: die Git-Historie zeigt den Merge `dev` → `stage` (2f729d4), die Smoke-Test-Punkte in §9.2 sind nicht belegt und wurden nicht abgehakt | Head-Auftrag des Nutzers (Kategorie abhängigkeit, 2026-11-17) | AP-41, PE-19, PE-73, PE-74, PE-76, M4-DEP (Status unverändert), H-08 | Nutzer am 2026-11-17 (über Head) |
