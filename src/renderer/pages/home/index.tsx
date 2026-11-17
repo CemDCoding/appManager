@@ -95,10 +95,26 @@ export function HomePage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title={t('income')} eurCents={overview?.incomeCents} loading={loading} />
-        <KpiCard title={t('expenses')} eurCents={overview?.expenseCents} loading={loading} />
-        <KpiCard title={t('balance')} eurCents={overview?.balanceCents} loading={loading} />
         <KpiCard
+          testId="kpi-income"
+          title={t('income')}
+          eurCents={overview?.incomeCents}
+          loading={loading}
+        />
+        <KpiCard
+          testId="kpi-expenses"
+          title={t('expenses')}
+          eurCents={overview?.expenseCents}
+          loading={loading}
+        />
+        <KpiCard
+          testId="kpi-balance"
+          title={t('balance')}
+          eurCents={overview?.balanceCents}
+          loading={loading}
+        />
+        <KpiCard
+          testId="kpi-fixed-costs"
           title={t('fixedCosts')}
           eurCents={overview?.fixedCostsCents}
           loading={loading}

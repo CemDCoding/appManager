@@ -27,7 +27,9 @@ const IMPORT_IO: readonly { match: string; key: TransferKey; changed: boolean }[
   { match: 'restore the latest backup', key: 'importRollbackFailed', changed: true },
   { match: 'previous state kept', key: 'importRolledBack', changed: false },
   { match: 'files could not be written', key: 'importWriteFailed', changed: false },
-  { match: 'could not be read', key: 'importReadFailed', changed: false }
+  // Nur die Quelllesung des Imports (`src/main/transfer/service.ts`). Lesefehler am
+  // Backup-Ordner (`backups: … could not be read`) fallen auf den allgemeinen Text.
+  { match: 'import: file could not be read', key: 'importReadFailed', changed: false }
 ]
 
 function errorOutcome(action: TransferAction, error: IpcError): TransferOutcome {

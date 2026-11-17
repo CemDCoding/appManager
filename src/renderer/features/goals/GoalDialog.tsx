@@ -115,7 +115,14 @@ function GoalForm({ onOpenChange, projects, goal }: GoalDialogProps) {
       </Label>
       {needsTarget(draft.kind) && (
         <Label className="grid gap-1">
-          {isMoneyKind(draft.kind) ? t('fTargetMoney') : t('fTargetUsers')}
+          {isMoneyKind(draft.kind) ? (
+            <span>
+              {t('fTargetMoney')}{' '}
+              <span className="text-xs text-muted-foreground">({t('fTargetMoneyHint')})</span>
+            </span>
+          ) : (
+            t('fTargetUsers')
+          )}
           <Input
             inputMode={isMoneyKind(draft.kind) ? 'decimal' : 'numeric'}
             value={draft.target}

@@ -25,13 +25,6 @@ export interface TransferDeps {
   /** Native open dialog for one `.zip`; returns the path or null (cancelled). */
   showOpenDialog: () => Promise<string | null>
   /**
-   * @deprecated Ignored since AP-34 (size check and reading are one step in
-   * `readImportFile`); kept only so existing wiring still compiles.
-   */
-  fileSize?: (path: string) => Promise<number>
-  /** @deprecated Ignored since AP-34, see `fileSize`. */
-  readFile?: (path: string) => Promise<Uint8Array>
-  /**
    * Reads the import file and fails with INVALID_DATA as soon as more than
    * `maxBytes` were read (default `readFileLimited`).
    */

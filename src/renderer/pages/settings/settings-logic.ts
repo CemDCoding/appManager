@@ -3,6 +3,7 @@ import { MAX_KEY_LENGTH, MAX_LIST_ENTRIES, MAX_NAME_LENGTH } from '@shared/limit
 import { BASE_CURRENCY, CurrencyCodeSchema, RateSchema, type Rate } from '@shared/money'
 import { isValidDateString } from '@shared/schemas/common'
 import type { ListSetting } from '@shared/schemas/settings'
+import type { IpcError } from '@shared/ipc'
 import type { Result } from '@core/money/money'
 
 export type RateEntryError = 'invalidCurrency' | 'eurNoRate' | 'invalidRate' | 'invalidDate'
@@ -94,6 +95,32 @@ export function addCustomEntry(
     ok: true,
     value: { ...setting, custom: [...setting.custom, { key, label: trimmed, hidden: false }] }
   }
+}
+
+/** Fehlerzustand des Ordnerbereichs; `fromSwitch`: Der Fehler stammt aus dem Ordnerwechsel. */
+export interface DataErrorState {
+  error: IpcError | null
+  fromSwitch: boolean
+}
+
+/**
+ * Zusatz „bisheriger Datenordner bleibt aktiv“ nur bei einem IO-Fehler aus dem Wechsel
+ * (PE-71, PE-75 d). INTERNAL-, Lade- und Backup-Fehler zeigen ihn nicht.
+ */
+export function showDirSwitchAborted(state: DataErrorState): boolean {
+  return state.fromSwitch && state.error !== null && state.error.code === 'IO'
+}
+
+/**
+ * Fehlerzustand nach dem Neuladen von Datenordner und Backup-Liste. Lesen beide Teile,
+ * ist eine alte Meldung (Laden, Wechsel) überholt und wird gelöscht. Bei zwei Fehlern
+ * gilt der Backup-Fehler (wie bisher).
+ */
+export function dataErrorAfterLoad(
+  dirError: IpcError | null,
+  backupsError: IpcError | null
+): DataErrorState {
+  return { error: backupsError ?? dirError, fromSwitch: false }
 }
 
 /** Blendet einen Eintrag (Standard oder eigen) aus oder ein. */

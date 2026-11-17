@@ -40,6 +40,9 @@ export const printDict = defineDictionary(
     usersGained: 'Nutzer',
     rating: 'Sterne',
     campaignNote: 'Kosten und Kennzahlen je Kampagne gesamt (nicht nur der Anteil im Bericht).',
+    campaignCostShare: 'Kosten (Anteil)',
+    campaignNoteProject:
+      'Kosten und Nutzer zeigen den Anteil dieses Projekts; Kosten pro Klick, Kosten pro Nutzer und CTR gelten für die ganze Kampagne.',
     forecast: 'Prognose 12 Monate',
     forecastNote: 'Nur laufende wiederkehrende Einnahmen und Ausgaben ab morgen.',
     projectsComparison: 'Alle Projekte im Vergleich',
@@ -104,6 +107,9 @@ export const printDict = defineDictionary(
     usersGained: 'Users',
     rating: 'Stars',
     campaignNote: 'Cost and figures per campaign in total (not only the share in this report).',
+    campaignCostShare: 'Cost (share)',
+    campaignNoteProject:
+      'Cost and users show the share of this project; cost per click, cost per user and CTR apply to the whole campaign.',
     forecast: '12-month forecast',
     forecastNote: 'Only running recurring income and expenses from tomorrow.',
     projectsComparison: 'All projects compared',

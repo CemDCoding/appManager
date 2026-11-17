@@ -18,6 +18,7 @@ import type { Income } from '@shared/schemas/income'
 import type { Person } from '@shared/schemas/person'
 import type { Project } from '@shared/schemas/project'
 import type { Service } from '@shared/schemas/service'
+import { projectCampaignShares } from '@/features/campaigns'
 
 export interface ReportData {
   projects: readonly Project[]
@@ -56,6 +57,17 @@ export interface ProjectComparisonRow extends Totals {
   breakEven: BreakEven | null
 }
 
+/**
+ * Kampagnenzeile des Berichts. `costEurCents`/`users`: im Portfolio die Werte der
+ * ganzen Kampagne, im Projektbericht nur der Anteil des Projekts (PE-49, wie der
+ * Kampagnen-Tab des Projekts). CPC, Kosten pro Nutzer und CTR sind Verhältnisse der
+ * ganzen Kampagne (`kpis`); bei anteiliger Aufteilung bleiben sie gleich.
+ */
+export interface ReportCampaign extends RankedCampaign {
+  costEurCents: number
+  users: number
+}
+
 export interface ReportErrors {
   /** Nicht umrechenbare Buchungen im Berichtszeitraum. */
   ledger: number
@@ -85,7 +97,7 @@ export interface ReportModel {
   /** Projektbericht: Zahlungen an Personen. */
   people: NamedAmount[]
   /** Kampagnen mit Buchung im Zeitraum (Projektbericht: mit Anteil am Projekt). */
-  campaigns: RankedCampaign[]
+  campaigns: ReportCampaign[]
   /** Prognose 12 Monate ab morgen. */
   forecast: MonthValues[]
   /** Portfoliobericht: alle Projekte im Vergleich. */
@@ -201,6 +213,34 @@ export function buildReportModel(
     data.campaigns.filter((c) => campaignIds.has(c.id)),
     'costPerUser'
   )
+  let campaignShareErrors = 0
+  const campaigns: ReportCampaign[] = []
+  if (projectId === null) {
+    for (const item of ranking.items) {
+      campaigns.push({
+        ...item,
+        costEurCents: item.kpis.costEurCents,
+        users: item.campaign.usersGained
+      })
+    }
+  } else {
+    // Projektanteil wie im Kampagnen-Tab des Projekts (Kosten aus dem Ledger, Nutzer aus dem Kern).
+    const shares = new Map(
+      projectCampaignShares(
+        ranking.items.map((i) => i.campaign),
+        data.projects,
+        projectId
+      ).map((s) => [s.campaign.id, s])
+    )
+    for (const item of ranking.items) {
+      const share = shares.get(item.campaign.id)
+      if (!share || share.costEurCents === null) {
+        campaignShareErrors++
+        continue
+      }
+      campaigns.push({ ...item, costEurCents: share.costEurCents, users: share.users })
+    }
+  }
 
   const forecastMonths: MonthValues[] = fc.months.map((m) => {
     if (projectId === null) {
@@ -274,7 +314,7 @@ export function buildReportModel(
     incomeByCategory: byCategory('income'),
     services,
     people,
-    campaigns: ranking.items,
+    campaigns,
     forecast: forecastMonths,
     projects,
     unallocatedCount: projectId === null ? ledger.entries.filter((e) => e.unallocated).length : 0,
@@ -283,7 +323,7 @@ export function buildReportModel(
       history: history.errors.length,
       forecast: fc.errors.length,
       fixedCosts: fixed.errors.length,
-      campaigns: ranking.errors.length
+      campaigns: ranking.errors.length + campaignShareErrors
     }
   }
 }
